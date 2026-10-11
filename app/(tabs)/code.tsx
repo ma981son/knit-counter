@@ -52,7 +52,7 @@ export default function CodeScreen() {
         ]}
       />
 
-            <View style={styles.buttons}>
+        <View style={styles.buttons}>
         <Button title="Save code" onPress={() => updateCode(pattern.id, draft)} disabled={!hasChanges} />
         {hasChanges && (
           <Button title="Discard changes" variant="secondary" onPress={() => setDraft(savedCode)} />
