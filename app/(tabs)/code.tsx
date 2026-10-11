@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { Button } from '@/src/components/Button';
 import { CodeCheatSheet } from '@/src/components/CodeCheatSheet';
-import { PatternSummary } from '@/src/components/PatternSummary';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
@@ -52,36 +52,10 @@ export default function CodeScreen() {
         ]}
       />
 
-      <View style={styles.buttons}>
-        {hasChanges ? (
-            <Text style={[styles.message, { color: colors.muted }]}>
-                Save to check your changes.
-            </Text>
-        ) : (
-            <PatternSummary parsed={parsed} stitchCounts={stitchCounts} warnings={warnings} />
-        )}
-        <Pressable
-          disabled={!hasChanges}
-          onPress={() => updateCode(pattern.id, draft)}
-          style={({ pressed }) => [
-            styles.button,
-            {
-              backgroundColor: colors.accent,
-              borderColor: colors.accent,
-              opacity: !hasChanges ? 0.4 : pressed ? 0.85 : 1,
-            },
-          ]}
-        >
-          <Text style={[styles.buttonText, { color: colors.onAccent }]}>Save code</Text>
-        </Pressable>
-
+            <View style={styles.buttons}>
+        <Button title="Save code" onPress={() => updateCode(pattern.id, draft)} disabled={!hasChanges} />
         {hasChanges && (
-          <Pressable
-            onPress={() => setDraft(savedCode)}
-            style={[styles.button, { borderColor: colors.line }]}
-          >
-            <Text style={[styles.buttonText, { color: colors.text }]}>Discard changes</Text>
-          </Pressable>
+          <Button title="Discard changes" variant="secondary" onPress={() => setDraft(savedCode)} />
         )}
       </View>
       <CodeCheatSheet />
@@ -117,15 +91,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-  },
-  button: {
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-  },
-  buttonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 16,
   },
 });

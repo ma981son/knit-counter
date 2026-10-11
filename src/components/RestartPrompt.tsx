@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Button } from '@/src/components/Button';
 import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
@@ -22,22 +23,15 @@ export function RestartPrompt({ onRestart }: Props) {
   return (
     <View style={[styles.box, { backgroundColor: colors.surface, borderColor: colors.line }]}>
       <Text style={[styles.question, { color: colors.text }]}>Go back to row 1?</Text>
-      <View style={styles.buttons}>
-        <Pressable
+            <View style={styles.buttons}>
+        <Button
+          title="Yes, start again"
           onPress={() => {
             setConfirming(false);
             onRestart();
           }}
-          style={[styles.button, { backgroundColor: colors.accent }]}
-        >
-          <Text style={[styles.buttonText, { color: colors.onAccent }]}>Yes, start again</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setConfirming(false)}
-          style={[styles.button, { borderWidth: 1, borderColor: colors.line }]}
-        >
-          <Text style={[styles.buttonText, { color: colors.text }]}>Cancel</Text>
-        </Pressable>
+        />
+        <Button title="Cancel" variant="secondary" onPress={() => setConfirming(false)} />
       </View>
     </View>
   );
@@ -67,14 +61,5 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     gap: 10,
-  },
-  button: {
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-  },
-  buttonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 16,
   },
 });
