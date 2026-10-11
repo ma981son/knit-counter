@@ -8,7 +8,7 @@ export type Project = {
 
 export type Pattern = {
     id: string;
-    name: string;
+    code: string;
     patternText: string;
     currentRow: number;
 };
