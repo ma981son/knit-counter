@@ -3,9 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
-  before: number; 
-  change: number;    
-  lineColor: string; 
+  before: number;
+  change: number;
+  lineColor: string;
 };
 
 export function StitchCount({ before, change, lineColor }: Props) {

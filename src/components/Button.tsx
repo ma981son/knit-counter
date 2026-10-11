@@ -5,13 +5,19 @@ import { fonts, useTheme } from '@/src/theme';
 type Props = {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'danger';
   disabled?: boolean;
 };
 
 export function Button({ title, onPress, variant = 'primary', disabled = false }: Props) {
   const colors = useTheme();
-  const isPrimary = variant === 'primary';
+
+  const background =
+    variant === 'primary' ? colors.accent : variant === 'danger' ? colors.danger : 'transparent';
+  const border =
+    variant === 'primary' ? colors.accent : variant === 'danger' ? colors.danger : colors.line;
+  const textColor =
+    variant === 'primary' ? colors.onAccent : variant === 'danger' ? colors.onDanger : colors.text;
 
   return (
     <Pressable
@@ -21,13 +27,13 @@ export function Button({ title, onPress, variant = 'primary', disabled = false }
       style={({ pressed }) => [
         styles.button,
         {
-          backgroundColor: isPrimary ? colors.accent : 'transparent',
-          borderColor: isPrimary ? colors.accent : colors.line,
+          backgroundColor: background,
+          borderColor: border,
           opacity: disabled ? 0.4 : pressed ? 0.85 : 1,
         },
       ]}
     >
-      <Text style={[styles.text, { color: isPrimary ? colors.onAccent : colors.text }]}>{title}</Text>
+      <Text style={[styles.text, { color: textColor }]}>{title}</Text>
     </Pressable>
   );
 }

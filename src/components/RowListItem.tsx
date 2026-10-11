@@ -7,7 +7,7 @@ type Props = {
   info: RowInfo;
   stitchesBefore: number | null;
   isCurrent: boolean;
-  onLongPress: () => void; // hold the row to jump to it
+  onLongPress: () => void;
 };
 
 export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Props) {
@@ -19,8 +19,14 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
       ? colors.markBackground
       : colors.surface;
 
-  const numberColor = isCurrent ? colors.accent : info.highlight ? colors.mark : colors.muted;
-  const textColor = info.highlight ? colors.markText : colors.text;
+  const numberColor = isCurrent
+    ? colors.accent
+    : info.isLastRow
+      ? colors.end
+      : info.highlight
+        ? colors.mark
+        : colors.muted;
+  const textColor = info.highlight && !info.isLastRow ? colors.markText : colors.text;
 
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 
@@ -48,7 +54,9 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
         )}
 
         {info.normalRow !== null && (
-          <Text style={[styles.small, { color: colors.muted }]}>Normal row here: {info.normalRow}</Text>
+          <Text style={[styles.small, { color: colors.muted }]}>
+            Normal row here: {info.normalRow}
+          </Text>
         )}
 
         {stitchesBefore !== null && info.stitchChange !== 0 && (

@@ -6,7 +6,7 @@ import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
   info: RowInfo;
-  stitchesBefore: number | null; 
+  stitchesBefore: number | null;
 };
 
 export function RowCard({ info, stitchesBefore }: Props) {
@@ -15,7 +15,12 @@ export function RowCard({ info, stitchesBefore }: Props) {
   const look = info.isLastRow
     ? { background: colors.endBackground, border: colors.end, text: colors.text, badge: 'Last row' }
     : info.highlight
-      ? { background: colors.markBackground, border: colors.mark, text: colors.markText, badge: 'Pay attention' }
+      ? {
+          background: colors.markBackground,
+          border: colors.mark,
+          text: colors.markText,
+          badge: 'Pay attention',
+        }
       : { background: colors.surface, border: colors.line, text: colors.text, badge: null };
 
   return (
@@ -32,7 +37,9 @@ export function RowCard({ info, stitchesBefore }: Props) {
       <Text style={[styles.rowNumber, { color: colors.text }]}>{info.row}</Text>
 
       {info.isEmpty ? (
-        <Text style={[styles.emptyNote, { color: colors.muted }]}>No instruction for this row.</Text>
+        <Text style={[styles.emptyNote, { color: colors.muted }]}>
+          No instruction for this row.
+        </Text>
       ) : (
         info.instructions.map((instruction, index) => (
           <Text key={index} style={[styles.instruction, { color: look.text }]}>
@@ -42,7 +49,9 @@ export function RowCard({ info, stitchesBefore }: Props) {
       )}
 
       {info.normalRow !== null && (
-        <Text style={[styles.normalRow, { color: colors.muted }]}>Normal row here: {info.normalRow}</Text>
+        <Text style={[styles.normalRow, { color: colors.muted }]}>
+          Normal row here: {info.normalRow}
+        </Text>
       )}
 
       {stitchesBefore !== null && (

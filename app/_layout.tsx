@@ -1,11 +1,3 @@
-import { useFonts } from 'expo-font';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/components/useColorScheme';
-import { useTheme } from '@/src/theme';
 import {
   Figtree_400Regular,
   Figtree_500Medium,
@@ -13,12 +5,16 @@ import {
   Figtree_700Bold,
 } from '@expo-google-fonts/figtree';
 import { YoungSerif_400Regular } from '@expo-google-fonts/young-serif';
+import { useFonts } from 'expo-font';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import 'react-native-reanimated';
+
+import { useColorScheme } from '@/components/useColorScheme';
+import { fonts, useTheme } from '@/src/theme';
 
 export { ErrorBoundary } from 'expo-router';
-
-export const unstable_settings = {
-  initialRouteName: '(tabs)',
-};
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,8 +63,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={navigationTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.background },
+          headerShadowVisible: false,
+          headerTitleStyle: { fontFamily: fonts.display, fontSize: 22 },
+          headerTintColor: colors.text,
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: 'Projects' }} />
+        <Stack.Screen name="project/[projectId]" options={{ title: '' }} />
+        <Stack.Screen name="pattern/[patternId]" options={{ title: '' }} />
       </Stack>
     </ThemeProvider>
   );
