@@ -1,31 +1,53 @@
-import { StyleSheet } from 'react-native';
+import { useMemo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { parsePatternCode } from '@/src/pattern/parse';
+import { getRowInfo } from '@/src/pattern/rows';
+import { useStore } from '@/src/store/store';
+import { fonts, useTheme } from '@/src/theme';
 
-export default function TabOneScreen() {
+export default function CounterScreen() {
+  const colors = useTheme();
+
+  const pattern = useStore((state) => state.projects[0]?.patterns[0]);
+
+  const code = pattern?.code ?? '';
+  const parsed = useMemo(() => parsePatternCode(code).pattern, [code]);
+
+  if (!pattern) {
+    return (
+      <View style={[styles.screen, { backgroundColor: colors.background }]}>
+        <Text style={{ color: colors.muted, fontFamily: fonts.body }}>Loading…</Text>
+      </View>
+    );
+  }
+
+  const info = getRowInfo(parsed, pattern.currentRow);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+      <Text style={[styles.rowNumber, { color: colors.text }]}>{pattern.currentRow}</Text>
+      {info.instructions.map((instruction, index) => (
+        <Text key={index} style={[styles.instruction, { color: colors.text }]}>
+          {instruction.text}
+        </Text>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  rowNumber: {
+    fontFamily: fonts.display,
+    fontSize: 96,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  instruction: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 22,
   },
 });
