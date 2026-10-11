@@ -11,9 +11,7 @@ import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
-import { Button } from '@/src/components/Button';
 import '@/src/notifications/rowNotification';
-import { setupRowNotification, showRowNotification } from '@/src/notifications/rowNotification';
 
 export default function CounterScreen() {
   useKeepAwake();
@@ -71,13 +69,6 @@ export default function CounterScreen() {
       />
 
       {pattern.currentRow > 1 && !isFinished && <RestartPrompt onRestart={restart} />}
-      <Button
-        title="Show in notifications"
-        variant="secondary"
-        onPress={async () => {
-          if (await setupRowNotification()) await showRowNotification();
-        }}
-      />
     </View>
   );
 }

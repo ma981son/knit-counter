@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { fonts, useTheme } from '@/src/theme';
 
 export { ErrorBoundary } from 'expo-router';
@@ -47,6 +48,7 @@ export default function RootLayout() {
 
   return <RootLayoutNav />;
 }
+useRowNotification();
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();

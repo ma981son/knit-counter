@@ -41,6 +41,10 @@ export async function showRowNotification() {
   });
 }
 
+export async function hideRowNotification() {
+  await Notifications.dismissNotificationAsync(NOTIFICATION_ID);
+}
+
 export async function handleRowAction(actionId: string) {
   await useStore.persist.rehydrate();
   const state = useStore.getState();
