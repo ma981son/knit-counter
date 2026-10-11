@@ -6,6 +6,8 @@ import { parsePatternCode } from '../pattern/parse';
 import * as actions from './actions';
 import type { Pattern, SavedData } from './types';
 
+import { SKIRT_PANEL } from '../patterns/examples';
+
 function maxRowFor(code: string): number {
     const { totalRows } = parsePatternCode(code).pattern;
     return totalRows > 0 ? totalRows + 1 : Infinity;
@@ -87,6 +89,12 @@ export const useStore = create<Store>()(
             name: 'knit-counter-data',
             storage: createJSONStorage(() => AsyncStorage),
             partialize: (state): SavedData => ({ version: state.version, projects: state.projects }),
+            onRehydrateStorage: () => (state) => {
+                if (state && state.projects.length === 0) {
+                    const projectId = state.addProject('Skirt');
+                    state.addPattern(projectId, 'Front panel', SKIRT_PANEL);
+                }
+            },
         },
     ),
 );

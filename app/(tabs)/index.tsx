@@ -1,31 +1,84 @@
-import { StyleSheet } from 'react-native';
+import { useKeepAwake } from 'expo-keep-awake';
+import { useMemo } from 'react';
+import { StyleSheet, Text, Vibration, View } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { CounterControls } from '@/src/components/CounterControls';
+import { FinishedCard } from '@/src/components/FinishedCard';
+import { RestartPrompt } from '@/src/components/RestartPrompt';
+import { RowCard } from '@/src/components/RowCard';
+import { parsePatternCode } from '@/src/pattern/parse';
+import { getRowInfo, getStitchCounts } from '@/src/pattern/rows';
+import { useStore } from '@/src/store/store';
+import { fonts, useTheme } from '@/src/theme';
 
-export default function TabOneScreen() {
+export default function CounterScreen() {
+  useKeepAwake();
+  const colors = useTheme();
+
+  const pattern = useStore((state) => state.projects[0]?.patterns[0]);
+  const nextRow = useStore((state) => state.nextRow);
+  const previousRow = useStore((state) => state.previousRow);
+  const setRow = useStore((state) => state.setRow);
+
+  const code = pattern?.code ?? '';
+  const parsed = useMemo(() => parsePatternCode(code).pattern, [code]);
+  const stitchCounts = useMemo(() => getStitchCounts(parsed), [parsed]);
+
+  if (!pattern) {
+    return (
+      <View style={[styles.screen, { backgroundColor: colors.background }]}>
+        <Text style={{ color: colors.muted, fontFamily: fonts.body }}>Loading…</Text>
+      </View>
+    );
+  }
+
+  const info = getRowInfo(parsed, pattern.currentRow);
+  const isFinished = parsed.totalRows > 0 && pattern.currentRow > parsed.totalRows;
+
+  function restart() {
+    setRow(pattern!.id, 1);
+  }
+
+  function handleNextRow() {
+    const next = pattern!.currentRow + 1;
+    nextRow(pattern!.id);
+
+    if (next <= parsed.totalRows) {
+      const nextInfo = getRowInfo(parsed, next);
+      if (nextInfo.highlight || nextInfo.isLastRow) {
+        Vibration.vibrate([0, 80, 50, 80, 50, 80]);
+      }
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View style={[styles.screen, { backgroundColor: colors.background }]}>
+      <View style={styles.content}>
+        {isFinished ? (
+          <FinishedCard totalRows={parsed.totalRows} onRestart={restart} />
+        ) : (
+          <RowCard info={info} stitchesBefore={stitchCounts?.[pattern.currentRow] ?? null} />
+        )}
+      </View>
+
+      <CounterControls
+        onPrevious={() => previousRow(pattern.id)}
+        onNext={handleNextRow}
+        nextDisabled={isFinished}
+      />
+
+      {pattern.currentRow > 1 && !isFinished && <RestartPrompt onRestart={restart} />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  content: {
+    flex: 1,
   },
 });
