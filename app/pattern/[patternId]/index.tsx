@@ -3,6 +3,7 @@ import { StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
 import { FinishedCard } from '@/src/components/FinishedCard';
+import { ProgressBar } from '@/src/components/ProgressBar';
 import { RestartPrompt } from '@/src/components/RestartPrompt';
 import { RowCard } from '@/src/components/RowCard';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
@@ -48,6 +49,9 @@ export default function CounterScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
+      {parsed.totalRows > 0 && (
+        <ProgressBar row={pattern.currentRow} totalRows={parsed.totalRows} />
+      )}
       <View style={styles.content}>
         {isFinished ? (
           <FinishedCard totalRows={parsed.totalRows} onRestart={restart} />
