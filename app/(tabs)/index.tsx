@@ -9,6 +9,8 @@ import { fonts, useTheme } from '@/src/theme';
 import { useKeepAwake } from 'expo-keep-awake';
 import { Pressable, Vibration } from 'react-native';
 
+import { StitchCount } from '@/src/components/StitchCount';
+
 export default function CounterScreen() {
    useKeepAwake();
    
@@ -106,23 +108,11 @@ export default function CounterScreen() {
             )}
 
             {stitchCounts !== null && (
-              <View style={[styles.stitches, { borderTopColor: card.border }]}>
-                <Text style={[styles.eyebrow, { color: colors.muted }]}>STITCHES</Text>
-                <Text style={[styles.stitchValue, { color: colors.text }]}>
-                  {stitchCounts[pattern.currentRow]}
-                  {info.stitchChange !== 0 && (
-                    <Text style={{ color: colors.mark }}>
-                      {' → '}
-                      {stitchCounts[pattern.currentRow] + info.stitchChange}
-                    </Text>
-                  )}
-                </Text>
-                <Text style={[styles.stitchNote, { color: colors.muted }]}>
-                  {info.stitchChange === 0
-                    ? 'on your needle'
-                    : `${info.stitchChange > 0 ? '+' : '−'}${Math.abs(info.stitchChange)} this row`}
-                </Text>
-              </View>
+              <StitchCount
+                before={stitchCounts[pattern.currentRow]}
+                change={info.stitchChange}
+                lineColor={card.border}
+              />
             )}
           </View>
         )}
@@ -261,22 +251,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   normalRow: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-  },
-    stitches: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'baseline',
-    gap: 10,
-    borderTopWidth: 1,
-    paddingTop: 12,
-  },
-  stitchValue: {
-    fontFamily: fonts.display,
-    fontSize: 28,
-  },
-  stitchNote: {
     fontFamily: fonts.body,
     fontSize: 15,
   },
