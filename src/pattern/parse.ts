@@ -46,3 +46,46 @@ export function parseRows(spec: string): ParsedRows {
 
     return result;
 }
+
+export type ParsedInstruction = {
+    highlight: boolean;
+    isEnd: boolean;
+    stitchChange: number;
+    parts: string[];
+};
+
+export function parseInstruction(input: string): ParsedInstruction {
+    let text = input.trim();
+    let highlight = false;
+    let isEnd = false;
+
+    while (true) {
+        if (text.startsWith('!')) {
+            highlight = true;
+            text = text.slice(1).trim();
+        } else if (/^END\b/.test(text)) {
+            isEnd = true;
+            text = text.slice(3).trim();
+        } else {
+            break;
+        }
+    }
+
+    let stitchChange = 0;
+    text = text
+        .replace(/\(\s*([+\-−])\s*(\d+)\s*\)/g, (_match, sign: string, amount: string) => {
+            stitchChange += (sign === '+' ? 1 : -1) * Number(amount);
+            return '';
+        })
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+    const parts = text
+        .split('|')
+        .map((part) => part.trim())
+        .filter((part) => part !== '');
+    if (parts.length === 0) parts.push(isEnd ? 'Last row' : '');
+
+    return { highlight, isEnd, stitchChange, parts };
+}
+
