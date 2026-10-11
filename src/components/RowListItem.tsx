@@ -7,12 +7,10 @@ type Props = {
   info: RowInfo;
   stitchesBefore: number | null;
   isCurrent: boolean;
-  isSelected: boolean;
-  onPress: () => void;
-  onGoTo: () => void;
+  onLongPress: () => void; // hold the row to jump to it
 };
 
-export function RowListItem({ info, stitchesBefore, isCurrent, isSelected, onPress, onGoTo }: Props) {
+export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Props) {
   const colors = useTheme();
 
   const background = info.isLastRow
@@ -27,57 +25,49 @@ export function RowListItem({ info, stitchesBefore, isCurrent, isSelected, onPre
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 
   return (
-    <View style={[styles.item, { backgroundColor: background, borderBottomColor: colors.line }]}>
-      <Pressable
-        onPress={onPress}
-        style={[styles.row, isCurrent && { borderLeftColor: colors.accent, borderLeftWidth: 4 }]}
-      >
-        <Text style={[styles.number, { color: numberColor }]}>{info.row}</Text>
+    <Pressable
+      onLongPress={onLongPress}
+      accessibilityHint="Hold to jump to this row"
+      style={({ pressed }) => [
+        styles.row,
+        { backgroundColor: background, borderBottomColor: colors.line, opacity: pressed ? 0.6 : 1 },
+        isCurrent && { borderLeftColor: colors.accent },
+      ]}
+    >
+      <Text style={[styles.number, { color: numberColor }]}>{info.row}</Text>
 
-        <View style={styles.texts}>
-          {isCurrent && <Text style={[styles.here, { color: colors.accent }]}>YOU ARE HERE</Text>}
+      <View style={styles.texts}>
+        {isCurrent && <Text style={[styles.here, { color: colors.accent }]}>YOU ARE HERE</Text>}
 
-          {info.isEmpty ? (
-            <Text style={[styles.empty, { color: colors.muted }]}>No instruction</Text>
-          ) : (
-            <Text style={[styles.instruction, { color: textColor }, info.highlight && styles.bold]}>
-              {text}
-            </Text>
-          )}
+        {info.isEmpty ? (
+          <Text style={[styles.empty, { color: colors.muted }]}>No instruction</Text>
+        ) : (
+          <Text style={[styles.instruction, { color: textColor }, info.highlight && styles.bold]}>
+            {text}
+          </Text>
+        )}
 
-          {info.normalRow !== null && (
-            <Text style={[styles.small, { color: colors.muted }]}>Normal row here: {info.normalRow}</Text>
-          )}
+        {info.normalRow !== null && (
+          <Text style={[styles.small, { color: colors.muted }]}>Normal row here: {info.normalRow}</Text>
+        )}
 
-          {stitchesBefore !== null && info.stitchChange !== 0 && (
-            <Text style={[styles.small, { color: colors.muted }]}>
-              {stitchesBefore} → {stitchesBefore + info.stitchChange} stitches
-            </Text>
-          )}
-        </View>
-      </Pressable>
-
-      {isSelected && !isCurrent && (
-        <Pressable
-          onPress={onGoTo}
-          style={({ pressed }) => [styles.goTo, { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1 }]}
-        >
-          <Text style={[styles.goToText, { color: colors.onAccent }]}>Go to row {info.row}</Text>
-        </Pressable>
-      )}
-    </View>
+        {stitchesBefore !== null && info.stitchChange !== 0 && (
+          <Text style={[styles.small, { color: colors.muted }]}>
+            {stitchesBefore} → {stitchesBefore + info.stitchChange} stitches
+          </Text>
+        )}
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  item: {
-    borderBottomWidth: 1,
-  },
   row: {
     flexDirection: 'row',
     gap: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
+    borderBottomWidth: 1,
     borderLeftWidth: 4,
     borderLeftColor: 'transparent',
   },
@@ -110,17 +100,5 @@ const styles = StyleSheet.create({
   small: {
     fontFamily: fonts.body,
     fontSize: 13,
-  },
-  goTo: {
-    alignSelf: 'flex-start',
-    marginLeft: 66,
-    marginBottom: 12,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-  },
-  goToText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
   },
 });

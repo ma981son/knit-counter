@@ -1,12 +1,13 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { RowListItem } from '@/src/components/RowListItem';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
+
 
 export default function RowsScreen() {
   const colors = useTheme();
@@ -36,22 +37,23 @@ export default function RowsScreen() {
     );
   }
 
-  return (
+    return (
     <FlatList
       style={{ backgroundColor: colors.background }}
       data={rows}
       keyExtractor={(info) => String(info.row)}
-      extraData={{ currentRow: pattern.currentRow, selectedRow }}
+      extraData={pattern.currentRow}
+      ListHeaderComponent={
+        <Text style={[styles.hint, { color: colors.muted }]}>Hold a row to jump there.</Text>
+      }
       renderItem={({ item }) => (
         <RowListItem
           info={item}
           stitchesBefore={stitchCounts?.[item.row] ?? null}
           isCurrent={item.row === pattern.currentRow}
-          isSelected={item.row === selectedRow}
-          onPress={() => setSelectedRow(selectedRow === item.row ? null : item.row)}
-          onGoTo={() => {
+          onLongPress={() => {
+            Vibration.vibrate(30);
             setRow(pattern.id, item.row);
-            setSelectedRow(null);
             router.navigate('/');
           }}
         />
@@ -70,5 +72,11 @@ const styles = StyleSheet.create({
   message: {
     fontFamily: fonts.body,
     fontSize: 16,
+  },
+    hint: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
 });
