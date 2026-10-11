@@ -50,7 +50,11 @@ export default function TabLayout() {
           title: 'Rows',
           tabBarIcon: ({ color }) => (
             <TabIcon
-              name={{ android: 'format_list_numbered', ios: 'list.number', web: 'format_list_numbered' }}
+              name={{
+                android: 'format_list_numbered',
+                ios: 'list.number',
+                web: 'format_list_numbered',
+              }}
               color={color}
             />
           ),
@@ -62,7 +66,11 @@ export default function TabLayout() {
           title: 'Code',
           tabBarIcon: ({ color }) => (
             <TabIcon
-              name={{ android: 'code', ios: 'chevron.left.forwardslash.chevron.right', web: 'code' }}
+              name={{
+                android: 'code',
+                ios: 'chevron.left.forwardslash.chevron.right',
+                web: 'code',
+              }}
               color={color}
             />
           ),

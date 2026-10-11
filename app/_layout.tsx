@@ -13,9 +13,7 @@ import {
 } from '@expo-google-fonts/figtree';
 import { YoungSerif_400Regular } from '@expo-google-fonts/young-serif';
 
-export {
-  ErrorBoundary
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',

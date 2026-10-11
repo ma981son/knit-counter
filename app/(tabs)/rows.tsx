@@ -10,7 +10,6 @@ import { fonts, useTheme } from '@/src/theme';
 
 import type { RowInfo } from '@/src/pattern/types';
 
-
 export default function RowsScreen() {
   const colors = useTheme();
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function RowsScreen() {
     () => Array.from({ length: parsed.totalRows }, (_, index) => getRowInfo(parsed, index + 1)),
     [parsed],
   );
-  
+
   const listRef = useRef<FlatList<RowInfo>>(null);
 
   const currentIndex = pattern ? Math.min(pattern.currentRow, rows.length) - 1 : -1;
@@ -53,7 +52,7 @@ export default function RowsScreen() {
     );
   }
 
-    return (
+  return (
     <FlatList
       ref={listRef}
       style={{ backgroundColor: colors.background }}
@@ -61,7 +60,6 @@ export default function RowsScreen() {
       keyExtractor={(info) => String(info.row)}
       extraData={pattern.currentRow}
       onScrollToIndexFailed={({ index, averageItemLength }) => {
-        // The row isn't drawn yet: jump close to it first, then try again
         listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
         setTimeout(() => {
           listRef.current?.scrollToIndex({ index, viewPosition: 0.3, animated: false });
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 16,
   },
-    hint: {
+  hint: {
     fontFamily: fonts.body,
     fontSize: 14,
     paddingHorizontal: 16,
