@@ -3,16 +3,14 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { parsePatternCode } from '../pattern/parse';
+import { SKIRT_PANEL } from '../patterns/examples';
 import * as actions from './actions';
 import type { Pattern, SavedData } from './types';
-
-import { SKIRT_PANEL } from '../patterns/examples';
 
 function maxRowFor(code: string): number {
     const { totalRows } = parsePatternCode(code).pattern;
     return totalRows > 0 ? totalRows + 1 : Infinity;
 }
-
 
 export function findPattern(data: SavedData, patternId: string): Pattern | undefined {
     for (const project of data.projects) {
@@ -20,6 +18,10 @@ export function findPattern(data: SavedData, patternId: string): Pattern | undef
         if (pattern) return pattern;
     }
     return undefined;
+}
+
+export function selectOpenPattern(state: SavedData): Pattern | undefined {
+    return findPattern(state, state.openPatternId ?? '') ?? state.projects[0]?.patterns[0];
 }
 
 type Store = SavedData & {
@@ -33,6 +35,7 @@ type Store = SavedData & {
     renameProject: (projectId: string, name: string) => void;
     deletePattern: (patternId: string) => void;
     deleteProject: (projectId: string) => void;
+    openPattern: (patternId: string) => void;
 };
 
 export const useStore = create<Store>()(
@@ -56,12 +59,7 @@ export const useStore = create<Store>()(
                 const pattern = findPattern(get(), patternId);
                 if (!pattern) return;
                 set((state) =>
-                    actions.setRow(state, {
-                        patternId,
-                        row,
-                        maxRow: maxRowFor(pattern.code),
-                        now: Date.now(),
-                    }),
+                    actions.setRow(state, { patternId, row, maxRow: maxRowFor(pattern.code), now: Date.now() }),
                 );
             },
 
@@ -90,11 +88,17 @@ export const useStore = create<Store>()(
                 set((state) => actions.deletePattern(state, { patternId, now: Date.now() })),
 
             deleteProject: (projectId) => set((state) => actions.deleteProject(state, { projectId })),
+
+            openPattern: (patternId) => set({ openPatternId: patternId }),
         }),
         {
             name: 'knit-counter-data',
             storage: createJSONStorage(() => AsyncStorage),
-            partialize: (state): SavedData => ({ version: state.version, projects: state.projects }),
+            partialize: (state): SavedData => ({
+                version: state.version,
+                projects: state.projects,
+                openPatternId: state.openPatternId,
+            }),
             onRehydrateStorage: () => (state) => {
                 if (state && state.projects.length === 0) {
                     const projectId = state.addProject('Skirt');

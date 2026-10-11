@@ -15,4 +15,5 @@ export type Pattern = {
 export type SavedData = {
   version: 1;
   projects: Project[];
+  openPatternId: string | null;
 };

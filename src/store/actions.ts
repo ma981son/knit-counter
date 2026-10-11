@@ -1,6 +1,6 @@
 import type { Pattern, Project, SavedData } from './types';
 
-export const emptyData: SavedData = { version: 1, projects: [] };
+export const emptyData: SavedData = { version: 1, projects: [], openPatternId: null };
 
 export function createId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -105,10 +105,10 @@ export function deletePattern(
     projects: data.projects.map((project) =>
       project.patterns.some((pattern) => pattern.id === args.patternId)
         ? {
-            ...project,
-            updatedAt: args.now,
-            patterns: project.patterns.filter((pattern) => pattern.id !== args.patternId),
-          }
+          ...project,
+          updatedAt: args.now,
+          patterns: project.patterns.filter((pattern) => pattern.id !== args.patternId),
+        }
         : project,
     ),
   };
