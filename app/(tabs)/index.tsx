@@ -9,6 +9,8 @@ import { fonts, useTheme } from '@/src/theme';
 import { useKeepAwake } from 'expo-keep-awake';
 import { Pressable, Vibration } from 'react-native';
 
+import { CounterControls } from '@/src/components/CounterControls';
+import { FinishedCard } from '@/src/components/FinishedCard';
 import { RowCard } from '@/src/components/RowCard';
 
 export default function CounterScreen() {
@@ -60,53 +62,17 @@ export default function CounterScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         {isFinished ? (
-          <View style={[styles.card, styles.doneCard, { backgroundColor: colors.endBackground, borderColor: colors.end }]}>
-            <Text style={[styles.doneTitle, { color: colors.text }]}>Piece finished</Text>
-            <Text style={[styles.doneText, { color: colors.muted }]}>
-              All {parsed.totalRows} rows done. Tap −1 if you need to go back.
-            </Text>
-            <Pressable
-              onPress={restart}
-              style={({ pressed }) => [styles.smallButton, { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1 }]}
-            >
-              <Text style={[styles.smallButtonText, { color: colors.onAccent }]}>Start again from row 1</Text>
-            </Pressable>
-          </View>
+          <FinishedCard totalRows={parsed.totalRows} onRestart={restart} />
         ) : (
           <RowCard info={info} stitchesBefore={stitchCounts?.[pattern.currentRow] ?? null} />
         )}
       </View>
 
-      <View style={styles.controls}>
-        <Pressable
-          accessibilityLabel="Back one row"
-          onPress={() => previousRow(pattern.id)}
-          style={({ pressed }) => [
-            styles.button,
-            styles.minus,
-            { backgroundColor: colors.surface, borderColor: colors.line, opacity: pressed ? 0.7 : 1 },
-          ]}
-        >
-          <Text style={[styles.minusText, { color: colors.text }]}>−1</Text>
-        </Pressable>
-
-        <Pressable
-          accessibilityLabel="Row done, next row"
-          disabled={isFinished}
-          onPress={handleNextRow}
-          style={({ pressed }) => [
-            styles.button,
-            styles.plus,
-            {
-              backgroundColor: colors.accent,
-              borderColor: colors.accent,
-              opacity: isFinished ? 0.4 : pressed ? 0.85 : 1,
-            },
-          ]}
-        >
-          <Text style={[styles.plusText, { color: colors.onAccent }]}>+1 row</Text>
-        </Pressable>
-      </View>
+      <CounterControls
+        onPrevious={() => previousRow(pattern.id)}
+        onNext={handleNextRow}
+        nextDisabled={isFinished}
+      />
 
       {pattern.currentRow > 1 && !isFinished && (
         confirmingRestart ? (
@@ -143,50 +109,6 @@ const styles = StyleSheet.create({
     content: {
     flex: 1,
     gap: 12,
-  },
-  controls: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  button: {
-    borderRadius: 16,
-    borderWidth: 1,
-    paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  minus: {
-    flex: 1,
-  },
-  plus: {
-    flex: 2.4,
-  },
-  minusText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 22,
-  },
-  plusText: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 24,
-  },
-    card: {
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 20,
-    gap: 12,
-  },
-    doneCard: {
-    alignItems: 'center',
-    paddingVertical: 28,
-  },
-  doneTitle: {
-    fontFamily: fonts.display,
-    fontSize: 32,
-  },
-  doneText: {
-    fontFamily: fonts.body,
-    fontSize: 16,
-    textAlign: 'center',
   },
   smallButton: {
     borderRadius: 14,
