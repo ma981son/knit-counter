@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { RowListItem } from '@/src/components/RowListItem';
@@ -7,6 +7,8 @@ import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
+
+import type { RowInfo } from '@/src/pattern/types';
 
 
 export default function RowsScreen() {
@@ -19,6 +21,20 @@ export default function RowsScreen() {
   const rows = useMemo(
     () => Array.from({ length: parsed.totalRows }, (_, index) => getRowInfo(parsed, index + 1)),
     [parsed],
+  );
+  
+  const listRef = useRef<FlatList<RowInfo>>(null);
+
+  const currentIndex = pattern ? Math.min(pattern.currentRow, rows.length) - 1 : -1;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (currentIndex < 0) return;
+      const timer = setTimeout(() => {
+        listRef.current?.scrollToIndex({ index: currentIndex, viewPosition: 0.3, animated: false });
+      }, 50);
+      return () => clearTimeout(timer);
+    }, [currentIndex]),
   );
 
   if (!pattern) {
@@ -39,10 +55,18 @@ export default function RowsScreen() {
 
     return (
     <FlatList
+      ref={listRef}
       style={{ backgroundColor: colors.background }}
       data={rows}
       keyExtractor={(info) => String(info.row)}
       extraData={pattern.currentRow}
+      onScrollToIndexFailed={({ index, averageItemLength }) => {
+        // The row isn't drawn yet: jump close to it first, then try again
+        listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+        setTimeout(() => {
+          listRef.current?.scrollToIndex({ index, viewPosition: 0.3, animated: false });
+        }, 100);
+      }}
       ListHeaderComponent={
         <Text style={[styles.hint, { color: colors.muted }]}>Hold a row to jump there.</Text>
       }
