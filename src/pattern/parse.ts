@@ -1,4 +1,4 @@
-import type { RowRange } from './types';
+import type { ParseResult, PatternCodeLine, RowRange } from './types';
 
 export type ParsedRows = {
     singleRows: number[];
@@ -89,3 +89,75 @@ export function parseInstruction(input: string): ParsedInstruction {
     return { highlight, isEnd, stitchChange, parts };
 }
 
+const CAST_ON = /^(cast\s*on|co|anschlag(?:en)?)\s*:\s*(\d+)\s*$/i;
+const STARTS_WITH_ROWS = /^\s*(rows?|rounds?|rnds?|rd|reihen?|runden?)?\.?\s*\d/i;
+
+function shorten(text: string): string {
+    return text.length > 40 ? text.slice(0, 40) + '…' : text;
+}
+
+export function parsePatternCode(code: string): ParseResult {
+    const lines: PatternCodeLine[] = [];
+    const warnings: string[] = [];
+    let castOn: number | null = null;
+
+    for (const [index, rawLine] of code.split(/\r?\n/).entries()) {
+        const lineNumber = index + 1;
+        const line = rawLine.trim();
+        if (line === '') continue;
+
+        const castOnMatch = line.match(CAST_ON);
+        if (castOnMatch) {
+            castOn = Number(castOnMatch[2]);
+            continue;
+        }
+
+        const colon = line.indexOf(':');
+        const rowPart = colon === -1 ? '' : line.slice(0, colon);
+        if (colon === -1 || !STARTS_WITH_ROWS.test(rowPart)) {
+            warnings.push(`Line ${lineNumber} was skipped because it doesn't start with a row number: "${shorten(line)}"`);
+            continue;
+        }
+
+        const rows = parseRows(rowPart);
+        for (const part of rows.invalid) {
+            warnings.push(`Line ${lineNumber}: "${part}" isn't a row number or range.`);
+        }
+        if (rows.singleRows.length === 0 && rows.ranges.length === 0) continue;
+
+        const instruction = parseInstruction(line.slice(colon + 1));
+        lines.push({
+            lineNumber,
+            singleRows: rows.singleRows,
+            ranges: rows.ranges,
+            ...instruction,
+        });
+    }
+
+    const endRows = lines
+        .filter((line) => line.isEnd)
+        .flatMap((line) => [...line.singleRows, ...line.ranges.map((range) => range.from)]);
+    const endRow = endRows.length > 0 ? Math.min(...endRows) : null;
+
+    let highestRow = 0;
+    for (const line of lines) {
+        for (const row of line.singleRows) highestRow = Math.max(highestRow, row);
+        for (const range of line.ranges) {
+            highestRow = Math.max(highestRow, Number.isFinite(range.to) ? range.to : range.from);
+        }
+    }
+
+    const totalRows = endRow ?? highestRow;
+
+    if (endRow !== null && highestRow > endRow) {
+        warnings.push(`The pattern ends at row ${endRow} (END), so rows after that are ignored (up to row ${highestRow}).`);
+    }
+    if (totalRows === 0) {
+        warnings.push('No rows found yet. Start a line with a row number, like "1-6: Knit".');
+    }
+
+    return {
+        pattern: { lines, castOn, endRow, totalRows },
+        warnings,
+    };
+}
