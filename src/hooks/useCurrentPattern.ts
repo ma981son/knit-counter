@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { usePatternId } from '@/src/hooks/PatternIdContext';
 import { useMemo } from 'react';
 
 import { parsePatternCode } from '@/src/pattern/parse';
@@ -6,7 +6,7 @@ import { getStitchCounts } from '@/src/pattern/rows';
 import { findPattern, useStore } from '@/src/store/store';
 
 export function useCurrentPattern() {
-    const { patternId } = useLocalSearchParams<{ patternId: string }>();
+    const patternId = usePatternId() ?? '';
     const pattern = useStore((state) => findPattern(state, patternId));
 
     const code = pattern?.code ?? '';
