@@ -9,7 +9,7 @@ import { fonts, useTheme } from '@/src/theme';
 import { useKeepAwake } from 'expo-keep-awake';
 import { Pressable, Vibration } from 'react-native';
 
-import { StitchCount } from '@/src/components/StitchCount';
+import { RowCard } from '@/src/components/RowCard';
 
 export default function CounterScreen() {
    useKeepAwake();
@@ -36,12 +36,6 @@ export default function CounterScreen() {
   }
 
   const info = getRowInfo(parsed, pattern.currentRow);
-  
-  const card = info.isLastRow
-    ? { background: colors.endBackground, border: colors.end, text: colors.text, badge: 'Last row' }
-    : info.highlight
-      ? { background: colors.markBackground, border: colors.mark, text: colors.markText, badge: 'Pay attention' }
-      : { background: colors.surface, border: colors.line, text: colors.text, badge: null };
       
   const isFinished = parsed.totalRows > 0 && pattern.currentRow > parsed.totalRows;
 
@@ -79,42 +73,7 @@ export default function CounterScreen() {
             </Pressable>
           </View>
         ) : (
-          <View style={[styles.card, { backgroundColor: card.background, borderColor: card.border }]}>
-            <View style={styles.cardTop}>
-              <Text style={[styles.eyebrow, { color: colors.muted }]}>ROW</Text>
-              {card.badge !== null && (
-                <View style={[styles.badge, { backgroundColor: card.border }]}>
-                  <Text style={[styles.badgeText, { color: colors.surface }]}>{card.badge}</Text>
-                </View>
-              )}
-            </View>
-
-            <Text style={[styles.rowNumber, { color: colors.text }]}>{pattern.currentRow}</Text>
-
-            {info.isEmpty ? (
-              <Text style={[styles.emptyNote, { color: colors.muted }]}>No instruction for this row.</Text>
-            ) : (
-              info.instructions.map((instruction, index) => (
-                <Text key={index} style={[styles.instruction, { color: card.text }]}>
-                  {instruction.text}
-                </Text>
-              ))
-            )}
-
-            {info.normalRow !== null && (
-              <Text style={[styles.normalRow, { color: colors.muted }]}>
-                Normal row here: {info.normalRow}
-              </Text>
-            )}
-
-            {stitchCounts !== null && (
-              <StitchCount
-                before={stitchCounts[pattern.currentRow]}
-                change={info.stitchChange}
-                lineColor={card.border}
-              />
-            )}
-          </View>
+          <RowCard info={info} stitchesBefore={stitchCounts?.[pattern.currentRow] ?? null} />
         )}
       </View>
 
@@ -181,10 +140,6 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  instruction: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 22,
-  },
     content: {
     flex: 1,
     gap: 12,
@@ -219,40 +174,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 20,
     gap: 12,
-  },
-  cardTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  eyebrow: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    letterSpacing: 1,
-  },
-  badge: {
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  badgeText: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 12,
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-  },
-  rowNumber: {
-    fontFamily: fonts.display,
-    fontSize: 96,
-    lineHeight: 104,
-  },
-  emptyNote: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 17,
-  },
-  normalRow: {
-    fontFamily: fonts.body,
-    fontSize: 15,
   },
     doneCard: {
     alignItems: 'center',
