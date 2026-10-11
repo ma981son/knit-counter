@@ -1,13 +1,12 @@
 import { useKeepAwake } from 'expo-keep-awake';
-import { useMemo } from 'react';
 import { StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
 import { FinishedCard } from '@/src/components/FinishedCard';
 import { RestartPrompt } from '@/src/components/RestartPrompt';
 import { RowCard } from '@/src/components/RowCard';
-import { parsePatternCode } from '@/src/pattern/parse';
-import { getRowInfo, getStitchCounts } from '@/src/pattern/rows';
+import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
+import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
@@ -15,14 +14,10 @@ export default function CounterScreen() {
   useKeepAwake();
   const colors = useTheme();
 
-  const pattern = useStore((state) => state.projects[0]?.patterns[0]);
+  const { pattern, parsed, stitchCounts } = useCurrentPattern();
   const nextRow = useStore((state) => state.nextRow);
   const previousRow = useStore((state) => state.previousRow);
   const setRow = useStore((state) => state.setRow);
-
-  const code = pattern?.code ?? '';
-  const parsed = useMemo(() => parsePatternCode(code).pattern, [code]);
-  const stitchCounts = useMemo(() => getStitchCounts(parsed), [parsed]);
 
   if (!pattern) {
     return (
