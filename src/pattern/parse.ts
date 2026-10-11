@@ -1,4 +1,5 @@
-import type { ParseResult, PatternCodeLine, RowRange } from './types';
+import { findRowProblems } from './rows';
+import type { ParsedPattern, ParseResult, PatternCodeLine, RowRange } from './types';
 
 export type ParsedRows = {
     singleRows: number[];
@@ -156,8 +157,8 @@ export function parsePatternCode(code: string): ParseResult {
         warnings.push('No rows found yet. Start a line with a row number, like "1-6: Knit".');
     }
 
-    return {
-        pattern: { lines, castOn, endRow, totalRows },
-        warnings,
-    };
+    const pattern: ParsedPattern = { lines, castOn, endRow, totalRows };
+    warnings.push(...findRowProblems(pattern));
+
+    return { pattern, warnings };
 }
