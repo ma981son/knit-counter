@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
 import { ListCard } from '@/src/components/ListCard';
-import { useStore } from '@/src/store/store';
+import { useHasHydrated } from '@/src/hooks/useHasHydrated';
+import { findPattern, useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function ProjectsScreen() {
@@ -15,6 +16,24 @@ export default function ProjectsScreen() {
     () => [...projects].sort((a, b) => b.updatedAt - a.updatedAt),
     [projects],
   );
+  
+  const hydrated = useHasHydrated();
+  const didAutoOpen = useRef(false);
+
+  useEffect(() => {
+    if (!hydrated || didAutoOpen.current) return;
+    didAutoOpen.current = true;
+
+    const state = useStore.getState();
+    const pattern = state.openPatternId ? findPattern(state, state.openPatternId) : undefined;
+    if (!pattern) return;
+
+    const project = state.projects.find((p) => p.patterns.some((x) => x.id === pattern.id));
+    if (project) {
+      router.push({ pathname: '/project/[projectId]', params: { projectId: project.id } });
+    }
+    router.push({ pathname: '/pattern/[patternId]', params: { patternId: pattern.id } });
+  }, [hydrated, router]);
 
   return (
     <FlatList
