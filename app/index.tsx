@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef } from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
+import { AddItem } from '@/src/components/AddItem';
 import { ListCard } from '@/src/components/ListCard';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { findPattern, useStore } from '@/src/store/store';
@@ -19,6 +20,8 @@ export default function ProjectsScreen() {
   
   const hydrated = useHasHydrated();
   const didAutoOpen = useRef(false);
+  
+  const addProject = useStore((state) => state.addProject);
 
   useEffect(() => {
     if (!hydrated || didAutoOpen.current) return;
@@ -38,9 +41,21 @@ export default function ProjectsScreen() {
   return (
     <FlatList
       style={{ backgroundColor: colors.background }}
+      
       contentContainerStyle={styles.list}
       data={sortedProjects}
       keyExtractor={(project) => project.id}
+      keyboardShouldPersistTaps="handled"
+      ListHeaderComponent={
+        <AddItem
+          label="New project"
+          placeholder="Project name, e.g. Sweater"
+          onAdd={(name) => {
+            const id = addProject(name);
+            router.push({ pathname: '/project/[projectId]', params: { projectId: id } });
+          }}
+        />
+      }
       renderItem={({ item }) => (
         <ListCard
           title={item.name}
@@ -49,7 +64,8 @@ export default function ProjectsScreen() {
             router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
           }
         />
-      )}
+      )
+    }
       ListEmptyComponent={
         <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
       }

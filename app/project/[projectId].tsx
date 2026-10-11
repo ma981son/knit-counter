@@ -1,6 +1,7 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
+import { AddItem } from '@/src/components/AddItem';
 import { ListCard } from '@/src/components/ListCard';
 import { parsePatternCode } from '@/src/pattern/parse';
 import { useStore } from '@/src/store/store';
@@ -20,6 +21,7 @@ export default function ProjectScreen() {
   const { projectId } = useLocalSearchParams<{ projectId: string }>();
   const project = useStore((state) => state.projects.find((p) => p.id === projectId));
   const openPattern = useStore((state) => state.openPattern);
+  const addPattern = useStore((state) => state.addPattern);
 
   function open(patternId: string) {
     openPattern(patternId);
@@ -34,6 +36,20 @@ export default function ProjectScreen() {
         contentContainerStyle={styles.list}
         data={project?.patterns ?? []}
         keyExtractor={(pattern) => pattern.id}
+        keyboardShouldPersistTaps="handled"
+        ListHeaderComponent={
+          project ? (
+            <AddItem
+              label="New pattern"
+              placeholder="Pattern name, e.g. Left sleeve"
+              onAdd={(name) => {
+                const id = addPattern(project.id, name);
+                openPattern(id);
+                router.push({ pathname: '/pattern/[patternId]/code', params: { patternId: id } });
+              }}
+            />
+          ) : null
+        }
         renderItem={({ item }) => (
           <ListCard title={item.name} subtitle={progressText(item)} onPress={() => open(item.id)} />
         )}
