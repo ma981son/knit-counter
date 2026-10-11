@@ -23,7 +23,7 @@ export default function ProjectScreen() {
 
   function open(patternId: string) {
     openPattern(patternId);
-        router.navigate({ pathname: '/pattern/[patternId]', params: { patternId } });
+    router.navigate({ pathname: '/pattern/[patternId]', params: { patternId } });
   }
 
   return (
