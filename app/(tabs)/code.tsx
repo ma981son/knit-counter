@@ -7,7 +7,6 @@ import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
-
 export default function CodeScreen() {
   const colors = useTheme();
   const { pattern, parsed, warnings, stitchCounts } = useCurrentPattern();
@@ -52,8 +51,12 @@ export default function CodeScreen() {
         ]}
       />
 
-            <View style={styles.buttons}>
-        <Button title="Save code" onPress={() => updateCode(pattern.id, draft)} disabled={!hasChanges} />
+      <View style={styles.buttons}>
+        <Button
+          title="Save code"
+          onPress={() => updateCode(pattern.id, draft)}
+          disabled={!hasChanges}
+        />
         {hasChanges && (
           <Button title="Discard changes" variant="secondary" onPress={() => setDraft(savedCode)} />
         )}
