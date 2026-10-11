@@ -79,3 +79,12 @@ class RowNotificationModule : Module() {
     try {
       ContextCompat.startForegroundService(context, intent)
     } catch (error: Exception) {
+      Log.w("RowNotification", "Could not start service", error)
+    }
+  }
+
+  private fun stopService() {
+    val context = appContext.reactContext ?: return
+    context.stopService(Intent(context, RowNotificationService::class.java))
+  }
+}
