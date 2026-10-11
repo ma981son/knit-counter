@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { parsePatternCode } from '@/src/pattern/parse';
-import { getRowInfo } from '@/src/pattern/rows';
+import { getRowInfo, getStitchCounts } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
@@ -15,6 +15,7 @@ export default function CounterScreen() {
 
   const code = pattern?.code ?? '';
   const parsed = useMemo(() => parsePatternCode(code).pattern, [code]);
+  const stitchCounts = useMemo(() => getStitchCounts(parsed), [parsed]);
   
   const nextRow = useStore((state) => state.nextRow);
   const previousRow = useStore((state) => state.previousRow);
@@ -64,6 +65,25 @@ export default function CounterScreen() {
             <Text style={[styles.normalRow, { color: colors.muted }]}>
               Normal row here: {info.normalRow}
             </Text>
+          )}
+                    {stitchCounts !== null && (
+            <View style={[styles.stitches, { borderTopColor: card.border }]}>
+              <Text style={[styles.eyebrow, { color: colors.muted }]}>STITCHES</Text>
+              <Text style={[styles.stitchValue, { color: colors.text }]}>
+                {stitchCounts[pattern.currentRow]}
+                {info.stitchChange !== 0 && (
+                  <Text style={{ color: colors.mark }}>
+                    {' → '}
+                    {stitchCounts[pattern.currentRow] + info.stitchChange}
+                  </Text>
+                )}
+              </Text>
+              <Text style={[styles.stitchNote, { color: colors.muted }]}>
+                {info.stitchChange === 0
+                  ? 'on your needle'
+                  : `${info.stitchChange > 0 ? '+' : '−'}${Math.abs(info.stitchChange)} this row`}
+              </Text>
+            </View>
           )}
         </View>
       </View>
@@ -173,6 +193,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   normalRow: {
+    fontFamily: fonts.body,
+    fontSize: 15,
+  },
+    stitches: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    gap: 10,
+    borderTopWidth: 1,
+    paddingTop: 12,
+  },
+  stitchValue: {
+    fontFamily: fonts.display,
+    fontSize: 28,
+  },
+  stitchNote: {
     fontFamily: fonts.body,
     fontSize: 15,
   },
