@@ -15,6 +15,8 @@ const light = {
     endBackground: '#ddefe5',
     warnBackground: '#fff4dc',
     warnText: '#6b4500',
+    danger: '#b3261e',
+    onDanger: '#ffffff',
 };
 
 const dark: typeof light = {
@@ -32,6 +34,8 @@ const dark: typeof light = {
     endBackground: '#16302a',
     warnBackground: '#33270f',
     warnText: '#f3d29a',
+    danger: '#f2b8b5',
+    onDanger: '#601410',
 };
 
 export type ThemeColors = typeof light;

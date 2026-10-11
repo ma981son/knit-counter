@@ -1,27 +1,29 @@
 import { useRouter } from 'expo-router';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
 import { AddItem } from '@/src/components/AddItem';
+import { EditItemSheet } from '@/src/components/EditItemSheet';
 import { ListCard } from '@/src/components/ListCard';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { findPattern, useStore } from '@/src/store/store';
+import { Project } from '@/src/store/types';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function ProjectsScreen() {
   const colors = useTheme();
   const router = useRouter();
   const projects = useStore((state) => state.projects);
-
   const sortedProjects = useMemo(
     () => [...projects].sort((a, b) => b.updatedAt - a.updatedAt),
     [projects],
   );
-  
   const hydrated = useHasHydrated();
   const didAutoOpen = useRef(false);
-  
   const addProject = useStore((state) => state.addProject);
+  const renameProject = useStore((state) => state.renameProject);
+  const deleteProject = useStore((state) => state.deleteProject);
+  const [editing, setEditing] = useState<Project | null>(null);
 
   useEffect(() => {
     if (!hydrated || didAutoOpen.current) return;
@@ -39,6 +41,7 @@ export default function ProjectsScreen() {
   }, [hydrated, router]);
 
   return (
+     <>
     <FlatList
       style={{ backgroundColor: colors.background }}
       
@@ -63,6 +66,7 @@ export default function ProjectsScreen() {
           onPress={() =>
             router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
           }
+          onLongPress={() => setEditing(item)}
         />
       )
     }
@@ -70,6 +74,16 @@ export default function ProjectsScreen() {
         <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
       }
     />
+    <EditItemSheet
+        visible={editing !== null}
+        kind="project"
+        initialName={editing?.name ?? ''}
+        deleteMessage={`This deletes "${editing?.name}" and all its patterns. This can't be undone.`}
+        onRename={(name) => editing && renameProject(editing.id, name)}
+        onDelete={() => editing && deleteProject(editing.id)}
+        onClose={() => setEditing(null)}
+      />
+      </>
   );
 }
 

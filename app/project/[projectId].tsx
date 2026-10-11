@@ -2,11 +2,13 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
 import { AddItem } from '@/src/components/AddItem';
+import { EditItemSheet } from '@/src/components/EditItemSheet';
 import { ListCard } from '@/src/components/ListCard';
 import { parsePatternCode } from '@/src/pattern/parse';
 import { useStore } from '@/src/store/store';
 import type { Pattern } from '@/src/store/types';
 import { fonts, useTheme } from '@/src/theme';
+import { useState } from 'react';
 
 function progressText(pattern: Pattern): string {
   const totalRows = parsePatternCode(pattern.code).pattern.totalRows;
@@ -22,6 +24,9 @@ export default function ProjectScreen() {
   const project = useStore((state) => state.projects.find((p) => p.id === projectId));
   const openPattern = useStore((state) => state.openPattern);
   const addPattern = useStore((state) => state.addPattern);
+  const renamePattern = useStore((state) => state.renamePattern);
+  const deletePattern = useStore((state) => state.deletePattern);
+  const [editing, setEditing] = useState<Pattern | null>(null);
 
   function open(patternId: string) {
     openPattern(patternId);
@@ -51,13 +56,22 @@ export default function ProjectScreen() {
           ) : null
         }
         renderItem={({ item }) => (
-          <ListCard title={item.name} subtitle={progressText(item)} onPress={() => open(item.id)} />
+          <ListCard title={item.name} subtitle={progressText(item)} onPress={() => open(item.id)} onLongPress={() => setEditing(item)}/>
         )}
         ListEmptyComponent={
           <Text style={[styles.empty, { color: colors.muted }]}>
             {project ? 'No patterns yet.' : 'This project no longer exists.'}
           </Text>
         }
+      />
+            <EditItemSheet
+        visible={editing !== null}
+        kind="pattern"
+        initialName={editing?.name ?? ''}
+        deleteMessage={`This deletes "${editing?.name}" with its code and your row. This can't be undone.`}
+        onRename={(name) => editing && renamePattern(editing.id, name)}
+        onDelete={() => editing && deletePattern(editing.id)}
+        onClose={() => setEditing(null)}
       />
     </>
   );
