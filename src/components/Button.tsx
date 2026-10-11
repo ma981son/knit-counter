@@ -27,7 +27,9 @@ export function Button({ title, onPress, variant = 'primary', disabled = false }
         },
       ]}
     >
-      <Text style={[styles.text, { color: isPrimary ? colors.onAccent : colors.text }]}>{title}</Text>
+      <Text style={[styles.text, { color: isPrimary ? colors.onAccent : colors.text }]}>
+        {title}
+      </Text>
     </Pressable>
   );
 }

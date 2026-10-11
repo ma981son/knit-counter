@@ -23,7 +23,7 @@ export function RestartPrompt({ onRestart }: Props) {
   return (
     <View style={[styles.box, { backgroundColor: colors.surface, borderColor: colors.line }]}>
       <Text style={[styles.question, { color: colors.text }]}>Go back to row 1?</Text>
-            <View style={styles.buttons}>
+      <View style={styles.buttons}>
         <Button
           title="Yes, start again"
           onPress={() => {

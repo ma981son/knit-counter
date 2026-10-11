@@ -13,7 +13,8 @@ function maxRowFor(code: string): number {
     return totalRows > 0 ? totalRows + 1 : Infinity;
 }
 
-function findPattern(data: SavedData, patternId: string): Pattern | undefined {
+
+export function findPattern(data: SavedData, patternId: string): Pattern | undefined {
     for (const project of data.projects) {
         const pattern = project.patterns.find((p) => p.id === patternId);
         if (pattern) return pattern;
@@ -55,7 +56,12 @@ export const useStore = create<Store>()(
                 const pattern = findPattern(get(), patternId);
                 if (!pattern) return;
                 set((state) =>
-                    actions.setRow(state, { patternId, row, maxRow: maxRowFor(pattern.code), now: Date.now() }),
+                    actions.setRow(state, {
+                        patternId,
+                        row,
+                        maxRow: maxRowFor(pattern.code),
+                        now: Date.now(),
+                    }),
                 );
             },
 

@@ -10,6 +10,7 @@ import { fonts, useTheme } from '@/src/theme';
 
 import type { RowInfo } from '@/src/pattern/types';
 
+
 export default function RowsScreen() {
   const colors = useTheme();
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function RowsScreen() {
     () => Array.from({ length: parsed.totalRows }, (_, index) => getRowInfo(parsed, index + 1)),
     [parsed],
   );
-
+  
   const listRef = useRef<FlatList<RowInfo>>(null);
 
   const currentIndex = pattern ? Math.min(pattern.currentRow, rows.length) - 1 : -1;
@@ -52,7 +53,7 @@ export default function RowsScreen() {
     );
   }
 
-  return (
+    return (
     <FlatList
       ref={listRef}
       style={{ backgroundColor: colors.background }}
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 16,
   },
-  hint: {
+    hint: {
     fontFamily: fonts.body,
     fontSize: 14,
     paddingHorizontal: 16,

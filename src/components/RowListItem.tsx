@@ -7,7 +7,7 @@ type Props = {
   info: RowInfo;
   stitchesBefore: number | null;
   isCurrent: boolean;
-  onLongPress: () => void; // hold the row to jump to it
+  onLongPress: () => void;
 };
 
 export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Props) {
@@ -48,7 +48,9 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
         )}
 
         {info.normalRow !== null && (
-          <Text style={[styles.small, { color: colors.muted }]}>Normal row here: {info.normalRow}</Text>
+          <Text style={[styles.small, { color: colors.muted }]}>
+            Normal row here: {info.normalRow}
+          </Text>
         )}
 
         {stitchesBefore !== null && info.stitchChange !== 0 && (

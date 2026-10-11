@@ -68,7 +68,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={navigationTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="pattern/[patternId]" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

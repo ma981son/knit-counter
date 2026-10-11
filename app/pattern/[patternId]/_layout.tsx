@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { useStore } from '@/src/store/store';
+import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { fonts, useTheme } from '@/src/theme';
 
 type TabIconProps = {
@@ -16,7 +16,8 @@ function TabIcon({ name, color }: TabIconProps) {
 
 export default function TabLayout() {
   const colors = useTheme();
-  const patternName = useStore((state) => state.projects[0]?.patterns[0]?.name);
+  const { pattern } = useCurrentPattern();
+  const patternName = pattern?.name;
 
   return (
     <Tabs
