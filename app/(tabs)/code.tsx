@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { CodeCheatSheet } from '@/src/components/CodeCheatSheet';
 import { PatternSummary } from '@/src/components/PatternSummary';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { useStore } from '@/src/store/store';
@@ -83,6 +84,7 @@ export default function CodeScreen() {
           </Pressable>
         )}
       </View>
+      <CodeCheatSheet />
     </ScrollView>
   );
 }
