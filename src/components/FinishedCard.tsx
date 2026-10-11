@@ -1,0 +1,57 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { fonts, useTheme } from '@/src/theme';
+
+type Props = {
+  totalRows: number;
+  onRestart: () => void;
+};
+
+export function FinishedCard({ totalRows, onRestart }: Props) {
+  const colors = useTheme();
+
+  return (
+    <View style={[styles.card, { backgroundColor: colors.endBackground, borderColor: colors.end }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Piece finished</Text>
+      <Text style={[styles.text, { color: colors.muted }]}>
+        All {totalRows} rows done. Tap −1 if you need to go back.
+      </Text>
+      <Pressable
+        onPress={onRestart}
+        style={({ pressed }) => [styles.button, { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1 }]}
+      >
+        <Text style={[styles.buttonText, { color: colors.onAccent }]}>Start again from row 1</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    borderWidth: 1,
+    borderRadius: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 28,
+    gap: 12,
+    alignItems: 'center',
+  },
+  title: {
+    fontFamily: fonts.display,
+    fontSize: 32,
+  },
+  text: {
+    fontFamily: fonts.body,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  button: {
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    marginTop: 4,
+  },
+  buttonText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 16,
+  },
+});
