@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
-import { useTheme } from '@/src/theme';
+import { fonts, useTheme } from '@/src/theme';
 import {
   Figtree_400Regular,
   Figtree_500Medium,
@@ -67,8 +67,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={navigationTheme}>
-      <Stack>
-          <Stack.Screen name="pattern/[patternId]" options={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.background },
+          headerShadowVisible: false,
+          headerTitleStyle: { fontFamily: fonts.display, fontSize: 22 },
+          headerTintColor: colors.text,
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: 'Projects' }} />
+        <Stack.Screen name="project/[projectId]" options={{ title: '' }} />
+        <Stack.Screen name="pattern/[patternId]" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

@@ -1,11 +1,52 @@
-import { Redirect } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useMemo } from 'react';
+import { FlatList, StyleSheet, Text } from 'react-native';
 
+import { ListCard } from '@/src/components/ListCard';
 import { useStore } from '@/src/store/store';
+import { fonts, useTheme } from '@/src/theme';
 
-export default function HomeScreen() {
-  const firstPatternId = useStore((state) => state.projects[0]?.patterns[0]?.id);
+export default function ProjectsScreen() {
+  const colors = useTheme();
+  const router = useRouter();
+  const projects = useStore((state) => state.projects);
 
-  if (!firstPatternId) return null;
+  const sortedProjects = useMemo(
+    () => [...projects].sort((a, b) => b.updatedAt - a.updatedAt),
+    [projects],
+  );
 
-  return <Redirect href={{ pathname: '/pattern/[patternId]', params: { patternId: firstPatternId } }} />;
+  return (
+    <FlatList
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={styles.list}
+      data={sortedProjects}
+      keyExtractor={(project) => project.id}
+      renderItem={({ item }) => (
+        <ListCard
+          title={item.name}
+          subtitle={item.patterns.length === 1 ? '1 pattern' : `${item.patterns.length} patterns`}
+          onPress={() =>
+            router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
+          }
+        />
+      )}
+      ListEmptyComponent={
+        <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
+      }
+    />
+  );
 }
+
+const styles = StyleSheet.create({
+  list: {
+    padding: 16,
+    gap: 12,
+  },
+  empty: {
+    fontFamily: fonts.body,
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 24,
+  },
+});
