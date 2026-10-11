@@ -1,8 +1,7 @@
-import { Tabs, useLocalSearchParams } from 'expo-router';
+import { Stack, Tabs, useLocalSearchParams } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { useEffect } from 'react';
 
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { selectOpenPattern, useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
@@ -26,13 +25,11 @@ export default function PatternLayout() {
   }, [params.patternId, openPattern]);
 
   return (
+    <>
+      <Stack.Screen options={{ title: patternName ?? '' }} />
     <Tabs
       screenOptions={{
-        headerShown: useClientOnlyValue(false, true),
-        headerTitle: patternName ?? 'Knit counter',
-        headerStyle: { backgroundColor: colors.background },
-        headerShadowVisible: false,
-        headerTitleStyle: { fontFamily: fonts.display, fontSize: 22, color: colors.text },
+        headerShown: false,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.muted,
         tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.line },
@@ -73,5 +70,6 @@ export default function PatternLayout() {
         }}
       />
     </Tabs>
+    </>
   );
 }
