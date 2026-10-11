@@ -19,8 +19,14 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
       ? colors.markBackground
       : colors.surface;
 
-  const numberColor = isCurrent ? colors.accent : info.highlight ? colors.mark : colors.muted;
-  const textColor = info.highlight ? colors.markText : colors.text;
+  const numberColor = isCurrent
+    ? colors.accent
+    : info.isLastRow
+      ? colors.end
+      : info.highlight
+        ? colors.mark
+        : colors.muted;
+  const textColor = info.highlight && !info.isLastRow ? colors.markText : colors.text;
 
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 

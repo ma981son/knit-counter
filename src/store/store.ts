@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { parsePatternCode } from '../pattern/parse';
-import { SKIRT_PANEL } from '../patterns/examples';
+import { EXAMPLE_PATTERN } from '../patterns/examples';
 import * as actions from './actions';
 import type { Pattern, SavedData } from './types';
 
@@ -106,8 +106,8 @@ export const useStore = create<Store>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state && state.projects.length === 0) {
-          const projectId = state.addProject('Skirt');
-          state.addPattern(projectId, 'Front panel', SKIRT_PANEL);
+          const projectId = state.addProject('Example');
+          state.addPattern(projectId, 'How it works', EXAMPLE_PATTERN);
         }
       },
     },
