@@ -3,9 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
-  before: number;    // stitches at the start of the row
-  change: number;    // stitches gained or lost on this row, 0 if none
-  lineColor: string; // color of the divider line, matches the card
+  before: number; 
+  change: number;    
+  lineColor: string; 
 };
 
 export function StitchCount({ before, change, lineColor }: Props) {
