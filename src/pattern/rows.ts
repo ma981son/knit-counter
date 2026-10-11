@@ -42,3 +42,18 @@ export function getRowInfo(pattern: ParsedPattern, row: number): RowInfo {
         stitchChange: instructions.reduce((sum, instruction) => sum + instruction.stitchChange, 0),
     };
 }
+
+export function getStitchCounts(pattern: ParsedPattern): number[] | null {
+    if (pattern.castOn === null) return null;
+
+    const counts: number[] = [];
+    let current = pattern.castOn;
+
+    for (let row = 1; row <= pattern.totalRows; row++) {
+        counts[row] = current;
+        current += getRowInfo(pattern, row).stitchChange;
+    }
+    counts[pattern.totalRows + 1] = current;
+
+    return counts;
+}
