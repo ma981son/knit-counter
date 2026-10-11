@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { PatternSummary } from '@/src/components/PatternSummary';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
+
 export default function CodeScreen() {
   const colors = useTheme();
-  const { pattern } = useCurrentPattern();
+  const { pattern, parsed, warnings, stitchCounts } = useCurrentPattern();
   const updateCode = useStore((state) => state.updateCode);
 
   const savedCode = pattern?.code ?? '';
@@ -50,6 +52,13 @@ export default function CodeScreen() {
       />
 
       <View style={styles.buttons}>
+        {hasChanges ? (
+            <Text style={[styles.message, { color: colors.muted }]}>
+                Save to check your changes.
+            </Text>
+        ) : (
+            <PatternSummary parsed={parsed} stitchCounts={stitchCounts} warnings={warnings} />
+        )}
         <Pressable
           disabled={!hasChanges}
           onPress={() => updateCode(pattern.id, draft)}
