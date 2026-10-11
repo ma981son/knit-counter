@@ -16,6 +16,10 @@ import { fonts, useTheme } from '@/src/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
