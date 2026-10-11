@@ -8,8 +8,8 @@ export function useCurrentPattern() {
     const pattern = useStore((state) => state.projects[0]?.patterns[0]);
 
     const code = pattern?.code ?? '';
-    const parsed = useMemo(() => parsePatternCode(code).pattern, [code]);
-    const stitchCounts = useMemo(() => getStitchCounts(parsed), [parsed]);
+    const result = useMemo(() => parsePatternCode(code), [code]);
+    const stitchCounts = useMemo(() => getStitchCounts(result.pattern), [result]);
 
-    return { pattern, parsed, stitchCounts };
+    return { pattern, parsed: result.pattern, warnings: result.warnings, stitchCounts };
 }

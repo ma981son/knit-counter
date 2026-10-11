@@ -82,6 +82,17 @@ export function findRowProblems(pattern: ParsedPattern): string[] {
     if (overlaps.length > 0) {
         warnings.push(`Two fixed ranges both cover ${describeRows(overlaps)}. The one that starts later wins.`);
     }
+    const counts = getStitchCounts(pattern);
+    if (counts !== null) {
+        for (let row = 1; row <= pattern.totalRows + 1; row++) {
+            if (counts[row] < 0) {
+                warnings.push(
+                    `The stitch count goes below zero after row ${row - 1} (${counts[row]} stitches). Check the cast on and the (-2) numbers.`,
+                );
+                break;
+            }
+        }
+    }
     return warnings;
 }
 

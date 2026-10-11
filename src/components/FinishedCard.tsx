@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-
+import { Button } from '@/src/components/Button';
 import { fonts, useTheme } from '@/src/theme';
+import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
   totalRows: number;
@@ -16,12 +16,7 @@ export function FinishedCard({ totalRows, onRestart }: Props) {
       <Text style={[styles.text, { color: colors.muted }]}>
         All {totalRows} rows done. Tap −1 if you need to go back.
       </Text>
-      <Pressable
-        onPress={onRestart}
-        style={({ pressed }) => [styles.button, { backgroundColor: colors.accent, opacity: pressed ? 0.85 : 1 }]}
-      >
-        <Text style={[styles.buttonText, { color: colors.onAccent }]}>Start again from row 1</Text>
-      </Pressable>
+      <Button title="Start again from row 1" onPress={onRestart} />
     </View>
   );
 }
@@ -43,15 +38,5 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 16,
     textAlign: 'center',
-  },
-  button: {
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    marginTop: 4,
-  },
-  buttonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 16,
   },
 });
