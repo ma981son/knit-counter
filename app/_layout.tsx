@@ -24,6 +24,8 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useRowNotification();
+
   const [loaded, error] = useFonts({
     YoungSerif_400Regular,
     Figtree_400Regular,
@@ -48,7 +50,6 @@ export default function RootLayout() {
 
   return <RootLayoutNav />;
 }
-useRowNotification();
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
