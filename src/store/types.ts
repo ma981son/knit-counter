@@ -2,14 +2,14 @@
 export type Project = {
     id: string;
     name: string;
-    pieces: Pattern[];
+    patterns: Pattern[];
     updatedAt: number;
 };
 
 export type Pattern = {
     id: string;
+    name: string;
     code: string;
-    patternText: string;
     currentRow: number;
 };
 
