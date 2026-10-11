@@ -50,11 +50,62 @@ export function addPattern(
     };
 }
 
-// Move to a row. maxRow is the "finished" row (totalRows + 1).
 export function setRow(
     data: SavedData,
     args: { patternId: string; row: number; maxRow: number; now: number },
 ): SavedData {
     const row = Math.max(1, Math.min(args.row, args.maxRow));
     return updatePattern(data, args.patternId, args.now, (pattern) => ({ ...pattern, currentRow: row }));
+}
+
+export function updateCode(
+    data: SavedData,
+    args: { patternId: string; code: string; maxRow: number; now: number },
+): SavedData {
+    return updatePattern(data, args.patternId, args.now, (pattern) => ({
+        ...pattern,
+        code: args.code,
+        currentRow: Math.min(pattern.currentRow, args.maxRow),
+    }));
+}
+
+export function renamePattern(
+    data: SavedData,
+    args: { patternId: string; name: string; now: number },
+): SavedData {
+    return updatePattern(data, args.patternId, args.now, (pattern) => ({ ...pattern, name: args.name }));
+}
+
+export function renameProject(
+    data: SavedData,
+    args: { projectId: string; name: string; now: number },
+): SavedData {
+    return {
+        ...data,
+        projects: data.projects.map((project) =>
+            project.id === args.projectId ? { ...project, name: args.name, updatedAt: args.now } : project,
+        ),
+    };
+}
+
+export function deletePattern(
+    data: SavedData,
+    args: { patternId: string; now: number },
+): SavedData {
+    return {
+        ...data,
+        projects: data.projects.map((project) =>
+            project.patterns.some((pattern) => pattern.id === args.patternId)
+                ? {
+                    ...project,
+                    updatedAt: args.now,
+                    patterns: project.patterns.filter((pattern) => pattern.id !== args.patternId),
+                }
+                : project,
+        ),
+    };
+}
+
+export function deleteProject(data: SavedData, args: { projectId: string }): SavedData {
+    return { ...data, projects: data.projects.filter((project) => project.id !== args.projectId) };
 }
