@@ -76,7 +76,10 @@ export default function RowsScreen() {
           onLongPress={() => {
             Vibration.vibrate(30);
             setRow(pattern.id, item.row);
-            router.navigate({ pathname: '/pattern/[patternId]', params: { patternId: pattern.id } });
+            router.navigate({
+              pathname: '/pattern/[patternId]',
+              params: { patternId: pattern.id },
+            });
           }}
         />
       )}

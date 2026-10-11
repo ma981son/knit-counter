@@ -41,40 +41,38 @@ export default function ProjectsScreen() {
   }, [hydrated, router]);
 
   return (
-     <>
-    <FlatList
-      style={{ backgroundColor: colors.background }}
-      
-      contentContainerStyle={styles.list}
-      data={sortedProjects}
-      keyExtractor={(project) => project.id}
-      keyboardShouldPersistTaps="handled"
-      ListHeaderComponent={
-        <AddItem
-          label="New project"
-          placeholder="Project name, e.g. Sweater"
-          onAdd={(name) => {
-            const id = addProject(name);
-            router.push({ pathname: '/project/[projectId]', params: { projectId: id } });
-          }}
-        />
-      }
-      renderItem={({ item }) => (
-        <ListCard
-          title={item.name}
-          subtitle={item.patterns.length === 1 ? '1 pattern' : `${item.patterns.length} patterns`}
-          onPress={() =>
-            router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
-          }
-          onLongPress={() => setEditing(item)}
-        />
-      )
-    }
-      ListEmptyComponent={
-        <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
-      }
-    />
-    <EditItemSheet
+    <>
+      <FlatList
+        style={{ backgroundColor: colors.background }}
+        contentContainerStyle={styles.list}
+        data={sortedProjects}
+        keyExtractor={(project) => project.id}
+        keyboardShouldPersistTaps="handled"
+        ListHeaderComponent={
+          <AddItem
+            label="New project"
+            placeholder="Project name, e.g. Sweater"
+            onAdd={(name) => {
+              const id = addProject(name);
+              router.push({ pathname: '/project/[projectId]', params: { projectId: id } });
+            }}
+          />
+        }
+        renderItem={({ item }) => (
+          <ListCard
+            title={item.name}
+            subtitle={item.patterns.length === 1 ? '1 pattern' : `${item.patterns.length} patterns`}
+            onPress={() =>
+              router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
+            }
+            onLongPress={() => setEditing(item)}
+          />
+        )}
+        ListEmptyComponent={
+          <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
+        }
+      />
+      <EditItemSheet
         visible={editing !== null}
         kind="project"
         initialName={editing?.name ?? ''}
@@ -83,7 +81,7 @@ export default function ProjectsScreen() {
         onDelete={() => editing && deleteProject(editing.id)}
         onClose={() => setEditing(null)}
       />
-      </>
+    </>
   );
 }
 

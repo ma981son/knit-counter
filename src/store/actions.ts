@@ -105,10 +105,10 @@ export function deletePattern(
     projects: data.projects.map((project) =>
       project.patterns.some((pattern) => pattern.id === args.patternId)
         ? {
-          ...project,
-          updatedAt: args.now,
-          patterns: project.patterns.filter((pattern) => pattern.id !== args.patternId),
-        }
+            ...project,
+            updatedAt: args.now,
+            patterns: project.patterns.filter((pattern) => pattern.id !== args.patternId),
+          }
         : project,
     ),
   };

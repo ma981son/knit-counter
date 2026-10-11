@@ -56,7 +56,12 @@ export default function ProjectScreen() {
           ) : null
         }
         renderItem={({ item }) => (
-          <ListCard title={item.name} subtitle={progressText(item)} onPress={() => open(item.id)} onLongPress={() => setEditing(item)}/>
+          <ListCard
+            title={item.name}
+            subtitle={progressText(item)}
+            onPress={() => open(item.id)}
+            onLongPress={() => setEditing(item)}
+          />
         )}
         ListEmptyComponent={
           <Text style={[styles.empty, { color: colors.muted }]}>
@@ -64,7 +69,7 @@ export default function ProjectScreen() {
           </Text>
         }
       />
-            <EditItemSheet
+      <EditItemSheet
         visible={editing !== null}
         kind="pattern"
         initialName={editing?.name ?? ''}

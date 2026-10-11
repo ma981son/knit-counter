@@ -32,7 +32,10 @@ export function AddItem({ label, placeholder, onAdd }: Props) {
     return (
       <Pressable
         onPress={() => setIsAdding(true)}
-        style={({ pressed }) => [styles.addButton, { borderColor: colors.line, opacity: pressed ? 0.7 : 1 }]}
+        style={({ pressed }) => [
+          styles.addButton,
+          { borderColor: colors.line, opacity: pressed ? 0.7 : 1 },
+        ]}
       >
         <Text style={[styles.addText, { color: colors.accent }]}>+ {label}</Text>
       </Pressable>
