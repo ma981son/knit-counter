@@ -21,7 +21,8 @@ import kotlin.math.roundToInt
 
 class RowNotificationService : Service() {
   companion object {
-    const val CHANNEL_ID = "row-counter"
+    const val CHANNEL_ID = "row-counter-alert"
+    const val OLD_CHANNEL_ID = "row-counter"
     const val NOTIFICATION_ID = 1
     const val ACTION_NEXT = "expo.modules.rownotification.NEXT"
     const val ACTION_PREVIOUS = "expo.modules.rownotification.PREVIOUS"
@@ -96,7 +97,7 @@ class RowNotificationService : Service() {
       .setCustomBigContentView(expanded)
       .setContentIntent(openAppIntent())
       .setOngoing(true)
-      .setSilent(true)
+      .setOnlyAlertOnce(true)
 
     val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
@@ -182,8 +183,10 @@ class RowNotificationService : Service() {
 
   private fun createChannel() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-    val channel = NotificationChannel(CHANNEL_ID, "Row counter", NotificationManager.IMPORTANCE_LOW)
-    getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+    val manager = getSystemService(NotificationManager::class.java)
+    manager.deleteNotificationChannel(OLD_CHANNEL_ID)
+    val channel = NotificationChannel(CHANNEL_ID, "Row counter", NotificationManager.IMPORTANCE_DEFAULT)
+    manager.createNotificationChannel(channel)
   }
 
   private fun actionIntent(action: String, requestCode: Int): PendingIntent {
