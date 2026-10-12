@@ -32,12 +32,14 @@ class RowNotificationService : Service() {
     const val EXTRA_TOTAL = "total"
     const val EXTRA_STATE = "state"
     val VIBRATION_PATTERN = longArrayOf(0, 80, 50, 80, 50, 80)
+    val TICK_PATTERN = longArrayOf(0, 20)
 
     var instance: RowNotificationService? = null
       private set
   }
 
   private var nextFromNotification = false
+  private var shownRow = -1
 
   override fun onCreate() {
     super.onCreate()
@@ -77,10 +79,11 @@ class RowNotificationService : Service() {
   fun show(title: String, body: String, row: Int, total: Int, state: String) {
     createChannel()
 
-    if (nextFromNotification && (state == "highlight" || state == "last")) {
-      vibrate()
+    if (nextFromNotification && row != shownRow) {
+      vibrate(if (state == "highlight" || state == "last") VIBRATION_PATTERN else TICK_PATTERN)
     }
     nextFromNotification = false
+    shownRow = row
 
     val color = ContextCompat.getColor(this, colorFor(state))
     val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color)
@@ -166,7 +169,7 @@ class RowNotificationService : Service() {
     }
   }
 
-  private fun vibrate() {
+  private fun vibrate(pattern: LongArray) {
     val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
       getSystemService(VibratorManager::class.java).defaultVibrator
     } else {
@@ -174,10 +177,10 @@ class RowNotificationService : Service() {
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, -1))
+      vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
     } else {
       @Suppress("DEPRECATION")
-      vibrator.vibrate(VIBRATION_PATTERN, -1)
+      vibrator.vibrate(pattern, -1)
     }
   }
 
