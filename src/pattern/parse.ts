@@ -1,7 +1,7 @@
 import { findRowProblems } from './rows';
 import type { ParsedPattern, ParseResult, PatternCodeLine, RowRange } from './types';
 
-export type ParsedRows = {
+type ParsedRows = {
   singleRows: number[];
   ranges: RowRange[];
   invalid: string[];
@@ -9,7 +9,7 @@ export type ParsedRows = {
 
 const ROW_WORD = /^\s*(rows?|rounds?|rnds?|rd|reihen?|runden?)\.?\s*/i;
 
-export function parseRows(spec: string): ParsedRows {
+function parseRows(spec: string): ParsedRows {
   const result: ParsedRows = { singleRows: [], ranges: [], invalid: [] };
   const cleaned = spec.replace(ROW_WORD, '');
 
@@ -48,14 +48,14 @@ export function parseRows(spec: string): ParsedRows {
   return result;
 }
 
-export type ParsedInstruction = {
+type ParsedInstruction = {
   highlight: boolean;
   isEnd: boolean;
   stitchChange: number;
   parts: string[];
 };
 
-export function parseInstruction(input: string): ParsedInstruction {
+function parseInstruction(input: string): ParsedInstruction {
   let text = input.trim();
   let highlight = false;
   let isEnd = false;

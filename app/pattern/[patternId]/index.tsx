@@ -1,4 +1,3 @@
-import { useKeepAwake } from 'expo-keep-awake';
 import { StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
@@ -7,12 +6,13 @@ import { ProgressBar } from '@/src/components/ProgressBar';
 import { RestartPrompt } from '@/src/components/RestartPrompt';
 import { RowCard } from '@/src/components/RowCard';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
+import { useSafeKeepAwake } from '@/src/hooks/useSafeKeepAwake';
 import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function CounterScreen() {
-  useKeepAwake();
+  useSafeKeepAwake();
   const colors = useTheme();
 
   const { pattern, parsed, stitchCounts } = useCurrentPattern();
@@ -39,11 +39,11 @@ export default function CounterScreen() {
     const next = pattern!.currentRow + 1;
     nextRow(pattern!.id);
 
-    if (next <= parsed.totalRows) {
-      const nextInfo = getRowInfo(parsed, next);
-      if (nextInfo.highlight || nextInfo.isLastRow) {
-        Vibration.vibrate([0, 80, 50, 80, 50, 80]);
-      }
+    const nextInfo = next <= parsed.totalRows ? getRowInfo(parsed, next) : null;
+    if (nextInfo?.highlight || nextInfo?.isLastRow) {
+      Vibration.vibrate([0, 80, 50, 80, 50, 80]);
+    } else {
+      Vibration.vibrate(20);
     }
   }
 

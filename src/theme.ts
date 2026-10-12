@@ -1,4 +1,4 @@
-import { useColorScheme } from '@/components/useColorScheme';
+import { useColorScheme } from '@/src/hooks/useColorScheme';
 
 const light = {
   background: '#eef1ee',
@@ -38,7 +38,7 @@ const dark: typeof light = {
   onDanger: '#601410',
 };
 
-export type ThemeColors = typeof light;
+type ThemeColors = typeof light;
 
 export const fonts = {
   display: 'YoungSerif_400Regular',

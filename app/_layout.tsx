@@ -9,9 +9,9 @@ import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { fonts, useTheme } from '@/src/theme';
 
 export { ErrorBoundary } from 'expo-router';
@@ -23,6 +23,8 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useRowNotification();
+
   const [loaded, error] = useFonts({
     YoungSerif_400Regular,
     Figtree_400Regular,
