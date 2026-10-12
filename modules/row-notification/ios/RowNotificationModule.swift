@@ -4,10 +4,12 @@ public class RowNotificationModule: Module {
   public func definition() -> ModuleDefinition {
     Name("RowNotification")
 
-    Events("onChange")
+    Events("onAction")
 
-    Function("hello") {
-      return "Hello world! 👋"
+    Function("update") { (title: String, body: String, row: Int, total: Int, state: String) in
+    }
+
+    Function("clear") {
     }
   }
 }
