@@ -1,3 +1,5 @@
+export type RowNotificationState = 'normal' | 'highlight' | 'last' | 'finished';
+
 export type RowAction = 'next' | 'previous';
 
 export type RowNotificationModuleEvents = {

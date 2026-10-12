@@ -6,11 +6,18 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.graphics.Color
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.view.View
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
+import kotlin.math.roundToInt
 
 class RowNotificationService : Service() {
   companion object {
@@ -22,11 +29,14 @@ class RowNotificationService : Service() {
     const val EXTRA_BODY = "body"
     const val EXTRA_ROW = "row"
     const val EXTRA_TOTAL = "total"
-    val ACCENT = Color.parseColor("#7D5689")
+    const val EXTRA_STATE = "state"
+    val VIBRATION_PATTERN = longArrayOf(0, 80, 50, 80, 50, 80)
 
     var instance: RowNotificationService? = null
       private set
   }
+
+  private var shownRow = -1
 
   override fun onCreate() {
     super.onCreate()
@@ -48,7 +58,8 @@ class RowNotificationService : Service() {
         intent?.getStringExtra(EXTRA_TITLE) ?: "",
         intent?.getStringExtra(EXTRA_BODY) ?: "",
         intent?.getIntExtra(EXTRA_ROW, 0) ?: 0,
-        intent?.getIntExtra(EXTRA_TOTAL, 0) ?: 0
+        intent?.getIntExtra(EXTRA_TOTAL, 0) ?: 0,
+        intent?.getStringExtra(EXTRA_STATE) ?: "normal"
       )
     }
     return START_NOT_STICKY
@@ -59,23 +70,30 @@ class RowNotificationService : Service() {
     super.onTaskRemoved(rootIntent)
   }
 
-  fun show(title: String, body: String, row: Int, total: Int) {
+  fun show(title: String, body: String, row: Int, total: Int, state: String) {
     createChannel()
+
+    if (row == shownRow + 1 && (state == "highlight" || state == "last")) {
+      vibrate()
+    }
+    shownRow = row
+
+    val color = ContextCompat.getColor(this, colorFor(state))
+    val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color)
+    val expanded = buildViews(R.layout.row_notification_expanded, title, body, state, color)
+    addProgress(expanded, row, total, color)
 
     val builder = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_row_notification)
-      .setColor(ACCENT)
+      .setColor(color)
       .setContentTitle(title)
       .setContentText(body)
+      .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+      .setCustomContentView(collapsed)
+      .setCustomBigContentView(expanded)
       .setContentIntent(openAppIntent())
-      .addAction(0, "−1", actionIntent(ACTION_PREVIOUS, 1))
-      .addAction(0, "+1", actionIntent(ACTION_NEXT, 2))
       .setOngoing(true)
       .setSilent(true)
-
-    if (total > 0) {
-      builder.setProgress(total, row.coerceIn(0, total), false)
-    }
 
     val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
@@ -84,6 +102,79 @@ class RowNotificationService : Service() {
     }
 
     ServiceCompat.startForeground(this, NOTIFICATION_ID, builder.build(), type)
+  }
+
+  private fun colorFor(state: String): Int = when (state) {
+    "highlight" -> R.color.row_notification_mark
+    "last", "finished" -> R.color.row_notification_end
+    else -> R.color.row_notification_accent
+  }
+
+  private fun minusFor(state: String): Int = when (state) {
+    "highlight" -> R.drawable.row_notification_minus_highlight
+    "last", "finished" -> R.drawable.row_notification_minus_end
+    else -> R.drawable.row_notification_minus_normal
+  }
+
+  private fun plusFor(state: String): Int = when (state) {
+    "highlight" -> R.drawable.row_notification_plus_highlight
+    "last", "finished" -> R.drawable.row_notification_plus_end
+    else -> R.drawable.row_notification_plus_normal
+  }
+
+  private fun buildViews(layout: Int, title: String, body: String, state: String, color: Int): RemoteViews {
+    val views = RemoteViews(packageName, layout)
+    views.setTextViewText(R.id.row_notification_title, title)
+    views.setTextViewText(R.id.row_notification_body, body)
+    views.setTextColor(R.id.row_notification_minus, color)
+    views.setInt(R.id.row_notification_minus, "setBackgroundResource", minusFor(state))
+    views.setInt(R.id.row_notification_plus, "setBackgroundResource", plusFor(state))
+    views.setOnClickPendingIntent(R.id.row_notification_minus, actionIntent(ACTION_PREVIOUS, 1))
+    views.setOnClickPendingIntent(R.id.row_notification_plus, actionIntent(ACTION_NEXT, 2))
+
+    if (state != "normal") {
+      views.setTextColor(R.id.row_notification_title, color)
+    }
+
+    if (state == "finished") {
+      views.setFloat(R.id.row_notification_plus, "setAlpha", 0.4f)
+    }
+
+    return views
+  }
+
+  private fun addProgress(views: RemoteViews, row: Int, total: Int, color: Int) {
+    if (total <= 0) {
+      views.setViewVisibility(R.id.row_notification_progress_section, View.GONE)
+      return
+    }
+
+    val rowsDone = (row - 1).coerceIn(0, total)
+    val percent = (rowsDone * 100f / total).roundToInt()
+    val label = if (row > total) "Finished · $total rows" else "Row $row of $total"
+
+    views.setTextViewText(R.id.row_notification_progress_label, label)
+    views.setTextViewText(R.id.row_notification_progress_percent, "$percent%")
+    views.setProgressBar(R.id.row_notification_progress, total, rowsDone, false)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      views.setColorStateList(R.id.row_notification_progress, "setProgressTintList", ColorStateList.valueOf(color))
+    }
+  }
+
+  private fun vibrate() {
+    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      getSystemService(VibratorManager::class.java).defaultVibrator
+    } else {
+      getSystemService(Vibrator::class.java)
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      vibrator.vibrate(VibrationEffect.createWaveform(VIBRATION_PATTERN, -1))
+    } else {
+      @Suppress("DEPRECATION")
+      vibrator.vibrate(VIBRATION_PATTERN, -1)
+    }
   }
 
   private fun createChannel() {

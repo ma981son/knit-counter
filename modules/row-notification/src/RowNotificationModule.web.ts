@@ -1,9 +1,9 @@
 import { NativeModule, registerWebModule } from 'expo';
 
-import { RowNotificationModuleEvents } from './RowNotification.types';
+import { RowNotificationModuleEvents, RowNotificationState } from './RowNotification.types';
 
 class RowNotificationModule extends NativeModule<RowNotificationModuleEvents> {
-  update(title: string, body: string, row: number, total: number) {}
+  update(title: string, body: string, row: number, total: number, state: RowNotificationState) {}
   clear() {}
 }
 

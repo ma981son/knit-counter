@@ -1,8 +1,7 @@
+import { RowNotificationState } from '@/modules/row-notification/src/RowNotification.types';
 import { parsePatternCode } from '@/src/pattern/parse';
 import { getRowInfo } from '@/src/pattern/rows';
 import { Pattern } from '@/src/store/types';
-
-export type NotificationState = 'normal' | 'highlight' | 'last' | 'finished';
 
 export function getRowNotificationContent(pattern: Pattern) {
   const parsed = parsePatternCode(pattern.code).pattern;
@@ -12,7 +11,7 @@ export function getRowNotificationContent(pattern: Pattern) {
   const info = getRowInfo(parsed, row);
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 
-  let state: NotificationState = 'normal';
+  let state: RowNotificationState = 'normal';
   if (isFinished) state = 'finished';
   else if (info.isLastRow) state = 'last';
   else if (info.highlight) state = 'highlight';

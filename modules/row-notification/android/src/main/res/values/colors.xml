@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="row_notification_line">#d5dbd6</color>
+  <color name="row_notification_accent">#e475b2</color>
+  <color name="row_notification_on_accent">#ffffff</color>
+  <color name="row_notification_mark">#b8700c</color>
+  <color name="row_notification_end">#2f6b4f</color>
+</resources>

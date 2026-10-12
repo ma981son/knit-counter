@@ -17,8 +17,8 @@ export function useRowNotification() {
         RowNotification.clear();
         return;
       }
-      const { title, body, row, total } = getRowNotificationContent(pattern);
-      RowNotification.update(title, body, row, total);
+      const { title, body, row, total, state } = getRowNotificationContent(pattern);
+      RowNotification.update(title, body, row, total, state);
     };
 
     sync();
