@@ -1,20 +1,40 @@
 import { useEffect } from 'react';
-import { AppState } from 'react-native';
-import { hideRowNotification, setupRowNotification, showRowNotification } from './rowNotification';
+import { PermissionsAndroid, Platform } from 'react-native';
+
+import RowNotification from '@/modules/row-notification/src/RowNotificationModule';
+import { selectOpenPattern, useStore } from '@/src/store/store';
+import { getRowNotificationContent } from './rowNotification';
 
 export function useRowNotification() {
   useEffect(() => {
-    let ready = false;
-    setupRowNotification().then((granted) => {
-      ready = granted;
+    if (Platform.OS !== 'android') return;
+
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+    const sync = () => {
+      const pattern = selectOpenPattern(useStore.getState());
+      if (!pattern) {
+        RowNotification.clear();
+        return;
+      }
+      const { title, body } = getRowNotificationContent(pattern);
+      RowNotification.update(title, body);
+    };
+
+    sync();
+    const unsubscribe = useStore.subscribe(sync);
+
+    const actionSubscription = RowNotification.addListener('onAction', ({ action }) => {
+      const state = useStore.getState();
+      const pattern = selectOpenPattern(state);
+      if (!pattern) return;
+      if (action === 'next') state.nextRow(pattern.id);
+      if (action === 'previous') state.previousRow(pattern.id);
     });
 
-    const subscription = AppState.addEventListener('change', (state) => {
-      if (!ready) return;
-      if (state === 'background') showRowNotification();
-      if (state === 'active') hideRowNotification();
-    });
-
-    return () => subscription.remove();
+    return () => {
+      unsubscribe();
+      actionSubscription.remove();
+    };
   }, []);
 }
