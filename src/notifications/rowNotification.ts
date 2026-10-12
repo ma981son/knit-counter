@@ -2,13 +2,28 @@ import { parsePatternCode } from '@/src/pattern/parse';
 import { getRowInfo } from '@/src/pattern/rows';
 import { Pattern } from '@/src/store/types';
 
+export type NotificationState = 'normal' | 'highlight' | 'last' | 'finished';
+
 export function getRowNotificationContent(pattern: Pattern) {
   const parsed = parsePatternCode(pattern.code).pattern;
-  const info = getRowInfo(parsed, pattern.currentRow);
+  const row = pattern.currentRow;
+  const total = parsed.totalRows;
+  const isFinished = total > 0 && row > total;
+  const info = getRowInfo(parsed, row);
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 
+  let state: NotificationState = 'normal';
+  if (isFinished) state = 'finished';
+  else if (info.isLastRow) state = 'last';
+  else if (info.highlight) state = 'highlight';
+
   return {
-    title: `${pattern.name} · Row ${pattern.currentRow}`,
-    body: text || 'No instruction for this row',
+    title: isFinished ? `${pattern.name} · Finished` : `${pattern.name} · Row ${row}`,
+    body: isFinished ? `All ${total} rows done` : text || 'No instruction for this row',
+    row,
+    total,
+    state,
   };
 }
+
+export type NotificationContent = ReturnType<typeof getRowNotificationContent>;

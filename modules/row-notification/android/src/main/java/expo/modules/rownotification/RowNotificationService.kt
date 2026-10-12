@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -19,6 +20,9 @@ class RowNotificationService : Service() {
     const val ACTION_PREVIOUS = "expo.modules.rownotification.PREVIOUS"
     const val EXTRA_TITLE = "title"
     const val EXTRA_BODY = "body"
+    const val EXTRA_ROW = "row"
+    const val EXTRA_TOTAL = "total"
+    val ACCENT = Color.parseColor("#7D5689")
 
     var instance: RowNotificationService? = null
       private set
@@ -42,7 +46,9 @@ class RowNotificationService : Service() {
       ACTION_PREVIOUS -> if (!RowNotificationModule.sendAction("previous")) stopSelf()
       else -> show(
         intent?.getStringExtra(EXTRA_TITLE) ?: "",
-        intent?.getStringExtra(EXTRA_BODY) ?: ""
+        intent?.getStringExtra(EXTRA_BODY) ?: "",
+        intent?.getIntExtra(EXTRA_ROW, 0) ?: 0,
+        intent?.getIntExtra(EXTRA_TOTAL, 0) ?: 0
       )
     }
     return START_NOT_STICKY
@@ -53,11 +59,12 @@ class RowNotificationService : Service() {
     super.onTaskRemoved(rootIntent)
   }
 
-  fun show(title: String, body: String) {
+  fun show(title: String, body: String, row: Int, total: Int) {
     createChannel()
 
-    val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+    val builder = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_row_notification)
+      .setColor(ACCENT)
       .setContentTitle(title)
       .setContentText(body)
       .setContentIntent(openAppIntent())
@@ -65,7 +72,10 @@ class RowNotificationService : Service() {
       .addAction(0, "+1", actionIntent(ACTION_NEXT, 2))
       .setOngoing(true)
       .setSilent(true)
-      .build()
+
+    if (total > 0) {
+      builder.setProgress(total, row.coerceIn(0, total), false)
+    }
 
     val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
@@ -73,7 +83,7 @@ class RowNotificationService : Service() {
       0
     }
 
-    ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, type)
+    ServiceCompat.startForeground(this, NOTIFICATION_ID, builder.build(), type)
   }
 
   private fun createChannel() {
