@@ -17,7 +17,7 @@ export function getRowNotificationContent(pattern: Pattern) {
   else if (info.highlight) state = 'highlight';
 
   return {
-    title: isFinished ? `${pattern.name} · Finished` : `${pattern.name} · Row ${row}`,
+    title: isFinished ? `Finished · ${pattern.name}` : `Row ${row} · ${pattern.name}`,
     body: isFinished ? `All ${total} rows done` : text || 'No instruction for this row',
     row,
     total,
