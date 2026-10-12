@@ -43,11 +43,11 @@ export default function CounterScreen() {
     const next = pattern!.currentRow + 1;
     nextRow(pattern!.id);
 
-    if (next <= parsed.totalRows) {
-      const nextInfo = getRowInfo(parsed, next);
-      if (nextInfo.highlight || nextInfo.isLastRow) {
-        Vibration.vibrate([0, 80, 50, 80, 50, 80]);
-      }
+    const nextInfo = next <= parsed.totalRows ? getRowInfo(parsed, next) : null;
+    if (nextInfo?.highlight || nextInfo?.isLastRow) {
+      Vibration.vibrate([0, 80, 50, 80, 50, 80]);
+    } else {
+      Vibration.vibrate(20);
     }
   }
 
