@@ -1,4 +1,3 @@
-import { useKeepAwake } from 'expo-keep-awake';
 import { StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
@@ -11,10 +10,11 @@ import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
+import { useSafeKeepAwake } from '@/src/hooks/useSafeKeepAwake';
 import '@/src/notifications/rowNotification';
 
 export default function CounterScreen() {
-  useKeepAwake();
+  useSafeKeepAwake();
   const colors = useTheme();
 
   const { pattern, parsed, stitchCounts } = useCurrentPattern();
