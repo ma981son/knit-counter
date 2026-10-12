@@ -57,7 +57,7 @@ class RowNotificationService : Service() {
     createChannel()
 
     val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-      .setSmallIcon(applicationInfo.icon)
+      .setSmallIcon(R.drawable.ic_row_notification)
       .setContentTitle(title)
       .setContentText(body)
       .setContentIntent(openAppIntent())
