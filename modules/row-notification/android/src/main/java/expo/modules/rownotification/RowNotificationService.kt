@@ -36,7 +36,7 @@ class RowNotificationService : Service() {
       private set
   }
 
-  private var shownRow = -1
+  private var nextFromNotification = false
 
   override fun onCreate() {
     super.onCreate()
@@ -52,7 +52,10 @@ class RowNotificationService : Service() {
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     when (intent?.action) {
-      ACTION_NEXT -> if (!RowNotificationModule.sendAction("next")) stopSelf()
+      ACTION_NEXT -> {
+        nextFromNotification = true
+        if (!RowNotificationModule.sendAction("next")) stopSelf()
+      }
       ACTION_PREVIOUS -> if (!RowNotificationModule.sendAction("previous")) stopSelf()
       else -> show(
         intent?.getStringExtra(EXTRA_TITLE) ?: "",
@@ -73,10 +76,10 @@ class RowNotificationService : Service() {
   fun show(title: String, body: String, row: Int, total: Int, state: String) {
     createChannel()
 
-    if (row == shownRow + 1 && (state == "highlight" || state == "last")) {
+    if (nextFromNotification && (state == "highlight" || state == "last")) {
       vibrate()
     }
-    shownRow = row
+    nextFromNotification = false
 
     val color = ContextCompat.getColor(this, colorFor(state))
     val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color)

@@ -22,7 +22,6 @@ class RowNotificationModule : Module() {
   private var row: Int = 0
   private var total: Int = 0
   private var state: String = "normal"
-  private var inBackground = false
 
   override fun definition() = ModuleDefinition {
     Name("RowNotification")
@@ -52,14 +51,8 @@ class RowNotificationModule : Module() {
       stopService()
     }
 
-    OnActivityEntersBackground {
-      inBackground = true
-      refresh()
-    }
-
     OnActivityEntersForeground {
-      inBackground = false
-      stopService()
+      refresh()
     }
 
     OnActivityDestroys {
@@ -68,7 +61,6 @@ class RowNotificationModule : Module() {
   }
 
   private fun refresh() {
-    if (!inBackground) return
     val currentTitle = title ?: return
 
     val running = RowNotificationService.instance
