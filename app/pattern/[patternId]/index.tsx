@@ -6,14 +6,10 @@ import { ProgressBar } from '@/src/components/ProgressBar';
 import { RestartPrompt } from '@/src/components/RestartPrompt';
 import { RowCard } from '@/src/components/RowCard';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
+import { useSafeKeepAwake } from '@/src/hooks/useSafeKeepAwake';
 import { getRowInfo } from '@/src/pattern/rows';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
-
-import { NotificationPreview } from '@/src/components/NotificationPreview';
-import { useSafeKeepAwake } from '@/src/hooks/useSafeKeepAwake';
-import '@/src/notifications/rowNotification';
-import { getRowNotificationContent } from '@/src/notifications/rowNotification';
 
 export default function CounterScreen() {
   useSafeKeepAwake();
@@ -71,7 +67,6 @@ export default function CounterScreen() {
       />
 
       {pattern.currentRow > 1 && !isFinished && <RestartPrompt onRestart={restart} />}
-      {__DEV__ && <NotificationPreview content={getRowNotificationContent(pattern)} />}
     </View>
   );
 }

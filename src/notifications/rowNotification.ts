@@ -24,5 +24,3 @@ export function getRowNotificationContent(pattern: Pattern) {
     state,
   };
 }
-
-export type NotificationContent = ReturnType<typeof getRowNotificationContent>;
