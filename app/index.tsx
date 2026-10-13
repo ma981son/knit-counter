@@ -35,9 +35,15 @@ export default function ProjectsScreen() {
 
     const project = state.projects.find((p) => p.patterns.some((x) => x.id === pattern.id));
     if (project) {
-      router.push({ pathname: '/project/[projectId]', params: { projectId: project.id } });
+      router.push({
+        pathname: '/project/[projectId]',
+        params: { projectId: project.id, restore: '1' },
+      });
     }
-    router.push({ pathname: '/pattern/[patternId]', params: { patternId: pattern.id } });
+    router.push({
+      pathname: '/pattern/[patternId]',
+      params: { patternId: pattern.id, restore: '1' },
+    });
   }, [hydrated, router]);
 
   return (

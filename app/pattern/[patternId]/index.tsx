@@ -1,3 +1,5 @@
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 import { StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
@@ -19,6 +21,10 @@ export default function CounterScreen() {
   const nextRow = useStore((state) => state.nextRow);
   const previousRow = useStore((state) => state.previousRow);
   const setRow = useStore((state) => state.setRow);
+
+  useEffect(() => {
+    SplashScreen.hideAsync().catch(() => {});
+  }, []);
 
   if (!pattern) {
     return (
