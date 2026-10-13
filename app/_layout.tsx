@@ -11,13 +11,15 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
+import { findPattern, useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: 'index',
+  anchor: 'index',
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -32,18 +34,23 @@ export default function RootLayout() {
     Figtree_600SemiBold,
     Figtree_700Bold,
   });
+  const hydrated = useHasHydrated();
+  const restoring = useStore(
+    (state) =>
+      state.openPatternId !== null && findPattern(state, state.openPatternId) !== undefined,
+  );
 
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && hydrated && !restoring) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, hydrated, restoring]);
 
-  if (!loaded) {
+  if (!loaded || !hydrated) {
     return null;
   }
 
@@ -78,9 +85,14 @@ function RootLayoutNav() {
         }}
       >
         <Stack.Screen name="index" options={{ title: 'Projects' }} />
-        <Stack.Screen name="project/[projectId]" options={{ title: '' }} />
-        <Stack.Screen name="pattern/[patternId]" options={{ title: '' }} />
+        <Stack.Screen name="project/[projectId]" options={restorableScreen} />
+        <Stack.Screen name="pattern/[patternId]" options={restorableScreen} />
       </Stack>
     </ThemeProvider>
   );
+}
+
+function restorableScreen({ route }: { route: { params?: object } }) {
+  const isRestoring = route.params !== undefined && 'restore' in route.params;
+  return { title: '', animation: isRestoring ? 'none' : 'default' } as const;
 }
