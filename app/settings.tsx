@@ -54,6 +54,11 @@ export default function SettingsScreen() {
           value={settings.vibration}
           onChange={(vibration) => updateSettings({ vibration })}
         />
+        <SettingSwitch
+          label={t('settings.keepAwake')}
+          value={settings.keepAwake}
+          onChange={(keepAwake) => updateSettings({ keepAwake })}
+        />
       </SettingsCard>
     </ScrollView>
   );

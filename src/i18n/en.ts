@@ -114,6 +114,7 @@ export const en = {
     light: 'Light',
     counter: 'Counter',
     vibration: 'Vibrate on +1',
+    keepAwake: 'Keep screen on',
     dark: 'Dark',
   },
   editSheet: {

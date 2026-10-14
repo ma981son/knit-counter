@@ -115,6 +115,7 @@ export const es: typeof en = {
     light: 'Claro',
     counter: 'Contador',
     vibration: 'Vibrar con +1',
+    keepAwake: 'Mantener la pantalla encendida',
     dark: 'Oscuro',
   },
   editSheet: {

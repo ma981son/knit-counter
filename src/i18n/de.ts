@@ -120,6 +120,7 @@ export const de: typeof en = {
     light: 'Hell',
     counter: 'Zähler',
     vibration: 'Vibrieren bei +1',
+    keepAwake: 'Bildschirm anlassen',
     dark: 'Dunkel',
   },
   editSheet: {

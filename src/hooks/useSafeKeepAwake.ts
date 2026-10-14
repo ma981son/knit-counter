@@ -3,11 +3,12 @@ import { useEffect } from 'react';
 
 const TAG = 'counter';
 
-export function useSafeKeepAwake() {
+export function useSafeKeepAwake(enabled: boolean) {
   useEffect(() => {
+    if (!enabled) return;
     activateKeepAwakeAsync(TAG).catch(() => {});
     return () => {
       deactivateKeepAwake(TAG).catch(() => {});
     };
-  }, []);
+  }, [enabled]);
 }

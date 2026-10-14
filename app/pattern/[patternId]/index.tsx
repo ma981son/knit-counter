@@ -15,7 +15,8 @@ import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function CounterScreen() {
-  useSafeKeepAwake();
+  const keepAwake = useStore((state) => state.settings.keepAwake);
+  useSafeKeepAwake(keepAwake);
   const colors = useTheme();
   const { t } = useTranslation();
 
