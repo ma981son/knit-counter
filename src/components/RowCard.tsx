@@ -72,7 +72,9 @@ export function RowCard({ info, stitchesBefore }: Props) {
               ]
             }
           >
-            <Text style={[styles.instruction, { color: look.text }]}>{instruction.text}</Text>
+            <Text style={[styles.instruction, { color: look.text }]}>
+              {instruction.text || (info.isLastRow ? t('counter.lastRow') : '')}
+            </Text>
           </View>
         ))
       )}

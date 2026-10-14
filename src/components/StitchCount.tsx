@@ -25,9 +25,7 @@ export function StitchCount({ before, change, lineColor }: Props) {
           </Text>
         )}
       </Text>
-      {change === 0 ? (
-        <Text style={[styles.note, { color: colors.muted }]}>{t('counter.onNeedle')}</Text>
-      ) : (
+      {change !== 0 && (
         <View style={[styles.chip, { backgroundColor: colors.markBackground }]}>
           <Text style={[styles.note, { color: colors.markText }]}>
             {t('counter.stitchChange', {
