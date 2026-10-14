@@ -7,10 +7,11 @@ type Props = {
   info: RowInfo;
   stitchesBefore: number | null;
   isCurrent: boolean;
+  isLast: boolean;
   onLongPress: () => void;
 };
 
-export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Props) {
+export function RowListItem({ info, stitchesBefore, isCurrent, isLast, onLongPress }: Props) {
   const colors = useTheme();
 
   const background = info.isLastRow
@@ -18,6 +19,7 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
     : info.highlight
       ? colors.markBackground
       : colors.surface;
+  const isMarked = info.highlight && !info.isLastRow;
 
   const numberColor = isCurrent
     ? colors.accent
@@ -26,7 +28,6 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
       : info.highlight
         ? colors.mark
         : colors.muted;
-  const textColor = info.highlight && !info.isLastRow ? colors.markText : colors.text;
 
   const text = info.instructions.map((instruction) => instruction.text).join(' · ');
 
@@ -36,7 +37,12 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
       accessibilityHint="Hold to jump to this row"
       style={({ pressed }) => [
         styles.row,
-        { backgroundColor: background, borderBottomColor: colors.line, opacity: pressed ? 0.6 : 1 },
+        {
+          backgroundColor: background,
+          borderBottomColor: colors.line,
+          borderBottomWidth: isLast ? 0 : 1,
+          opacity: pressed ? 0.6 : 1,
+        },
         isCurrent && { borderLeftColor: colors.accent },
       ]}
     >
@@ -47,16 +53,10 @@ export function RowListItem({ info, stitchesBefore, isCurrent, onLongPress }: Pr
 
         {info.isEmpty ? (
           <Text style={[styles.empty, { color: colors.muted }]}>No instruction</Text>
+        ) : isMarked ? (
+          <Text style={[styles.instruction, styles.bold, { color: colors.markText }]}>{text}</Text>
         ) : (
-          <Text style={[styles.instruction, { color: textColor }, info.highlight && styles.bold]}>
-            {text}
-          </Text>
-        )}
-
-        {info.normalRow !== null && (
-          <Text style={[styles.small, { color: colors.muted }]}>
-            Normal row here: {info.normalRow}
-          </Text>
+          <Text style={[styles.instruction, { color: colors.text }]}>{text}</Text>
         )}
 
         {stitchesBefore !== null && info.stitchChange !== 0 && (
@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
-    borderBottomWidth: 1,
     borderLeftWidth: 4,
     borderLeftColor: 'transparent',
   },

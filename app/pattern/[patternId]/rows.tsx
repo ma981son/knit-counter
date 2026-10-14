@@ -55,41 +55,40 @@ export default function RowsScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
-      <View style={styles.progress}>
-        <ProgressBar row={pattern.currentRow} totalRows={parsed.totalRows} />
-      </View>
+      <ProgressBar row={pattern.currentRow} totalRows={parsed.totalRows} />
 
-      <FlatList
-        ref={listRef}
-        style={styles.list}
-        data={rows}
-        keyExtractor={(info) => String(info.row)}
-        extraData={pattern.currentRow}
-        onScrollToIndexFailed={({ index, averageItemLength }) => {
-          listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
-          setTimeout(() => {
-            listRef.current?.scrollToIndex({ index, viewPosition: 0.3, animated: false });
-          }, 100);
-        }}
-        ListHeaderComponent={
-          <Text style={[styles.hint, { color: colors.muted }]}>Hold a row to jump there.</Text>
-        }
-        renderItem={({ item }) => (
-          <RowListItem
-            info={item}
-            stitchesBefore={stitchCounts?.[item.row] ?? null}
-            isCurrent={item.row === pattern.currentRow}
-            onLongPress={() => {
-              Vibration.vibrate(30);
-              setRow(pattern.id, item.row);
-              router.navigate({
-                pathname: '/pattern/[patternId]',
-                params: { patternId: pattern.id },
-              });
-            }}
-          />
-        )}
-      />
+      <Text style={[styles.hint, { color: colors.muted }]}>Hold a row to jump there.</Text>
+
+      <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.line }]}>
+        <FlatList
+          ref={listRef}
+          data={rows}
+          keyExtractor={(info) => String(info.row)}
+          extraData={pattern.currentRow}
+          onScrollToIndexFailed={({ index, averageItemLength }) => {
+            listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
+            setTimeout(() => {
+              listRef.current?.scrollToIndex({ index, viewPosition: 0.3, animated: false });
+            }, 100);
+          }}
+          renderItem={({ item, index }) => (
+            <RowListItem
+              info={item}
+              isLast={index === rows.length - 1}
+              stitchesBefore={stitchCounts?.[item.row] ?? null}
+              isCurrent={item.row === pattern.currentRow}
+              onLongPress={() => {
+                Vibration.vibrate(30);
+                setRow(pattern.id, item.row);
+                router.navigate({
+                  pathname: '/pattern/[patternId]',
+                  params: { patternId: pattern.id },
+                });
+              }}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -108,18 +107,16 @@ const styles = StyleSheet.create({
   hint: {
     fontFamily: fonts.body,
     fontSize: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
   },
   screen: {
     flex: 1,
+    padding: 16,
+    gap: 12,
   },
-  progress: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 4,
-  },
-  list: {
+  card: {
     flex: 1,
+    borderWidth: 1,
+    borderRadius: 18,
+    overflow: 'hidden',
   },
 });
