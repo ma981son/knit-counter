@@ -13,23 +13,42 @@ export function RowCard({ info, stitchesBefore }: Props) {
   const colors = useTheme();
 
   const look = info.isLastRow
-    ? { background: colors.endBackground, border: colors.end, text: colors.text, badge: 'Last row' }
+    ? {
+        background: colors.endBackground,
+        border: colors.end,
+        text: colors.text,
+        badge: 'Last row',
+        badgeBackground: colors.end,
+        badgeText: colors.surface,
+        instructionBackground: null,
+      }
     : info.highlight
       ? {
-          background: colors.markBackground,
-          border: colors.mark,
+          background: colors.surface,
+          border: colors.line,
           text: colors.markText,
           badge: 'Pay attention',
+          badgeBackground: colors.markBackground,
+          badgeText: colors.markText,
+          instructionBackground: colors.markBackground,
         }
-      : { background: colors.surface, border: colors.line, text: colors.text, badge: null };
+      : {
+          background: colors.surface,
+          border: colors.line,
+          text: colors.text,
+          badge: null,
+          badgeBackground: colors.surface,
+          badgeText: colors.text,
+          instructionBackground: null,
+        };
 
   return (
     <View style={[styles.card, { backgroundColor: look.background, borderColor: look.border }]}>
       <View style={styles.top}>
         <Text style={[styles.label, { color: colors.muted }]}>ROW</Text>
         {look.badge !== null && (
-          <View style={[styles.badge, { backgroundColor: look.border }]}>
-            <Text style={[styles.badgeText, { color: colors.surface }]}>{look.badge}</Text>
+          <View style={[styles.badge, { backgroundColor: look.badgeBackground }]}>
+            <Text style={[styles.badgeText, { color: look.badgeText }]}>{look.badge}</Text>
           </View>
         )}
       </View>
@@ -42,9 +61,17 @@ export function RowCard({ info, stitchesBefore }: Props) {
         </Text>
       ) : (
         info.instructions.map((instruction, index) => (
-          <Text key={index} style={[styles.instruction, { color: look.text }]}>
-            {instruction.text}
-          </Text>
+          <View
+            key={index}
+            style={
+              look.instructionBackground !== null && [
+                styles.instructionChip,
+                { backgroundColor: look.instructionBackground },
+              ]
+            }
+          >
+            <Text style={[styles.instruction, { color: look.text }]}>{instruction.text}</Text>
+          </View>
         ))
       )}
 
@@ -93,6 +120,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: 96,
     lineHeight: 104,
+  },
+  instructionChip: {
+    alignSelf: 'flex-start',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   instruction: {
     fontFamily: fonts.bodySemiBold,
