@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text } from 'react-native';
 import { AddItem } from '@/src/components/AddItem';
 import { EditItemSheet } from '@/src/components/EditItemSheet';
 import { ListCard } from '@/src/components/ListCard';
+import { useClearRestoreParam } from '@/src/hooks/useClearRestoreParam';
 import { parsePatternCode } from '@/src/pattern/parse';
 import { useStore } from '@/src/store/store';
 import type { Pattern } from '@/src/store/types';
@@ -18,6 +19,7 @@ function progressText(pattern: Pattern): string {
 }
 
 export default function ProjectScreen() {
+  useClearRestoreParam();
   const colors = useTheme();
   const router = useRouter();
   const { projectId } = useLocalSearchParams<{ projectId: string }>();

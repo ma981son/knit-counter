@@ -95,6 +95,7 @@ function RootLayoutNav() {
 }
 
 function restorableScreen({ route }: { route: { params?: object } }) {
-  const isRestoring = route.params !== undefined && 'restore' in route.params;
+  const isRestoring =
+    route.params !== undefined && 'restore' in route.params && route.params.restore !== undefined;
   return { title: '', animation: isRestoring ? 'none' : 'default' } as const;
 }
