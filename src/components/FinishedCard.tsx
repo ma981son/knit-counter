@@ -12,7 +12,7 @@ export function FinishedCard({ totalRows, onRestart }: Props) {
 
   return (
     <View style={[styles.card, { backgroundColor: colors.endBackground, borderColor: colors.end }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Piece finished</Text>
+      <Text style={[styles.title, { color: colors.end }]}>Piece finished</Text>
       <Text style={[styles.text, { color: colors.muted }]}>
         All {totalRows} rows done. Tap −1 if you need to go back.
       </Text>

@@ -23,9 +23,15 @@ export function StitchCount({ before, change, lineColor }: Props) {
           </Text>
         )}
       </Text>
-      <Text style={[styles.note, { color: colors.muted }]}>
-        {change === 0 ? 'on your needle' : `${change > 0 ? '+' : '−'}${Math.abs(change)} this row`}
-      </Text>
+      {change === 0 ? (
+        <Text style={[styles.note, { color: colors.muted }]}>on your needle</Text>
+      ) : (
+        <View style={[styles.chip, { backgroundColor: colors.markBackground }]}>
+          <Text style={[styles.note, { color: colors.markText }]}>
+            {`${change > 0 ? '+' : '−'}${Math.abs(change)} this row`}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -47,6 +53,12 @@ const styles = StyleSheet.create({
   value: {
     fontFamily: fonts.display,
     fontSize: 28,
+  },
+  chip: {
+    alignSelf: 'center',
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
   note: {
     fontFamily: fonts.body,

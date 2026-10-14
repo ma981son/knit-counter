@@ -4,7 +4,7 @@
     "slug": "knit-counter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/colored-background.png",
+    "icon": "./assets/images/rosadito-background-dark.png",
     "scheme": "knitcounter",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -12,8 +12,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#131816",
-        "foregroundImage": "./assets/images/transparent-light.png",
+        "backgroundColor": "#211A1E",
+        "foregroundImage": "./assets/images/rosadito-transparent-dark.png",
         "monochromeImage": "./assets/images/monochrome-dark.png"
       },
       "predictiveBackGestureEnabled": false,
@@ -22,20 +22,20 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/colored-background.png"
+      "favicon": "./assets/images/rosadito-background-dark.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/transparent-dark.png",
+          "image": "./assets/images/rosadito-transparent-light.png",
           "imageWidth": 288,
           "resizeMode": "contain",
-          "backgroundColor": "#eef1ee",
+          "backgroundColor": "#F4EBE6",
           "dark": {
-            "image": "./assets/images/transparent-light.png",
-            "backgroundColor": "#131816"
+            "image": "./assets/images/rosadito-transparent-dark.png",
+            "backgroundColor": "#211A1E"
           }
         }
       ],

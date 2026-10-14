@@ -8,6 +8,7 @@ import { YoungSerif_400Regular } from '@expo-google-fonts/young-serif';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
@@ -76,6 +77,7 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={navigationTheme}>
+      <StatusBar style="auto" />
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
