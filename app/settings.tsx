@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { SegmentedControl } from '@/src/components/SegmentedControl';
+import { SettingsCard } from '@/src/components/SettingsCard';
 import { useStore } from '@/src/store/store';
 import type { AppearanceSetting, LanguageSetting } from '@/src/store/types';
-import { fonts, useTheme } from '@/src/theme';
+import { useTheme } from '@/src/theme';
 
 export default function SettingsScreen() {
   const colors = useTheme();
@@ -30,23 +31,21 @@ export default function SettingsScreen() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.content}
     >
-      <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.line }]}>
-        <Text style={[styles.label, { color: colors.muted }]}>{t('settings.language')}</Text>
+      <SettingsCard title={t('settings.language')}>
         <SegmentedControl
           options={languages}
           value={settings.language}
           onChange={(language) => updateSettings({ language })}
         />
-      </View>
+      </SettingsCard>
 
-      <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.line }]}>
-        <Text style={[styles.label, { color: colors.muted }]}>{t('settings.appearance')}</Text>
+      <SettingsCard title={t('settings.appearance')}>
         <SegmentedControl
           options={appearances}
           value={settings.appearance}
           onChange={(appearance) => updateSettings({ appearance })}
         />
-      </View>
+      </SettingsCard>
     </ScrollView>
   );
 }
@@ -55,17 +54,5 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     gap: 12,
-  },
-  card: {
-    borderWidth: 1,
-    borderRadius: 18,
-    padding: 16,
-    gap: 12,
-  },
-  label: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
   },
 });
