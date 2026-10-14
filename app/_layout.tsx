@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
-import '@/src/i18n';
+import { useLanguageSync } from '@/src/i18n';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { findPattern, useStore } from '@/src/store/store';
@@ -28,6 +28,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useLanguageSync();
   useRowNotification();
 
   const [loaded, error] = useFonts({
