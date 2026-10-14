@@ -15,7 +15,8 @@ import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function CounterScreen() {
-  useSafeKeepAwake();
+  const keepAwake = useStore((state) => state.settings.keepAwake);
+  useSafeKeepAwake(keepAwake);
   const colors = useTheme();
   const { t } = useTranslation();
 
@@ -23,6 +24,7 @@ export default function CounterScreen() {
   const nextRow = useStore((state) => state.nextRow);
   const previousRow = useStore((state) => state.previousRow);
   const setRow = useStore((state) => state.setRow);
+  const vibration = useStore((state) => state.settings.vibration);
 
   useEffect(() => {
     SplashScreen.hideAsync().catch(() => {});
@@ -46,6 +48,7 @@ export default function CounterScreen() {
   function handleNextRow() {
     const next = pattern!.currentRow + 1;
     nextRow(pattern!.id);
+    if (!vibration) return;
 
     const nextInfo = next <= parsed.totalRows ? getRowInfo(parsed, next) : null;
     if (nextInfo?.highlight || nextInfo?.isLastRow) {

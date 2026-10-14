@@ -13,13 +13,23 @@ export function useRowNotification() {
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
     const sync = () => {
-      const pattern = selectOpenPattern(useStore.getState());
-      if (!pattern) {
+      const store = useStore.getState();
+      const pattern = selectOpenPattern(store);
+      if (!pattern || !store.settings.notification) {
         RowNotification.clear();
         return;
       }
       const { title, body, row, total, state, progressLabel } = getRowNotificationContent(pattern);
-      RowNotification.update(title, body, row, total, state, progressLabel);
+      RowNotification.update(
+        title,
+        body,
+        row,
+        total,
+        state,
+        progressLabel,
+        store.settings.vibration,
+        store.settings.notificationSound,
+      );
     };
 
     sync();

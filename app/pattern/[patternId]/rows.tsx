@@ -18,6 +18,7 @@ export default function RowsScreen() {
   const router = useRouter();
   const { pattern, parsed, stitchCounts } = useCurrentPattern();
   const setRow = useStore((state) => state.setRow);
+  const vibration = useStore((state) => state.settings.vibration);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   const rows = useMemo(
@@ -80,7 +81,7 @@ export default function RowsScreen() {
               stitchesBefore={stitchCounts?.[item.row] ?? null}
               isCurrent={item.row === pattern.currentRow}
               onLongPress={() => {
-                Vibration.vibrate(30);
+                if (vibration) Vibration.vibrate(30);
                 setRow(pattern.id, item.row);
                 router.navigate({
                   pathname: '/pattern/[patternId]',
