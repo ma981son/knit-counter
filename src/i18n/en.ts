@@ -100,6 +100,12 @@ export const en = {
     negativeStitches:
       'The stitch count goes below zero after row {{row}} ({{count}} stitches). Check the cast on and the (-2) numbers.',
   },
+  notification: {
+    title: 'Row {{row}} · {{name}}',
+    finishedTitle: 'Finished · {{name}}',
+    allDone_one: '{{count}} row done',
+    allDone_other: 'All {{count}} rows done',
+  },
   editSheet: {
     title: {
       project: 'Edit project',

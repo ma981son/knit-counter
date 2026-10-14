@@ -101,6 +101,12 @@ export const es: typeof en = {
     negativeStitches:
       'El conteo de puntos baja de cero después de la fila {{row}} ({{count}} puntos). Revisa el montaje y los números (-2).',
   },
+  notification: {
+    title: 'Fila {{row}} · {{name}}',
+    finishedTitle: 'Terminado · {{name}}',
+    allDone_one: '{{count}} fila terminada',
+    allDone_other: 'Terminaste las {{count}} filas',
+  },
   editSheet: {
     title: {
       project: 'Editar proyecto',

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 
 import RowNotification from '@/modules/row-notification/src/RowNotificationModule';
+import i18n from '@/src/i18n';
 import { selectOpenPattern, useStore } from '@/src/store/store';
 import { getRowNotificationContent } from './rowNotification';
 
@@ -17,12 +18,13 @@ export function useRowNotification() {
         RowNotification.clear();
         return;
       }
-      const { title, body, row, total, state } = getRowNotificationContent(pattern);
-      RowNotification.update(title, body, row, total, state);
+      const { title, body, row, total, state, progressLabel } = getRowNotificationContent(pattern);
+      RowNotification.update(title, body, row, total, state, progressLabel);
     };
 
     sync();
     const unsubscribe = useStore.subscribe(sync);
+    i18n.on('languageChanged', sync);
 
     const actionSubscription = RowNotification.addListener('onAction', ({ action }) => {
       const state = useStore.getState();
@@ -34,6 +36,7 @@ export function useRowNotification() {
 
     return () => {
       unsubscribe();
+      i18n.off('languageChanged', sync);
       actionSubscription.remove();
     };
   }, []);

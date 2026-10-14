@@ -31,6 +31,7 @@ class RowNotificationService : Service() {
     const val EXTRA_ROW = "row"
     const val EXTRA_TOTAL = "total"
     const val EXTRA_STATE = "state"
+    const val EXTRA_PROGRESS_LABEL = "progressLabel"
     val VIBRATION_PATTERN = longArrayOf(0, 80, 50, 80, 50, 80)
     val TICK_PATTERN = longArrayOf(0, 20)
 
@@ -65,7 +66,8 @@ class RowNotificationService : Service() {
         intent?.getStringExtra(EXTRA_BODY) ?: "",
         intent?.getIntExtra(EXTRA_ROW, 0) ?: 0,
         intent?.getIntExtra(EXTRA_TOTAL, 0) ?: 0,
-        intent?.getStringExtra(EXTRA_STATE) ?: "normal"
+        intent?.getStringExtra(EXTRA_STATE) ?: "normal",
+        intent?.getStringExtra(EXTRA_PROGRESS_LABEL) ?: ""
       )
     }
     return START_NOT_STICKY
@@ -76,7 +78,7 @@ class RowNotificationService : Service() {
     super.onTaskRemoved(rootIntent)
   }
 
-  fun show(title: String, body: String, row: Int, total: Int, state: String) {
+  fun show(title: String, body: String, row: Int, total: Int, state: String, progressLabel: String) {
     createChannel()
 
     if (nextFromNotification && row != shownRow) {
@@ -88,7 +90,7 @@ class RowNotificationService : Service() {
     val color = ContextCompat.getColor(this, colorFor(state))
     val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color)
     val expanded = buildViews(R.layout.row_notification_expanded, title, body, state, color)
-    addProgress(expanded, row, total, color)
+    addProgress(expanded, row, total, progressLabel, color)
 
     val builder = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_row_notification)
@@ -150,7 +152,7 @@ class RowNotificationService : Service() {
     return views
   }
 
-  private fun addProgress(views: RemoteViews, row: Int, total: Int, color: Int) {
+  private fun addProgress(views: RemoteViews, row: Int, total: Int, label: String, color: Int) {
     if (total <= 0) {
       views.setViewVisibility(R.id.row_notification_progress_section, View.GONE)
       return
@@ -158,8 +160,6 @@ class RowNotificationService : Service() {
 
     val rowsDone = (row - 1).coerceIn(0, total)
     val percent = (rowsDone * 100f / total).roundToInt()
-    val label = if (row > total) "Finished · $total rows" else "Row $row of $total"
-
     views.setTextViewText(R.id.row_notification_progress_label, label)
     views.setTextViewText(R.id.row_notification_progress_percent, "$percent%")
     views.setProgressBar(R.id.row_notification_progress, total, rowsDone, false)
@@ -188,7 +188,7 @@ class RowNotificationService : Service() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
     val manager = getSystemService(NotificationManager::class.java)
     manager.deleteNotificationChannel(OLD_CHANNEL_ID)
-    val channel = NotificationChannel(CHANNEL_ID, "Row counter", NotificationManager.IMPORTANCE_DEFAULT)
+    val channel = NotificationChannel(CHANNEL_ID, getString(R.string.row_notification_channel_name), NotificationManager.IMPORTANCE_DEFAULT)
     manager.createNotificationChannel(channel)
   }
 

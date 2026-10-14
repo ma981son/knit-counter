@@ -106,6 +106,12 @@ export const de: typeof en = {
     negativeStitches:
       'Nach Reihe {{row}} fällt die Maschenzahl unter null ({{count}} Maschen). Prüfe den Anschlag und die (-2)-Zahlen.',
   },
+  notification: {
+    title: 'Reihe {{row}} · {{name}}',
+    finishedTitle: 'Fertig · {{name}}',
+    allDone_one: '{{count}} Reihe geschafft',
+    allDone_other: 'Alle {{count}} Reihen geschafft',
+  },
   editSheet: {
     title: {
       project: 'Projekt bearbeiten',

@@ -22,6 +22,7 @@ class RowNotificationModule : Module() {
   private var row: Int = 0
   private var total: Int = 0
   private var state: String = "normal"
+  private var progressLabel: String = ""
 
   override fun definition() = ModuleDefinition {
     Name("RowNotification")
@@ -37,12 +38,13 @@ class RowNotificationModule : Module() {
       stopService()
     }
 
-    Function("update") { newTitle: String, newBody: String, newRow: Int, newTotal: Int, newState: String ->
+    Function("update") { newTitle: String, newBody: String, newRow: Int, newTotal: Int, newState: String, newProgressLabel: String ->
       title = newTitle
       body = newBody
       row = newRow
       total = newTotal
       state = newState
+      progressLabel = newProgressLabel
       refresh()
     }
 
@@ -65,7 +67,7 @@ class RowNotificationModule : Module() {
 
     val running = RowNotificationService.instance
     if (running != null) {
-      running.show(currentTitle, body, row, total, state)
+      running.show(currentTitle, body, row, total, state, progressLabel)
       return
     }
 
@@ -76,6 +78,7 @@ class RowNotificationModule : Module() {
       .putExtra(RowNotificationService.EXTRA_ROW, row)
       .putExtra(RowNotificationService.EXTRA_TOTAL, total)
       .putExtra(RowNotificationService.EXTRA_STATE, state)
+      .putExtra(RowNotificationService.EXTRA_PROGRESS_LABEL, progressLabel)
 
     try {
       ContextCompat.startForegroundService(context, intent)
