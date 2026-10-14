@@ -7,6 +7,8 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.VibrationEffect
@@ -34,12 +36,16 @@ class RowNotificationService : Service() {
     const val EXTRA_PROGRESS_LABEL = "progressLabel"
     const val EXTRA_VIBRATE = "vibrate"
     const val EXTRA_SOUND = "sound"
+    const val EXTRA_COLOR_PREFIX = "color_"
+    val COLOR_KEYS = listOf("strongLight", "strongDark", "onStrongLight", "onStrongDark", "lineLight", "lineDark")
     val VIBRATION_PATTERN = longArrayOf(0, 80, 50, 80, 50, 80)
     val TICK_PATTERN = longArrayOf(0, 20)
 
     var instance: RowNotificationService? = null
       private set
   }
+
+  private data class DayNight(val light: Int, val dark: Int)
 
   private var nextFromNotification = false
   private var shownRow = -1
@@ -71,7 +77,8 @@ class RowNotificationService : Service() {
         intent?.getStringExtra(EXTRA_STATE) ?: "normal",
         intent?.getStringExtra(EXTRA_PROGRESS_LABEL) ?: "",
         intent?.getBooleanExtra(EXTRA_VIBRATE, true) ?: true,
-        intent?.getBooleanExtra(EXTRA_SOUND, true) ?: true
+        intent?.getBooleanExtra(EXTRA_SOUND, true) ?: true,
+        COLOR_KEYS.mapNotNull { key -> intent?.getStringExtra(EXTRA_COLOR_PREFIX + key)?.let { key to it } }.toMap()
       )
     }
     return START_NOT_STICKY
@@ -82,7 +89,17 @@ class RowNotificationService : Service() {
     super.onTaskRemoved(rootIntent)
   }
 
-  fun show(title: String, body: String, row: Int, total: Int, state: String, progressLabel: String, vibrate: Boolean, sound: Boolean) {
+  fun show(
+    title: String,
+    body: String,
+    row: Int,
+    total: Int,
+    state: String,
+    progressLabel: String,
+    vibrate: Boolean,
+    sound: Boolean,
+    colors: Map<String, String>
+  ) {
     createChannel()
 
     if (vibrate && nextFromNotification && row != shownRow) {
@@ -91,10 +108,15 @@ class RowNotificationService : Service() {
     nextFromNotification = false
     shownRow = row
 
-    val color = ContextCompat.getColor(this, colorFor(state))
-    val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color)
-    val expanded = buildViews(R.layout.row_notification_expanded, title, body, state, color)
-    addProgress(expanded, row, total, progressLabel, color)
+    val strong = dayNight(colors, "strong")
+    val onStrong = dayNight(colors, "onStrong")
+    val line = dayNight(colors, "line")
+
+    val color = strong?.let { if (isNight()) it.dark else it.light }
+      ?: ContextCompat.getColor(this, colorFor(state))
+    val collapsed = buildViews(R.layout.row_notification_collapsed, title, body, state, color, strong, onStrong)
+    val expanded = buildViews(R.layout.row_notification_expanded, title, body, state, color, strong, onStrong)
+    addProgress(expanded, row, total, progressLabel, color, strong, line)
 
     val builder = NotificationCompat.Builder(this, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_row_notification)
@@ -118,6 +140,19 @@ class RowNotificationService : Service() {
     ServiceCompat.startForeground(this, NOTIFICATION_ID, builder.build(), type)
   }
 
+  private fun dayNight(colors: Map<String, String>, name: String): DayNight? {
+    val light = colors["${name}Light"] ?: return null
+    val dark = colors["${name}Dark"] ?: return null
+    return try {
+      DayNight(Color.parseColor(light), Color.parseColor(dark))
+    } catch (error: IllegalArgumentException) {
+      null
+    }
+  }
+
+  private fun isNight(): Boolean =
+    (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
   private fun colorFor(state: String): Int = when (state) {
     "highlight" -> R.color.row_notification_mark
     "last", "finished" -> R.color.row_notification_end
@@ -136,7 +171,15 @@ class RowNotificationService : Service() {
     else -> R.drawable.row_notification_plus_normal
   }
 
-  private fun buildViews(layout: Int, title: String, body: String, state: String, color: Int): RemoteViews {
+  private fun buildViews(
+    layout: Int,
+    title: String,
+    body: String,
+    state: String,
+    color: Int,
+    strong: DayNight?,
+    onStrong: DayNight?
+  ): RemoteViews {
     val views = RemoteViews(packageName, layout)
     views.setTextViewText(R.id.row_notification_title, title)
     views.setTextViewText(R.id.row_notification_body, body)
@@ -154,10 +197,42 @@ class RowNotificationService : Service() {
       views.setFloat(R.id.row_notification_plus, "setAlpha", 0.4f)
     }
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      if (strong != null) {
+        views.setColorInt(R.id.row_notification_minus, "setTextColor", strong.light, strong.dark)
+        views.setColorStateList(
+          R.id.row_notification_minus,
+          "setBackgroundTintList",
+          ColorStateList.valueOf(strong.light),
+          ColorStateList.valueOf(strong.dark)
+        )
+        views.setColorStateList(
+          R.id.row_notification_plus,
+          "setBackgroundTintList",
+          ColorStateList.valueOf(strong.light),
+          ColorStateList.valueOf(strong.dark)
+        )
+        if (state != "normal") {
+          views.setColorInt(R.id.row_notification_title, "setTextColor", strong.light, strong.dark)
+        }
+      }
+      if (onStrong != null) {
+        views.setColorInt(R.id.row_notification_plus, "setTextColor", onStrong.light, onStrong.dark)
+      }
+    }
+
     return views
   }
 
-  private fun addProgress(views: RemoteViews, row: Int, total: Int, label: String, color: Int) {
+  private fun addProgress(
+    views: RemoteViews,
+    row: Int,
+    total: Int,
+    label: String,
+    color: Int,
+    strong: DayNight?,
+    line: DayNight?
+  ) {
     if (total <= 0) {
       views.setViewVisibility(R.id.row_notification_progress_section, View.GONE)
       return
@@ -170,7 +245,24 @@ class RowNotificationService : Service() {
     views.setProgressBar(R.id.row_notification_progress, total, rowsDone, false)
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-      views.setColorStateList(R.id.row_notification_progress, "setProgressTintList", ColorStateList.valueOf(color))
+      if (strong != null) {
+        views.setColorStateList(
+          R.id.row_notification_progress,
+          "setProgressTintList",
+          ColorStateList.valueOf(strong.light),
+          ColorStateList.valueOf(strong.dark)
+        )
+      } else {
+        views.setColorStateList(R.id.row_notification_progress, "setProgressTintList", ColorStateList.valueOf(color))
+      }
+      if (line != null) {
+        views.setColorStateList(
+          R.id.row_notification_progress,
+          "setProgressBackgroundTintList",
+          ColorStateList.valueOf(line.light),
+          ColorStateList.valueOf(line.dark)
+        )
+      }
     }
   }
 

@@ -1,18 +1,9 @@
 import { NativeModule, requireNativeModule } from 'expo';
 
-import { RowNotificationModuleEvents, RowNotificationState } from './RowNotification.types';
+import { RowNotificationContent, RowNotificationModuleEvents } from './RowNotification.types';
 
 declare class RowNotificationModule extends NativeModule<RowNotificationModuleEvents> {
-  update(
-    title: string,
-    body: string,
-    row: number,
-    total: number,
-    state: RowNotificationState,
-    progressLabel: string,
-    vibrate: boolean,
-    sound: boolean,
-  ): void;
+  update(content: RowNotificationContent): void;
   clear(): void;
 }
 

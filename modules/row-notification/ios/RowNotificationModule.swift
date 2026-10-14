@@ -6,7 +6,7 @@ public class RowNotificationModule: Module {
 
     Events("onAction")
 
-    Function("update") { (title: String, body: String, row: Int, total: Int, state: String, progressLabel: String, vibrate: Bool, sound: Bool) in
+    Function("update") { (content: [String: Any]) in
     }
 
     Function("clear") {

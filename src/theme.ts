@@ -1,7 +1,7 @@
 import { useColorScheme } from '@/src/hooks/useColorScheme';
 import { useStore } from '@/src/store/store';
 
-type ThemeColors = {
+export type ThemeColors = {
   background: string;
   surface: string;
   text: string;
@@ -113,7 +113,11 @@ export const fonts = {
 
 export const PALETTE_NAMES = Object.keys(palettes) as PaletteName[];
 
+export function getPalette(name: PaletteName): { light: ThemeColors; dark: ThemeColors } {
+  return palettes[name] ?? palettes[DEFAULT_PALETTE];
+}
+
 export function useTheme(): ThemeColors {
   const palette = useStore((state) => state.settings.palette);
-  return (palettes[palette] ?? palettes[DEFAULT_PALETTE])[useColorScheme()];
+  return getPalette(palette)[useColorScheme()];
 }

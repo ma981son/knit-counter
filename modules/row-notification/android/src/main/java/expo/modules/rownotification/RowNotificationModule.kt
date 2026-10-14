@@ -17,14 +17,7 @@ class RowNotificationModule : Module() {
     }
   }
 
-  private var title: String? = null
-  private var body: String = ""
-  private var row: Int = 0
-  private var total: Int = 0
-  private var state: String = "normal"
-  private var progressLabel: String = ""
-  private var vibrate: Boolean = true
-  private var sound: Boolean = true
+  private var content: NotificationContent? = null
 
   override fun definition() = ModuleDefinition {
     Name("RowNotification")
@@ -40,20 +33,13 @@ class RowNotificationModule : Module() {
       stopService()
     }
 
-    Function("update") { newTitle: String, newBody: String, newRow: Int, newTotal: Int, newState: String, newProgressLabel: String, newVibrate: Boolean, newSound: Boolean ->
-      title = newTitle
-      body = newBody
-      row = newRow
-      total = newTotal
-      state = newState
-      progressLabel = newProgressLabel
-      vibrate = newVibrate
-      sound = newSound
+    Function("update") { newContent: NotificationContent ->
+      content = newContent
       refresh()
     }
 
     Function("clear") {
-      title = null
+      content = null
       stopService()
     }
 
@@ -67,24 +53,38 @@ class RowNotificationModule : Module() {
   }
 
   private fun refresh() {
-    val currentTitle = title ?: return
+    val current = content ?: return
 
     val running = RowNotificationService.instance
     if (running != null) {
-      running.show(currentTitle, body, row, total, state, progressLabel, vibrate, sound)
+      running.show(
+        current.title,
+        current.body,
+        current.row,
+        current.total,
+        current.state,
+        current.progressLabel,
+        current.vibrate,
+        current.sound,
+        current.colors
+      )
       return
     }
 
     val context = appContext.reactContext ?: return
     val intent = Intent(context, RowNotificationService::class.java)
-      .putExtra(RowNotificationService.EXTRA_TITLE, currentTitle)
-      .putExtra(RowNotificationService.EXTRA_BODY, body)
-      .putExtra(RowNotificationService.EXTRA_ROW, row)
-      .putExtra(RowNotificationService.EXTRA_TOTAL, total)
-      .putExtra(RowNotificationService.EXTRA_STATE, state)
-      .putExtra(RowNotificationService.EXTRA_PROGRESS_LABEL, progressLabel)
-      .putExtra(RowNotificationService.EXTRA_VIBRATE, vibrate)
-      .putExtra(RowNotificationService.EXTRA_SOUND, sound)
+      .putExtra(RowNotificationService.EXTRA_TITLE, current.title)
+      .putExtra(RowNotificationService.EXTRA_BODY, current.body)
+      .putExtra(RowNotificationService.EXTRA_ROW, current.row)
+      .putExtra(RowNotificationService.EXTRA_TOTAL, current.total)
+      .putExtra(RowNotificationService.EXTRA_STATE, current.state)
+      .putExtra(RowNotificationService.EXTRA_PROGRESS_LABEL, current.progressLabel)
+      .putExtra(RowNotificationService.EXTRA_VIBRATE, current.vibrate)
+      .putExtra(RowNotificationService.EXTRA_SOUND, current.sound)
+
+    for ((key, value) in current.colors) {
+      intent.putExtra(RowNotificationService.EXTRA_COLOR_PREFIX + key, value)
+    }
 
     try {
       ContextCompat.startForegroundService(context, intent)

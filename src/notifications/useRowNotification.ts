@@ -4,7 +4,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import RowNotification from '@/modules/row-notification/src/RowNotificationModule';
 import i18n from '@/src/i18n';
 import { selectOpenPattern, useStore } from '@/src/store/store';
-import { getRowNotificationContent } from './rowNotification';
+import { getNotificationColors, getRowNotificationContent } from './rowNotification';
 
 export function useRowNotification() {
   useEffect(() => {
@@ -19,17 +19,13 @@ export function useRowNotification() {
         RowNotification.clear();
         return;
       }
-      const { title, body, row, total, state, progressLabel } = getRowNotificationContent(pattern);
-      RowNotification.update(
-        title,
-        body,
-        row,
-        total,
-        state,
-        progressLabel,
-        store.settings.vibration,
-        store.settings.notificationSound,
-      );
+      const content = getRowNotificationContent(pattern);
+      RowNotification.update({
+        ...content,
+        vibrate: store.settings.vibration,
+        sound: store.settings.notificationSound,
+        colors: getNotificationColors(store.settings.palette, content.state),
+      });
     };
 
     sync();
