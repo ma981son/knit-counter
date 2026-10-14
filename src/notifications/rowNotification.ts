@@ -1,8 +1,12 @@
-import { RowNotificationState } from '@/modules/row-notification/src/RowNotification.types';
+import {
+  RowNotificationColors,
+  RowNotificationState,
+} from '@/modules/row-notification/src/RowNotification.types';
 import i18n from '@/src/i18n';
 import { parsePatternCode } from '@/src/pattern/parse';
 import { getRowInfo } from '@/src/pattern/rows';
 import { Pattern } from '@/src/store/types';
+import { getPalette, type PaletteName } from '@/src/theme';
 
 export function getRowNotificationContent(pattern: Pattern) {
   const { t } = i18n;
@@ -30,5 +34,21 @@ export function getRowNotificationContent(pattern: Pattern) {
     progressLabel: isFinished
       ? t('counter.finished', { count: total })
       : t('project.progressRowOf', { row, total }),
+  };
+}
+
+export function getNotificationColors(
+  paletteName: PaletteName,
+  state: RowNotificationState,
+): RowNotificationColors {
+  const { light, dark } = getPalette(paletteName);
+  const strong = state === 'highlight' ? 'mark' : state === 'normal' ? 'accent' : 'end';
+  return {
+    strongLight: light[strong],
+    strongDark: dark[strong],
+    onStrongLight: light.onAccent,
+    onStrongDark: dark.onAccent,
+    lineLight: light.line,
+    lineDark: dark.line,
   };
 }

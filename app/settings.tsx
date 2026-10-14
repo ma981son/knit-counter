@@ -10,7 +10,7 @@ import { SettingsCard } from '@/src/components/SettingsCard';
 import { getExample } from '@/src/patterns/examples';
 import { useStore } from '@/src/store/store';
 import type { AppearanceSetting, LanguageSetting } from '@/src/store/types';
-import { fonts, useTheme } from '@/src/theme';
+import { fonts, PALETTE_NAMES, type PaletteName, useTheme } from '@/src/theme';
 
 export default function SettingsScreen() {
   const colors = useTheme();
@@ -33,6 +33,11 @@ export default function SettingsScreen() {
     { value: 'light', label: t('settings.light') },
     { value: 'dark', label: t('settings.dark') },
   ];
+
+  const palettes: { value: PaletteName; label: string }[] = PALETTE_NAMES.map((name) => ({
+    value: name,
+    label: name.charAt(0).toUpperCase() + name.slice(1),
+  }));
 
   function showExample() {
     const example = getExample(i18n.resolvedLanguage ?? i18n.language);
@@ -66,6 +71,14 @@ export default function SettingsScreen() {
           options={appearances}
           value={settings.appearance}
           onChange={(appearance) => updateSettings({ appearance })}
+        />
+      </SettingsCard>
+
+      <SettingsCard title={t('settings.palette')}>
+        <SegmentedControl
+          options={palettes}
+          value={settings.palette}
+          onChange={(palette) => updateSettings({ palette })}
         />
       </SettingsCard>
 

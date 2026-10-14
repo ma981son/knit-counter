@@ -131,6 +131,7 @@ export const de: typeof en = {
     version: 'knit-counter · Version {{version}}',
     sourceCode: 'Quellcode auf GitHub',
     dark: 'Dunkel',
+    palette: 'Farbpalette',
   },
   editSheet: {
     title: {

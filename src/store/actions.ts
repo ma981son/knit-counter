@@ -3,6 +3,7 @@ import type { Pattern, Project, SavedData, Settings } from './types';
 export const defaultSettings: Settings = {
   language: 'system',
   appearance: 'system',
+  palette: 'rosadito',
   vibration: true,
   notification: true,
   notificationSound: true,
