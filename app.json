@@ -45,7 +45,8 @@
         {
           "supportedLocales": ["en", "es", "de"]
         }
-      ]
+      ],
+      "./plugins/withLocalProperties.js"
     ],
     "experiments": {
       "typedRoutes": true
