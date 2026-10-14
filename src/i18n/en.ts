@@ -125,6 +125,7 @@ export const en = {
     version: 'knit-counter · Version {{version}}',
     sourceCode: 'Source code on GitHub',
     dark: 'Dark',
+    palette: 'Palette',
   },
   editSheet: {
     title: {
