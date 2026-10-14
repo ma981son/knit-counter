@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   chip: {
-    alignSelf: 'center',
     borderRadius: 999,
     paddingHorizontal: 10,
     paddingVertical: 4,
