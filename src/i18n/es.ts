@@ -120,6 +120,11 @@ export const es: typeof en = {
     showNotification: 'Mostrar notificación',
     notificationSound: 'Sonido',
     systemNotificationSettings: 'Configuración de Android',
+    help: 'Ayuda',
+    showExample: 'Mostrar el ejemplo de nuevo',
+    about: 'Acerca de',
+    version: 'knit-counter · Versión {{version}}',
+    sourceCode: 'Código fuente en GitHub',
     dark: 'Oscuro',
   },
   editSheet: {

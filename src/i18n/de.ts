@@ -125,6 +125,11 @@ export const de: typeof en = {
     showNotification: 'Benachrichtigung anzeigen',
     notificationSound: 'Ton',
     systemNotificationSettings: 'Android-Einstellungen',
+    help: 'Hilfe',
+    showExample: 'Beispiel erneut anzeigen',
+    about: 'Über die App',
+    version: 'knit-counter · Version {{version}}',
+    sourceCode: 'Quellcode auf GitHub',
     dark: 'Dunkel',
   },
   editSheet: {

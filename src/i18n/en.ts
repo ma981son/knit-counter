@@ -119,6 +119,11 @@ export const en = {
     showNotification: 'Show notification',
     notificationSound: 'Sound',
     systemNotificationSettings: 'Android settings',
+    help: 'Help',
+    showExample: 'Show example again',
+    about: 'About',
+    version: 'knit-counter · Version {{version}}',
+    sourceCode: 'Source code on GitHub',
     dark: 'Dark',
   },
   editSheet: {
