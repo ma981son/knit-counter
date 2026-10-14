@@ -58,6 +58,38 @@ export const de: typeof en = {
     backOneRow: 'Eine Reihe zurück',
     nextRow: 'Reihe fertig, nächste Reihe',
   },
+  rows: {
+    hint: 'Halte eine Reihe gedrückt, um dorthin zu springen.',
+    jumpHint: 'Gedrückt halten, um zu dieser Reihe zu springen',
+    youAreHere: 'DU BIST HIER',
+    noInstruction: 'Keine Anweisung',
+    empty: 'Diese Anleitung hat noch keine Reihen.',
+  },
+  code: {
+    placeholder: '1-6: 1 re, 1 li\n7+: Rechts | Links',
+    save: 'Code speichern',
+    discard: 'Änderungen verwerfen',
+    summaryRows_one: '{{count}} Reihe',
+    summaryRows_other: '{{count}} Reihen',
+    summaryHighlighted_one: '{{count}} markiert',
+    summaryHighlighted_other: '{{count}} markiert',
+    summaryStitches: '{{from}} → {{to}} Maschen',
+    cheatSheet: {
+      title: 'SO SCHREIBST DU ES',
+      alternateExample: 'Rechts | Links',
+      meanings: {
+        oneRow: 'eine Reihe',
+        range: 'Reihen 1 bis 6',
+        openRange: 'ab Reihe 7, bis ein anderer Bereich beginnt',
+        severalRows: 'mehrere Reihen',
+        alternate: 'wechselt Reihe für Reihe, beginnend mit der ersten',
+        highlight: 'am Textanfang: Reihe hervorheben',
+        end: 'am Textanfang: die letzte Reihe',
+        castOn: 'Anschlagmaschen, zeigt die Maschenzahl',
+        stitchChange: 'Maschen, die in der Reihe ab- oder zunehmen',
+      },
+    },
+  },
   editSheet: {
     title: {
       project: 'Projekt bearbeiten',

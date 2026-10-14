@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/src/components/Button';
@@ -9,6 +10,7 @@ import { fonts, useTheme } from '@/src/theme';
 
 export default function CodeScreen() {
   const colors = useTheme();
+  const { t } = useTranslation();
   const { pattern, parsed, warnings, stitchCounts } = useCurrentPattern();
   const updateCode = useStore((state) => state.updateCode);
 
@@ -24,7 +26,7 @@ export default function CodeScreen() {
   if (!pattern) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={[styles.message, { color: colors.muted }]}>Loading…</Text>
+        <Text style={[styles.message, { color: colors.muted }]}>{t('common.loading')}</Text>
       </View>
     );
   }
@@ -43,7 +45,7 @@ export default function CodeScreen() {
         autoCorrect={false}
         spellCheck={false}
         textAlignVertical="top"
-        placeholder={'1-6: K1, P1\n7+: Knit | Purl'}
+        placeholder={t('code.placeholder')}
         placeholderTextColor={colors.muted}
         style={[
           styles.editor,
@@ -53,12 +55,16 @@ export default function CodeScreen() {
 
       <View style={styles.buttons}>
         <Button
-          title="Save code"
+          title={t('code.save')}
           onPress={() => updateCode(pattern.id, draft)}
           disabled={!hasChanges}
         />
         {hasChanges && (
-          <Button title="Discard changes" variant="secondary" onPress={() => setDraft(savedCode)} />
+          <Button
+            title={t('code.discard')}
+            variant="secondary"
+            onPress={() => setDraft(savedCode)}
+          />
         )}
       </View>
       <CodeCheatSheet />

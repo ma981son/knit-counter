@@ -54,6 +54,38 @@ export const en = {
     backOneRow: 'Back one row',
     nextRow: 'Row done, next row',
   },
+  rows: {
+    hint: 'Hold a row to jump there.',
+    jumpHint: 'Hold to jump to this row',
+    youAreHere: 'YOU ARE HERE',
+    noInstruction: 'No instruction',
+    empty: 'This pattern has no rows yet.',
+  },
+  code: {
+    placeholder: '1-6: K1, P1\n7+: Knit | Purl',
+    save: 'Save code',
+    discard: 'Discard changes',
+    summaryRows_one: '{{count}} row',
+    summaryRows_other: '{{count}} rows',
+    summaryHighlighted_one: '{{count}} highlighted',
+    summaryHighlighted_other: '{{count}} highlighted',
+    summaryStitches: '{{from}} → {{to}} stitches',
+    cheatSheet: {
+      title: 'HOW TO WRITE IT',
+      alternateExample: 'Knit | Purl',
+      meanings: {
+        oneRow: 'one row',
+        range: 'rows 1 to 6',
+        openRange: 'from row 7 on, until another range starts',
+        severalRows: 'several rows',
+        alternate: 'alternates row by row, starting with the first',
+        highlight: 'at the start of the text: highlight the row',
+        end: 'at the start of the text: the last row',
+        castOn: 'starting stitches, shows the stitch count',
+        stitchChange: 'stitches lost or gained on that row',
+      },
+    },
+  },
   editSheet: {
     title: {
       project: 'Edit project',

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { getRowInfo } from '@/src/pattern/rows';
@@ -13,6 +14,7 @@ type Props = {
 
 export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const highlightedRows = useMemo(() => {
     let count = 0;
@@ -22,9 +24,14 @@ export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
     return count;
   }, [parsed]);
 
-  const parts = [`${parsed.totalRows} rows`, `${highlightedRows} highlighted`];
+  const parts = [
+    t('code.summaryRows', { count: parsed.totalRows }),
+    t('code.summaryHighlighted', { count: highlightedRows }),
+  ];
   if (stitchCounts !== null) {
-    parts.push(`${stitchCounts[1]} → ${stitchCounts[parsed.totalRows + 1]} stitches`);
+    parts.push(
+      t('code.summaryStitches', { from: stitchCounts[1], to: stitchCounts[parsed.totalRows + 1] }),
+    );
   }
 
   return (

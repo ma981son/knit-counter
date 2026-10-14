@@ -1,29 +1,35 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { fonts, useTheme } from '@/src/theme';
 
-const ENTRIES: [string, string][] = [
-  ['13:', 'one row'],
-  ['1-6:', 'rows 1 to 6'],
-  ['7+:', 'from row 7 on, until another range starts'],
-  ['13, 19, 25:', 'several rows'],
-  ['Knit | Purl', 'alternates row by row, starting with the first'],
-  ['!', 'at the start of the text: highlight the row'],
-  ['END', 'at the start of the text: the last row'],
-  ['Cast on: 66', 'starting stitches, shows the stitch count'],
-  ['(-2)  (+1)', 'stitches lost or gained on that row'],
-];
+const ENTRIES = [
+  ['13:', 'oneRow'],
+  ['1-6:', 'range'],
+  ['7+:', 'openRange'],
+  ['13, 19, 25:', 'severalRows'],
+  [null, 'alternate'],
+  ['!', 'highlight'],
+  ['END', 'end'],
+  ['Cast on: 66', 'castOn'],
+  ['(-2)  (+1)', 'stitchChange'],
+] as const;
 
 export function CodeCheatSheet() {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.box, { backgroundColor: colors.surface, borderColor: colors.line }]}>
-      <Text style={[styles.title, { color: colors.muted }]}>HOW TO WRITE IT</Text>
+      <Text style={[styles.title, { color: colors.muted }]}>{t('code.cheatSheet.title')}</Text>
       {ENTRIES.map(([syntax, meaning]) => (
-        <View key={syntax} style={styles.entry}>
-          <Text style={[styles.syntax, { color: colors.text }]}>{syntax}</Text>
-          <Text style={[styles.meaning, { color: colors.muted }]}>{meaning}</Text>
+        <View key={meaning} style={styles.entry}>
+          <Text style={[styles.syntax, { color: colors.text }]}>
+            {syntax ?? t('code.cheatSheet.alternateExample')}
+          </Text>
+          <Text style={[styles.meaning, { color: colors.muted }]}>
+            {t(`code.cheatSheet.meanings.${meaning}`)}
+          </Text>
         </View>
       ))}
     </View>

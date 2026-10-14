@@ -56,6 +56,38 @@ export const es: typeof en = {
     backOneRow: 'Una fila atrás',
     nextRow: 'Fila lista, siguiente fila',
   },
+  rows: {
+    hint: 'Mantén presionada una fila para saltar a ella.',
+    jumpHint: 'Mantén presionado para saltar a esta fila',
+    youAreHere: 'ESTÁS AQUÍ',
+    noInstruction: 'Sin instrucciones',
+    empty: 'Este patrón aún no tiene filas.',
+  },
+  code: {
+    placeholder: '1-6: D1, R1\n7+: Derecho | Revés',
+    save: 'Guardar código',
+    discard: 'Descartar cambios',
+    summaryRows_one: '{{count}} fila',
+    summaryRows_other: '{{count}} filas',
+    summaryHighlighted_one: '{{count}} destacada',
+    summaryHighlighted_other: '{{count}} destacadas',
+    summaryStitches: '{{from}} → {{to}} puntos',
+    cheatSheet: {
+      title: 'CÓMO ESCRIBIRLO',
+      alternateExample: 'Derecho | Revés',
+      meanings: {
+        oneRow: 'una fila',
+        range: 'filas 1 a 6',
+        openRange: 'desde la fila 7, hasta que empiece otro rango',
+        severalRows: 'varias filas',
+        alternate: 'alterna fila por fila, empezando por la primera',
+        highlight: 'al inicio del texto: destaca la fila',
+        end: 'al inicio del texto: la última fila',
+        castOn: 'puntos iniciales, muestra el conteo de puntos',
+        stitchChange: 'puntos que se pierden o se ganan en esa fila',
+      },
+    },
+  },
   editSheet: {
     title: {
       project: 'Editar proyecto',

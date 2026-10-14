@@ -1,5 +1,6 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { RowListItem } from '@/src/components/RowListItem';
@@ -13,6 +14,7 @@ import type { RowInfo } from '@/src/pattern/types';
 
 export default function RowsScreen() {
   const colors = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { pattern, parsed, stitchCounts } = useCurrentPattern();
   const setRow = useStore((state) => state.setRow);
@@ -40,7 +42,7 @@ export default function RowsScreen() {
   if (!pattern) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={[styles.message, { color: colors.muted }]}>Loading…</Text>
+        <Text style={[styles.message, { color: colors.muted }]}>{t('common.loading')}</Text>
       </View>
     );
   }
@@ -48,7 +50,7 @@ export default function RowsScreen() {
   if (rows.length === 0) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <Text style={[styles.message, { color: colors.muted }]}>This pattern has no rows yet.</Text>
+        <Text style={[styles.message, { color: colors.muted }]}>{t('rows.empty')}</Text>
       </View>
     );
   }
@@ -57,7 +59,7 @@ export default function RowsScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ProgressBar row={pattern.currentRow} totalRows={parsed.totalRows} />
 
-      <Text style={[styles.hint, { color: colors.muted }]}>Hold a row to jump there.</Text>
+      <Text style={[styles.hint, { color: colors.muted }]}>{t('rows.hint')}</Text>
 
       <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.line }]}>
         <FlatList
