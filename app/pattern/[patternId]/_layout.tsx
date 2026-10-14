@@ -2,6 +2,7 @@ import { Stack, Tabs, useLocalSearchParams } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { useEffect } from 'react';
 
+import { useClearRestoreParam } from '@/src/hooks/useClearRestoreParam';
 import { selectOpenPattern, useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
 
@@ -15,6 +16,7 @@ function TabIcon({ name, color }: TabIconProps) {
 }
 
 export default function PatternLayout() {
+  useClearRestoreParam();
   const colors = useTheme();
   const params = useLocalSearchParams<{ patternId: string }>();
   const openPattern = useStore((state) => state.openPattern);
