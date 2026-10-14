@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import { SegmentedControl } from '@/src/components/SegmentedControl';
+import { SettingSwitch } from '@/src/components/SettingSwitch';
 import { SettingsCard } from '@/src/components/SettingsCard';
 import { useStore } from '@/src/store/store';
 import type { AppearanceSetting, LanguageSetting } from '@/src/store/types';
@@ -44,6 +45,14 @@ export default function SettingsScreen() {
           options={appearances}
           value={settings.appearance}
           onChange={(appearance) => updateSettings({ appearance })}
+        />
+      </SettingsCard>
+
+      <SettingsCard title={t('settings.counter')}>
+        <SettingSwitch
+          label={t('settings.vibration')}
+          value={settings.vibration}
+          onChange={(vibration) => updateSettings({ vibration })}
         />
       </SettingsCard>
     </ScrollView>

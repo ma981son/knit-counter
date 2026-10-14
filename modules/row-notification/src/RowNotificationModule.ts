@@ -10,6 +10,7 @@ declare class RowNotificationModule extends NativeModule<RowNotificationModuleEv
     total: number,
     state: RowNotificationState,
     progressLabel: string,
+    vibrate: boolean,
   ): void;
   clear(): void;
 }

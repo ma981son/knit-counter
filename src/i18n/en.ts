@@ -112,6 +112,8 @@ export const en = {
     system: 'System',
     appearance: 'Appearance',
     light: 'Light',
+    counter: 'Counter',
+    vibration: 'Vibrate on +1',
     dark: 'Dark',
   },
   editSheet: {

@@ -118,6 +118,8 @@ export const de: typeof en = {
     system: 'System',
     appearance: 'Darstellung',
     light: 'Hell',
+    counter: 'Zähler',
+    vibration: 'Vibrieren bei +1',
     dark: 'Dunkel',
   },
   editSheet: {

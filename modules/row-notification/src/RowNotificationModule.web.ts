@@ -10,6 +10,7 @@ class RowNotificationModule extends NativeModule<RowNotificationModuleEvents> {
     total: number,
     state: RowNotificationState,
     progressLabel: string,
+    vibrate: boolean,
   ) {}
   clear() {}
 }

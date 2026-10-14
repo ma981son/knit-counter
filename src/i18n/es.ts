@@ -113,6 +113,8 @@ export const es: typeof en = {
     system: 'Sistema',
     appearance: 'Apariencia',
     light: 'Claro',
+    counter: 'Contador',
+    vibration: 'Vibrar al sumar',
     dark: 'Oscuro',
   },
   editSheet: {
