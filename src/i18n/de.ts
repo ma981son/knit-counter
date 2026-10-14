@@ -1,0 +1,131 @@
+import type { en } from './en';
+
+export const de: typeof en = {
+  common: {
+    add: 'Hinzufügen',
+    cancel: 'Abbrechen',
+    yes: 'Ja',
+    loading: 'Lädt…',
+  },
+  tabs: {
+    counter: 'Zähler',
+    rows: 'Reihen',
+    code: 'Code',
+  },
+  notFound: {
+    title: 'Hoppla!',
+    message: 'Diese Seite gibt es nicht.',
+    link: 'Zu deinen Projekten',
+  },
+  projects: {
+    title: 'Projekte',
+    newProject: 'Neues Projekt',
+    namePlaceholder: 'Projektname, z. B. Pullover',
+    patternCount_one: '{{count}} Anleitung',
+    patternCount_other: '{{count}} Anleitungen',
+    empty: 'Noch keine Projekte.',
+    deleteMessage:
+      'Das löscht „{{name}}“ mit allen Anleitungen. Das kann nicht rückgängig gemacht werden.',
+  },
+  project: {
+    newPattern: 'Neue Anleitung',
+    namePlaceholder: 'Name der Anleitung, z. B. Linker Ärmel',
+    empty: 'Noch keine Anleitungen.',
+    missing: 'Dieses Projekt gibt es nicht mehr.',
+    deleteMessage:
+      'Das löscht „{{name}}“ mit Code und deiner Reihe. Das kann nicht rückgängig gemacht werden.',
+    progressRow: 'Reihe {{row}}',
+    progressRowOf: 'Reihe {{row}} von {{total}}',
+    finished: 'Fertig',
+  },
+  counter: {
+    rowLabel: 'REIHE',
+    lastRow: 'Letzte Reihe',
+    payAttention: 'Achtung',
+    noInstruction: 'Keine Anweisung für diese Reihe.',
+    normalRow: 'Normale Reihe: {{text}}',
+    stitchesLabel: 'MASCHEN',
+    stitchChange: '{{change}} in dieser Reihe',
+    finished_one: 'Fertig · {{count}} Reihe',
+    finished_other: 'Fertig · {{count}} Reihen',
+    finishedTitle: 'Fertig gestrickt!',
+    allRowsDone_one: 'Die {{count}} Reihe ist geschafft. Tippe auf −, wenn du zurück willst.',
+    allRowsDone_other: 'Alle {{count}} Reihen geschafft. Tippe auf −, wenn du zurück willst.',
+    restartFromRowOne: 'Neu ab Reihe 1 beginnen',
+    restart: 'Neu anfangen',
+    restartQuestion: 'Zurück zu Reihe 1?',
+    backOneRow: 'Eine Reihe zurück',
+    nextRow: 'Reihe fertig, nächste Reihe',
+  },
+  rows: {
+    hint: 'Halte eine Reihe gedrückt, um dorthin zu springen.',
+    jumpHint: 'Gedrückt halten, um zu dieser Reihe zu springen',
+    youAreHere: 'DU BIST HIER',
+    noInstruction: 'Keine Anweisung',
+    empty: 'Diese Anleitung hat noch keine Reihen.',
+  },
+  code: {
+    placeholder: '1-6: 1 re, 1 li\n7+: Rechts | Links',
+    save: 'Code speichern',
+    discard: 'Änderungen verwerfen',
+    saveToCheck: 'Speichere, um deine Änderungen zu prüfen.',
+    summaryRows_one: '{{count}} Reihe',
+    summaryRows_other: '{{count}} Reihen',
+    summaryHighlighted_one: '{{count}} markiert',
+    summaryHighlighted_other: '{{count}} markiert',
+    summaryStitches: '{{from}} → {{to}} Maschen',
+    cheatSheet: {
+      title: 'SO SCHREIBST DU ES',
+      alternateExample: 'Rechts | Links',
+      meanings: {
+        oneRow: 'eine Reihe',
+        range: 'Reihen 1 bis 6',
+        openRange: 'ab Reihe 7, bis ein anderer Bereich beginnt',
+        severalRows: 'mehrere Reihen',
+        alternate: 'wechselt Reihe für Reihe, beginnend mit der ersten',
+        highlight: 'am Textanfang: Reihe hervorheben',
+        end: 'am Textanfang: die letzte Reihe',
+        castOn: 'Anschlagmaschen, zeigt die Maschenzahl',
+        stitchChange: 'Maschen, die in der Reihe ab- oder zunehmen',
+      },
+    },
+  },
+  warnings: {
+    skippedLine:
+      'Zeile {{line}} wurde übersprungen, weil sie nicht mit einer Reihennummer beginnt: „{{text}}“',
+    invalidRows: 'Zeile {{line}}: „{{part}}“ ist keine Reihennummer und kein Bereich.',
+    rowsAfterEnd:
+      'Die Anleitung endet in Reihe {{endRow}} (END), spätere Reihen werden ignoriert (bis Reihe {{highestRow}}).',
+    noRows:
+      'Noch keine Reihen gefunden. Beginne eine Zeile mit einer Reihennummer, z. B. „1-6: Rechts“.',
+    gaps_one: 'Keine Anweisung für Reihe {{rows}}. Sie wird leer angezeigt.',
+    gaps_other: 'Keine Anweisung für die Reihen {{rows}}. Sie werden leer angezeigt.',
+    overlaps_one: 'Zwei feste Bereiche enthalten beide Reihe {{rows}}. Der später beginnende gilt.',
+    overlaps_other:
+      'Zwei feste Bereiche enthalten beide die Reihen {{rows}}. Der später beginnende gilt.',
+    negativeStitches:
+      'Nach Reihe {{row}} fällt die Maschenzahl unter null ({{count}} Maschen). Prüfe den Anschlag und die (-2)-Zahlen.',
+  },
+  notification: {
+    title: 'Reihe {{row}} · {{name}}',
+    finishedTitle: 'Fertig · {{name}}',
+    allDone_one: '{{count}} Reihe geschafft',
+    allDone_other: 'Alle {{count}} Reihen geschafft',
+  },
+  editSheet: {
+    title: {
+      project: 'Projekt bearbeiten',
+      pattern: 'Anleitung bearbeiten',
+    },
+    saveName: 'Name speichern',
+    askDelete: {
+      project: 'Projekt löschen…',
+      pattern: 'Anleitung löschen…',
+    },
+    delete: {
+      project: 'Projekt löschen',
+      pattern: 'Anleitung löschen',
+    },
+    keep: 'Behalten',
+  },
+};

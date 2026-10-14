@@ -1,5 +1,6 @@
 import { Button } from '@/src/components/Button';
 import { fonts, useTheme } from '@/src/theme';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
@@ -9,14 +10,15 @@ type Props = {
 
 export function FinishedCard({ totalRows, onRestart }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.card, { backgroundColor: colors.endBackground, borderColor: colors.end }]}>
-      <Text style={[styles.title, { color: colors.end }]}>Piece finished</Text>
+      <Text style={[styles.title, { color: colors.end }]}>{t('counter.finishedTitle')}</Text>
       <Text style={[styles.text, { color: colors.muted }]}>
-        All {totalRows} rows done. Tap −1 if you need to go back.
+        {t('counter.allRowsDone', { count: totalRows })}
       </Text>
-      <Button title="Start again from row 1" onPress={onRestart} />
+      <Button title={t('counter.restartFromRowOne')} onPress={onRestart} />
     </View>
   );
 }

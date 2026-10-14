@@ -9,6 +9,7 @@ declare class RowNotificationModule extends NativeModule<RowNotificationModuleEv
     row: number,
     total: number,
     state: RowNotificationState,
+    progressLabel: string,
   ): void;
   clear(): void;
 }

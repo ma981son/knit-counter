@@ -10,8 +10,10 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
+import { useLanguageSync } from '@/src/i18n';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { findPattern, useStore } from '@/src/store/store';
@@ -26,6 +28,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useLanguageSync();
   useRowNotification();
 
   const [loaded, error] = useFonts({
@@ -59,6 +62,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const colors = useTheme();
 
@@ -86,7 +90,7 @@ function RootLayoutNav() {
           headerTintColor: colors.text,
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Projects' }} />
+        <Stack.Screen name="index" options={{ title: t('projects.title') }} />
         <Stack.Screen name="project/[projectId]" options={restorableScreen} />
         <Stack.Screen name="pattern/[patternId]" options={restorableScreen} />
       </Stack>

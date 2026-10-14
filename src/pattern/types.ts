@@ -20,9 +20,18 @@ export type ParsedPattern = {
   totalRows: number;
 };
 
+export type PatternWarning =
+  | { type: 'skippedLine'; line: number; text: string }
+  | { type: 'invalidRows'; line: number; part: string }
+  | { type: 'rowsAfterEnd'; endRow: number; highestRow: number }
+  | { type: 'noRows' }
+  | { type: 'gaps'; rows: number[] }
+  | { type: 'overlaps'; rows: number[] }
+  | { type: 'negativeStitches'; row: number; count: number };
+
 export type ParseResult = {
   pattern: ParsedPattern;
-  warnings: string[];
+  warnings: PatternWarning[];
 };
 
 export type RowInstruction = {

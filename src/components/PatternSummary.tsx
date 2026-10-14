@@ -1,18 +1,21 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { getRowInfo } from '@/src/pattern/rows';
-import type { ParsedPattern } from '@/src/pattern/types';
+import type { ParsedPattern, PatternWarning } from '@/src/pattern/types';
+import { warningText } from '@/src/pattern/warningText';
 import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
   parsed: ParsedPattern;
   stitchCounts: number[] | null;
-  warnings: string[];
+  warnings: PatternWarning[];
 };
 
 export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const highlightedRows = useMemo(() => {
     let count = 0;
@@ -22,9 +25,14 @@ export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
     return count;
   }, [parsed]);
 
-  const parts = [`${parsed.totalRows} rows`, `${highlightedRows} highlighted`];
+  const parts = [
+    t('code.summaryRows', { count: parsed.totalRows }),
+    t('code.summaryHighlighted', { count: highlightedRows }),
+  ];
   if (stitchCounts !== null) {
-    parts.push(`${stitchCounts[1]} → ${stitchCounts[parsed.totalRows + 1]} stitches`);
+    parts.push(
+      t('code.summaryStitches', { from: stitchCounts[1], to: stitchCounts[parsed.totalRows + 1] }),
+    );
   }
 
   return (
@@ -37,7 +45,7 @@ export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
 
       {warnings.map((warning, index) => (
         <View key={index} style={[styles.box, { backgroundColor: colors.warnBackground }]}>
-          <Text style={[styles.text, { color: colors.warnText }]}>{warning}</Text>
+          <Text style={[styles.text, { color: colors.warnText }]}>{warningText(warning, t)}</Text>
         </View>
       ))}
     </View>

@@ -1,4 +1,4 @@
-import type { ParsedPattern, RowInfo, RowInstruction } from './types';
+import type { ParsedPattern, PatternWarning, RowInfo, RowInstruction } from './types';
 
 export function getRowInfo(pattern: ParsedPattern, row: number): RowInfo {
   const specific: RowInstruction[] = [];
@@ -57,7 +57,7 @@ export function getStitchCounts(pattern: ParsedPattern): number[] | null {
   return counts;
 }
 
-export function findRowProblems(pattern: ParsedPattern): string[] {
+export function findRowProblems(pattern: ParsedPattern): PatternWarning[] {
   const gaps: number[] = [];
   const overlaps: number[] = [];
 
@@ -74,22 +74,18 @@ export function findRowProblems(pattern: ParsedPattern): string[] {
     if (fixedRanges > 1) overlaps.push(row);
   }
 
-  const warnings: string[] = [];
+  const warnings: PatternWarning[] = [];
   if (gaps.length > 0) {
-    warnings.push(`No instruction for ${describeRows(gaps)}. They'll show as empty.`);
+    warnings.push({ type: 'gaps', rows: gaps });
   }
   if (overlaps.length > 0) {
-    warnings.push(
-      `Two fixed ranges both cover ${describeRows(overlaps)}. The one that starts later wins.`,
-    );
+    warnings.push({ type: 'overlaps', rows: overlaps });
   }
   const counts = getStitchCounts(pattern);
   if (counts !== null) {
     for (let row = 1; row <= pattern.totalRows + 1; row++) {
       if (counts[row] < 0) {
-        warnings.push(
-          `The stitch count goes below zero after row ${row - 1} (${counts[row]} stitches). Check the cast on and the (-2) numbers.`,
-        );
+        warnings.push({ type: 'negativeStitches', row: row - 1, count: counts[row] });
         break;
       }
     }
@@ -97,13 +93,12 @@ export function findRowProblems(pattern: ParsedPattern): string[] {
   return warnings;
 }
 
-function describeRows(rows: number[]): string {
+export function formatRows(rows: number[]): string {
   const groups: [number, number][] = [];
   for (const row of rows) {
     const last = groups[groups.length - 1];
     if (last && last[1] === row - 1) last[1] = row;
     else groups.push([row, row]);
   }
-  const text = groups.map(([from, to]) => (from === to ? `${from}` : `${from}–${to}`)).join(', ');
-  return rows.length === 1 ? `row ${text}` : `rows ${text}`;
+  return groups.map(([from, to]) => (from === to ? `${from}` : `${from}–${to}`)).join(', ');
 }

@@ -1,5 +1,11 @@
 import { findRowProblems } from './rows';
-import type { ParsedPattern, ParseResult, PatternCodeLine, RowRange } from './types';
+import type {
+  ParsedPattern,
+  ParseResult,
+  PatternCodeLine,
+  PatternWarning,
+  RowRange,
+} from './types';
 
 type ParsedRows = {
   singleRows: number[];
@@ -85,7 +91,7 @@ function parseInstruction(input: string): ParsedInstruction {
     .split('|')
     .map((part) => part.trim())
     .filter((part) => part !== '');
-  if (parts.length === 0) parts.push(isEnd ? 'Last row' : '');
+  if (parts.length === 0) parts.push('');
 
   return { highlight, isEnd, stitchChange, parts };
 }
@@ -99,7 +105,7 @@ function shorten(text: string): string {
 
 export function parsePatternCode(code: string): ParseResult {
   const lines: PatternCodeLine[] = [];
-  const warnings: string[] = [];
+  const warnings: PatternWarning[] = [];
   let castOn: number | null = null;
 
   for (const [index, rawLine] of code.split(/\r?\n/).entries()) {
@@ -116,15 +122,13 @@ export function parsePatternCode(code: string): ParseResult {
     const colon = line.indexOf(':');
     const rowPart = colon === -1 ? '' : line.slice(0, colon);
     if (colon === -1 || !STARTS_WITH_ROWS.test(rowPart)) {
-      warnings.push(
-        `Line ${lineNumber} was skipped because it doesn't start with a row number: "${shorten(line)}"`,
-      );
+      warnings.push({ type: 'skippedLine', line: lineNumber, text: shorten(line) });
       continue;
     }
 
     const rows = parseRows(rowPart);
     for (const part of rows.invalid) {
-      warnings.push(`Line ${lineNumber}: "${part}" isn't a row number or range.`);
+      warnings.push({ type: 'invalidRows', line: lineNumber, part });
     }
     if (rows.singleRows.length === 0 && rows.ranges.length === 0) continue;
 
@@ -153,12 +157,10 @@ export function parsePatternCode(code: string): ParseResult {
   const totalRows = endRow ?? highestRow;
 
   if (endRow !== null && highestRow > endRow) {
-    warnings.push(
-      `The pattern ends at row ${endRow} (END), so rows after that are ignored (up to row ${highestRow}).`,
-    );
+    warnings.push({ type: 'rowsAfterEnd', endRow, highestRow });
   }
   if (totalRows === 0) {
-    warnings.push('No rows found yet. Start a line with a row number, like "1-6: Knit".');
+    warnings.push({ type: 'noRows' });
   }
 
   const pattern: ParsedPattern = { lines, castOn, endRow, totalRows };

@@ -3,7 +3,8 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { parsePatternCode } from '../pattern/parse';
-import { EXAMPLE_PATTERN } from '../patterns/examples';
+import i18n from '../i18n';
+import { getExample } from '../patterns/examples';
 import * as actions from './actions';
 import type { Pattern, SavedData } from './types';
 
@@ -106,8 +107,9 @@ export const useStore = create<Store>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state && state.projects.length === 0) {
-          const projectId = state.addProject('Example');
-          state.addPattern(projectId, 'How it works', EXAMPLE_PATTERN);
+          const example = getExample(i18n.resolvedLanguage ?? i18n.language);
+          const projectId = state.addProject(example.projectName);
+          state.addPattern(projectId, example.patternName, example.code);
         }
       },
     },

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { fonts, useTheme } from '@/src/theme';
@@ -10,10 +11,11 @@ type Props = {
 
 export function StitchCount({ before, change, lineColor }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.container, { borderTopColor: lineColor }]}>
-      <Text style={[styles.label, { color: colors.muted }]}>STITCHES</Text>
+      <Text style={[styles.label, { color: colors.muted }]}>{t('counter.stitchesLabel')}</Text>
       <Text style={[styles.value, { color: colors.text }]}>
         {before}
         {change !== 0 && (
@@ -23,12 +25,12 @@ export function StitchCount({ before, change, lineColor }: Props) {
           </Text>
         )}
       </Text>
-      {change === 0 ? (
-        <Text style={[styles.note, { color: colors.muted }]}>on your needle</Text>
-      ) : (
+      {change !== 0 && (
         <View style={[styles.chip, { backgroundColor: colors.markBackground }]}>
           <Text style={[styles.note, { color: colors.markText }]}>
-            {`${change > 0 ? '+' : '−'}${Math.abs(change)} this row`}
+            {t('counter.stitchChange', {
+              change: `${change > 0 ? '+' : '−'}${Math.abs(change)}`,
+            })}
           </Text>
         </View>
       )}

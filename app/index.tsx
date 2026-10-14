@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text } from 'react-native';
 
 import { AddItem } from '@/src/components/AddItem';
@@ -12,6 +13,7 @@ import { fonts, useTheme } from '@/src/theme';
 
 export default function ProjectsScreen() {
   const colors = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const projects = useStore((state) => state.projects);
   const sortedProjects = useMemo(
@@ -56,8 +58,8 @@ export default function ProjectsScreen() {
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={
           <AddItem
-            label="New project"
-            placeholder="Project name, e.g. Sweater"
+            label={t('projects.newProject')}
+            placeholder={t('projects.namePlaceholder')}
             onAdd={(name) => {
               const id = addProject(name);
               router.push({ pathname: '/project/[projectId]', params: { projectId: id } });
@@ -67,7 +69,7 @@ export default function ProjectsScreen() {
         renderItem={({ item }) => (
           <ListCard
             title={item.name}
-            subtitle={item.patterns.length === 1 ? '1 pattern' : `${item.patterns.length} patterns`}
+            subtitle={t('projects.patternCount', { count: item.patterns.length })}
             onPress={() =>
               router.navigate({ pathname: '/project/[projectId]', params: { projectId: item.id } })
             }
@@ -75,14 +77,14 @@ export default function ProjectsScreen() {
           />
         )}
         ListEmptyComponent={
-          <Text style={[styles.empty, { color: colors.muted }]}>No projects yet.</Text>
+          <Text style={[styles.empty, { color: colors.muted }]}>{t('projects.empty')}</Text>
         }
       />
       <EditItemSheet
         visible={editing !== null}
         kind="project"
         initialName={editing?.name ?? ''}
-        deleteMessage={`This deletes "${editing?.name}" and all its patterns. This can't be undone.`}
+        deleteMessage={t('projects.deleteMessage', { name: editing?.name })}
         onRename={(name) => editing && renameProject(editing.id, name)}
         onDelete={() => editing && deleteProject(editing.id)}
         onClose={() => setEditing(null)}

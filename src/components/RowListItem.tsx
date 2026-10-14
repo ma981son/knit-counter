@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { RowInfo } from '@/src/pattern/types';
@@ -13,6 +14,7 @@ type Props = {
 
 export function RowListItem({ info, stitchesBefore, isCurrent, isLast, onLongPress }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const background = info.isLastRow
     ? colors.endBackground
@@ -29,12 +31,13 @@ export function RowListItem({ info, stitchesBefore, isCurrent, isLast, onLongPre
         ? colors.mark
         : colors.muted;
 
-  const text = info.instructions.map((instruction) => instruction.text).join(' · ');
+  const joined = info.instructions.map((instruction) => instruction.text).join(' · ');
+  const text = joined || (info.isLastRow ? t('counter.lastRow') : '');
 
   return (
     <Pressable
       onLongPress={onLongPress}
-      accessibilityHint="Hold to jump to this row"
+      accessibilityHint={t('rows.jumpHint')}
       style={({ pressed }) => [
         styles.row,
         {
@@ -49,10 +52,12 @@ export function RowListItem({ info, stitchesBefore, isCurrent, isLast, onLongPre
       <Text style={[styles.number, { color: numberColor }]}>{info.row}</Text>
 
       <View style={styles.texts}>
-        {isCurrent && <Text style={[styles.here, { color: colors.accent }]}>YOU ARE HERE</Text>}
+        {isCurrent && (
+          <Text style={[styles.here, { color: colors.accent }]}>{t('rows.youAreHere')}</Text>
+        )}
 
         {info.isEmpty ? (
-          <Text style={[styles.empty, { color: colors.muted }]}>No instruction</Text>
+          <Text style={[styles.empty, { color: colors.muted }]}>{t('rows.noInstruction')}</Text>
         ) : isMarked ? (
           <Text style={[styles.instruction, styles.bold, { color: colors.markText }]}>{text}</Text>
         ) : (

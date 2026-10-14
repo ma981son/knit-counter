@@ -1,5 +1,6 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
@@ -16,6 +17,7 @@ import { fonts, useTheme } from '@/src/theme';
 export default function CounterScreen() {
   useSafeKeepAwake();
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const { pattern, parsed, stitchCounts } = useCurrentPattern();
   const nextRow = useStore((state) => state.nextRow);
@@ -29,7 +31,7 @@ export default function CounterScreen() {
   if (!pattern) {
     return (
       <View style={[styles.screen, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.muted, fontFamily: fonts.body }}>Loading…</Text>
+        <Text style={{ color: colors.muted, fontFamily: fonts.body }}>{t('common.loading')}</Text>
       </View>
     );
   }
