@@ -121,6 +121,10 @@ export const de: typeof en = {
     counter: 'Zähler',
     vibration: 'Vibrieren bei +1',
     keepAwake: 'Bildschirm anlassen',
+    notification: 'Benachrichtigung',
+    showNotification: 'Benachrichtigung anzeigen',
+    notificationSound: 'Ton',
+    systemNotificationSettings: 'Android-Einstellungen',
     dark: 'Dunkel',
   },
   editSheet: {

@@ -33,6 +33,7 @@ class RowNotificationService : Service() {
     const val EXTRA_STATE = "state"
     const val EXTRA_PROGRESS_LABEL = "progressLabel"
     const val EXTRA_VIBRATE = "vibrate"
+    const val EXTRA_SOUND = "sound"
     val VIBRATION_PATTERN = longArrayOf(0, 80, 50, 80, 50, 80)
     val TICK_PATTERN = longArrayOf(0, 20)
 
@@ -69,7 +70,8 @@ class RowNotificationService : Service() {
         intent?.getIntExtra(EXTRA_TOTAL, 0) ?: 0,
         intent?.getStringExtra(EXTRA_STATE) ?: "normal",
         intent?.getStringExtra(EXTRA_PROGRESS_LABEL) ?: "",
-        intent?.getBooleanExtra(EXTRA_VIBRATE, true) ?: true
+        intent?.getBooleanExtra(EXTRA_VIBRATE, true) ?: true,
+        intent?.getBooleanExtra(EXTRA_SOUND, true) ?: true
       )
     }
     return START_NOT_STICKY
@@ -80,7 +82,7 @@ class RowNotificationService : Service() {
     super.onTaskRemoved(rootIntent)
   }
 
-  fun show(title: String, body: String, row: Int, total: Int, state: String, progressLabel: String, vibrate: Boolean) {
+  fun show(title: String, body: String, row: Int, total: Int, state: String, progressLabel: String, vibrate: Boolean, sound: Boolean) {
     createChannel()
 
     if (vibrate && nextFromNotification && row != shownRow) {
@@ -105,6 +107,7 @@ class RowNotificationService : Service() {
       .setContentIntent(openAppIntent())
       .setOngoing(true)
       .setOnlyAlertOnce(true)
+      .setSilent(!sound)
 
     val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
       ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE

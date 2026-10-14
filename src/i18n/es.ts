@@ -116,6 +116,10 @@ export const es: typeof en = {
     counter: 'Contador',
     vibration: 'Vibrar con +1',
     keepAwake: 'Mantener la pantalla encendida',
+    notification: 'Notificación',
+    showNotification: 'Mostrar notificación',
+    notificationSound: 'Sonido',
+    systemNotificationSettings: 'Configuración de Android',
     dark: 'Oscuro',
   },
   editSheet: {

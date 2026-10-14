@@ -115,6 +115,10 @@ export const en = {
     counter: 'Counter',
     vibration: 'Vibrate on +1',
     keepAwake: 'Keep screen on',
+    notification: 'Notification',
+    showNotification: 'Show notification',
+    notificationSound: 'Sound',
+    systemNotificationSettings: 'Android settings',
     dark: 'Dark',
   },
   editSheet: {

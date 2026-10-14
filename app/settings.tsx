@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+import { Linking, ScrollView, StyleSheet } from 'react-native';
 
+import { Button } from '@/src/components/Button';
 import { SegmentedControl } from '@/src/components/SegmentedControl';
 import { SettingSwitch } from '@/src/components/SettingSwitch';
 import { SettingsCard } from '@/src/components/SettingsCard';
@@ -26,6 +28,13 @@ export default function SettingsScreen() {
     { value: 'light', label: t('settings.light') },
     { value: 'dark', label: t('settings.dark') },
   ];
+
+  function openNotificationSettings() {
+    const packageName = Constants.expoConfig?.android?.package;
+    Linking.sendIntent('android.settings.APP_NOTIFICATION_SETTINGS', [
+      { key: 'android.provider.extra.APP_PACKAGE', value: packageName ?? '' },
+    ]).catch(() => Linking.openSettings());
+  }
 
   return (
     <ScrollView
@@ -58,6 +67,24 @@ export default function SettingsScreen() {
           label={t('settings.keepAwake')}
           value={settings.keepAwake}
           onChange={(keepAwake) => updateSettings({ keepAwake })}
+        />
+      </SettingsCard>
+
+      <SettingsCard title={t('settings.notification')}>
+        <SettingSwitch
+          label={t('settings.showNotification')}
+          value={settings.notification}
+          onChange={(notification) => updateSettings({ notification })}
+        />
+        <SettingSwitch
+          label={t('settings.notificationSound')}
+          value={settings.notificationSound}
+          onChange={(notificationSound) => updateSettings({ notificationSound })}
+        />
+        <Button
+          title={t('settings.systemNotificationSettings')}
+          variant="secondary"
+          onPress={openNotificationSettings}
         />
       </SettingsCard>
     </ScrollView>

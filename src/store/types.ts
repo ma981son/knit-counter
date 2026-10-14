@@ -21,6 +21,7 @@ export type Settings = {
   appearance: AppearanceSetting;
   vibration: boolean;
   notification: boolean;
+  notificationSound: boolean;
   keepAwake: boolean;
 };
 

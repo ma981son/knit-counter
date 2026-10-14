@@ -5,6 +5,7 @@ export const defaultSettings: Settings = {
   appearance: 'system',
   vibration: true,
   notification: true,
+  notificationSound: true,
   keepAwake: true,
 };
 

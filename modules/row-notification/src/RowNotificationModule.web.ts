@@ -11,6 +11,7 @@ class RowNotificationModule extends NativeModule<RowNotificationModuleEvents> {
     state: RowNotificationState,
     progressLabel: string,
     vibrate: boolean,
+    sound: boolean,
   ) {}
   clear() {}
 }

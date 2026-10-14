@@ -15,7 +15,7 @@ export function useRowNotification() {
     const sync = () => {
       const store = useStore.getState();
       const pattern = selectOpenPattern(store);
-      if (!pattern) {
+      if (!pattern || !store.settings.notification) {
         RowNotification.clear();
         return;
       }
@@ -28,6 +28,7 @@ export function useRowNotification() {
         state,
         progressLabel,
         store.settings.vibration,
+        store.settings.notificationSound,
       );
     };
 
