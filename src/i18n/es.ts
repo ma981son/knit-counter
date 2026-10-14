@@ -114,7 +114,7 @@ export const es: typeof en = {
     appearance: 'Apariencia',
     light: 'Claro',
     counter: 'Contador',
-    vibration: 'Vibrar al sumar',
+    vibration: 'Vibrar con +1',
     dark: 'Oscuro',
   },
   editSheet: {
