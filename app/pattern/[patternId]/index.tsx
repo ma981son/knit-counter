@@ -1,6 +1,6 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { StyleSheet, Text, Vibration, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import { CounterControls } from '@/src/components/CounterControls';
 import { FinishedCard } from '@/src/components/FinishedCard';
@@ -58,21 +58,25 @@ export default function CounterScreen() {
       {parsed.totalRows > 0 && (
         <ProgressBar row={pattern.currentRow} totalRows={parsed.totalRows} />
       )}
-      <View style={styles.content}>
+      <ScrollView style={styles.cardArea}>
         {isFinished ? (
           <FinishedCard totalRows={parsed.totalRows} onRestart={restart} />
         ) : (
           <RowCard info={info} stitchesBefore={stitchCounts?.[pattern.currentRow] ?? null} />
         )}
+      </ScrollView>
+
+      <View style={styles.controls}>
+        <CounterControls
+          onPrevious={() => previousRow(pattern.id)}
+          onNext={handleNextRow}
+          nextDisabled={isFinished}
+        />
       </View>
 
-      <CounterControls
-        onPrevious={() => previousRow(pattern.id)}
-        onNext={handleNextRow}
-        nextDisabled={isFinished}
-      />
-
-      {pattern.currentRow > 1 && !isFinished && <RestartPrompt onRestart={restart} />}
+      <View style={styles.restart}>
+        {pattern.currentRow > 1 && !isFinished && <RestartPrompt onRestart={restart} />}
+      </View>
     </View>
   );
 }
@@ -83,7 +87,15 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
-  content: {
+  cardArea: {
     flex: 1,
+  },
+  controls: {
+    height: 160,
+    justifyContent: 'center',
+  },
+  restart: {
+    height: 48,
+    justifyContent: 'center',
   },
 });

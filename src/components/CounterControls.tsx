@@ -18,11 +18,10 @@ export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
         onPress={onPrevious}
         style={({ pressed }) => [
           styles.button,
-          styles.minus,
-          { backgroundColor: colors.surface, borderColor: colors.line, opacity: pressed ? 0.7 : 1 },
+          { borderColor: colors.accent, opacity: pressed ? 0.7 : 1 },
         ]}
       >
-        <Text style={[styles.minusText, { color: colors.text }]}>−1</Text>
+        <Text style={[styles.symbol, { color: colors.accent }]}>−</Text>
       </Pressable>
 
       <Pressable
@@ -31,7 +30,6 @@ export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
         onPress={onNext}
         style={({ pressed }) => [
           styles.button,
-          styles.plus,
           {
             backgroundColor: colors.accent,
             borderColor: colors.accent,
@@ -39,7 +37,7 @@ export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
           },
         ]}
       >
-        <Text style={[styles.plusText, { color: colors.onAccent }]}>+1 row</Text>
+        <Text style={[styles.symbol, { color: colors.onAccent }]}>+</Text>
       </Pressable>
     </View>
   );
@@ -48,27 +46,20 @@ export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    gap: 12,
+    justifyContent: 'center',
+    gap: 104,
   },
   button: {
-    borderRadius: 16,
-    borderWidth: 1,
-    paddingVertical: 20,
+    width: 104,
+    height: 104,
+    borderRadius: 52,
+    borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  minus: {
-    flex: 1,
-  },
-  plus: {
-    flex: 2.4,
-  },
-  minusText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 22,
-  },
-  plusText: {
+  symbol: {
     fontFamily: fonts.bodyBold,
-    fontSize: 24,
+    fontSize: 46,
+    lineHeight: 54,
   },
 });
