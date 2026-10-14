@@ -93,29 +93,27 @@ function RootLayoutNav() {
           headerShadowVisible: false,
           headerTitleStyle: { fontFamily: fonts.display, fontSize: 22 },
           headerTintColor: colors.text,
+          headerRight: () => (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('settings.title')}
+              hitSlop={12}
+              onPress={() => router.push('/settings')}
+            >
+              <SymbolView
+                name={{ android: 'settings', ios: 'gearshape', web: 'settings' }}
+                tintColor={colors.text}
+                size={24}
+              />
+            </Pressable>
+          ),
         }}
       >
+        <Stack.Screen name="index" options={{ title: t('projects.title') }} />
         <Stack.Screen
-          name="index"
-          options={{
-            title: t('projects.title'),
-            headerRight: () => (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t('settings.title')}
-                hitSlop={12}
-                onPress={() => router.push('/settings')}
-              >
-                <SymbolView
-                  name={{ android: 'settings', ios: 'gearshape', web: 'settings' }}
-                  tintColor={colors.text}
-                  size={24}
-                />
-              </Pressable>
-            ),
-          }}
+          name="settings"
+          options={{ title: t('settings.title'), headerRight: () => null }}
         />
-        <Stack.Screen name="settings" options={{ title: t('settings.title') }} />
         <Stack.Screen name="project/[projectId]" options={restorableScreen} />
         <Stack.Screen name="pattern/[patternId]" options={restorableScreen} />
       </Stack>
