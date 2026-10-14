@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { StitchCount } from '@/src/components/StitchCount';
@@ -11,13 +12,14 @@ type Props = {
 
 export function RowCard({ info, stitchesBefore }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const look = info.isLastRow
     ? {
         background: colors.endBackground,
         border: colors.end,
         text: colors.text,
-        badge: 'Last row',
+        badge: t('counter.lastRow'),
         badgeBackground: colors.end,
         badgeText: colors.surface,
         instructionBackground: null,
@@ -27,7 +29,7 @@ export function RowCard({ info, stitchesBefore }: Props) {
           background: colors.surface,
           border: colors.line,
           text: colors.markText,
-          badge: 'Pay attention',
+          badge: t('counter.payAttention'),
           badgeBackground: colors.markBackground,
           badgeText: colors.markText,
           instructionBackground: colors.markBackground,
@@ -45,7 +47,7 @@ export function RowCard({ info, stitchesBefore }: Props) {
   return (
     <View style={[styles.card, { backgroundColor: look.background, borderColor: look.border }]}>
       <View style={styles.top}>
-        <Text style={[styles.label, { color: colors.muted }]}>ROW</Text>
+        <Text style={[styles.label, { color: colors.muted }]}>{t('counter.rowLabel')}</Text>
         {look.badge !== null && (
           <View style={[styles.badge, { backgroundColor: look.badgeBackground }]}>
             <Text style={[styles.badgeText, { color: look.badgeText }]}>{look.badge}</Text>
@@ -57,7 +59,7 @@ export function RowCard({ info, stitchesBefore }: Props) {
 
       {info.isEmpty ? (
         <Text style={[styles.emptyNote, { color: colors.muted }]}>
-          No instruction for this row.
+          {t('counter.noInstruction')}
         </Text>
       ) : (
         info.instructions.map((instruction, index) => (
@@ -77,7 +79,7 @@ export function RowCard({ info, stitchesBefore }: Props) {
 
       {info.normalRow !== null && (
         <Text style={[styles.normalRow, { color: colors.muted }]}>
-          Normal row here: {info.normalRow}
+          {t('counter.normalRow', { text: info.normalRow })}
         </Text>
       )}
 

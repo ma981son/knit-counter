@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { fonts, useTheme } from '@/src/theme';
@@ -9,10 +10,14 @@ type Props = {
 
 export function ProgressBar({ row, totalRows }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   const rowsDone = Math.min(row - 1, totalRows);
   const percent = (rowsDone / totalRows) * 100;
-  const label = row > totalRows ? `Finished · ${totalRows} rows` : `Row ${row} of ${totalRows}`;
+  const label =
+    row > totalRows
+      ? t('counter.finished', { count: totalRows })
+      : t('project.progressRowOf', { row, total: totalRows });
 
   return (
     <View style={styles.container}>

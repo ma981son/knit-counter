@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { fonts, useTheme } from '@/src/theme';
@@ -10,11 +11,12 @@ type Props = {
 
 export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.row}>
       <Pressable
-        accessibilityLabel="Back one row"
+        accessibilityLabel={t('counter.backOneRow')}
         onPress={onPrevious}
         style={({ pressed }) => [
           styles.button,
@@ -25,7 +27,7 @@ export function CounterControls({ onPrevious, onNext, nextDisabled }: Props) {
       </Pressable>
 
       <Pressable
-        accessibilityLabel="Row done, next row"
+        accessibilityLabel={t('counter.nextRow')}
         disabled={nextDisabled}
         onPress={onNext}
         style={({ pressed }) => [

@@ -4,6 +4,8 @@ export const es: typeof en = {
   common: {
     add: 'Agregar',
     cancel: 'Cancelar',
+    yes: 'Sí',
+    loading: 'Cargando…',
   },
   tabs: {
     counter: 'Contador',
@@ -33,6 +35,26 @@ export const es: typeof en = {
     progressRow: 'Fila {{row}}',
     progressRowOf: 'Fila {{row}} de {{total}}',
     finished: 'Terminado',
+  },
+  counter: {
+    rowLabel: 'FILA',
+    lastRow: 'Última fila',
+    payAttention: 'Atención',
+    noInstruction: 'No hay instrucciones para esta fila.',
+    normalRow: 'Fila normal: {{text}}',
+    stitchesLabel: 'PUNTOS',
+    onNeedle: 'en la aguja',
+    stitchChange: '{{change}} en esta fila',
+    finished_one: 'Terminado · {{count}} fila',
+    finished_other: 'Terminado · {{count}} filas',
+    finishedTitle: '¡Terminaste de tejer!',
+    allRowsDone_one: 'Terminaste la {{count}} fila. Toca − si necesitas volver.',
+    allRowsDone_other: 'Terminaste las {{count}} filas. Toca − si necesitas volver.',
+    restartFromRowOne: 'Empezar de nuevo desde la fila 1',
+    restart: 'Empezar de nuevo',
+    restartQuestion: '¿Volver a la fila 1?',
+    backOneRow: 'Una fila atrás',
+    nextRow: 'Fila lista, siguiente fila',
   },
   editSheet: {
     title: {

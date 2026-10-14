@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { fonts, useTheme } from '@/src/theme';
@@ -9,6 +10,7 @@ type Props = {
 
 export function RestartPrompt({ onRestart }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
   const [confirming, setConfirming] = useState(false);
 
   if (!confirming) {
@@ -17,14 +19,14 @@ export function RestartPrompt({ onRestart }: Props) {
         onPress={() => setConfirming(true)}
         style={[styles.pill, { backgroundColor: colors.endBackground }]}
       >
-        <Text style={[styles.pillText, { color: colors.end }]}>Start again</Text>
+        <Text style={[styles.pillText, { color: colors.end }]}>{t('counter.restart')}</Text>
       </Pressable>
     );
   }
 
   return (
     <View style={styles.confirm}>
-      <Text style={[styles.question, { color: colors.text }]}>Go back to row 1?</Text>
+      <Text style={[styles.question, { color: colors.text }]}>{t('counter.restartQuestion')}</Text>
       <Pressable
         onPress={() => {
           setConfirming(false);
@@ -32,13 +34,13 @@ export function RestartPrompt({ onRestart }: Props) {
         }}
         style={[styles.pill, { backgroundColor: colors.end }]}
       >
-        <Text style={[styles.pillText, { color: colors.surface }]}>Yes</Text>
+        <Text style={[styles.pillText, { color: colors.surface }]}>{t('common.yes')}</Text>
       </Pressable>
       <Pressable
         onPress={() => setConfirming(false)}
         style={[styles.pill, { backgroundColor: colors.endBackground }]}
       >
-        <Text style={[styles.pillText, { color: colors.end }]}>Cancel</Text>
+        <Text style={[styles.pillText, { color: colors.end }]}>{t('common.cancel')}</Text>
       </Pressable>
     </View>
   );

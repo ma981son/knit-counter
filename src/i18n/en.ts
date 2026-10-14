@@ -2,6 +2,8 @@ export const en = {
   common: {
     add: 'Add',
     cancel: 'Cancel',
+    yes: 'Yes',
+    loading: 'Loading…',
   },
   tabs: {
     counter: 'Counter',
@@ -31,6 +33,26 @@ export const en = {
     progressRow: 'Row {{row}}',
     progressRowOf: 'Row {{row}} of {{total}}',
     finished: 'Finished',
+  },
+  counter: {
+    rowLabel: 'ROW',
+    lastRow: 'Last row',
+    payAttention: 'Pay attention',
+    noInstruction: 'No instruction for this row.',
+    normalRow: 'Normal row: {{text}}',
+    stitchesLabel: 'STITCHES',
+    onNeedle: 'on your needle',
+    stitchChange: '{{change}} this row',
+    finished_one: 'Finished · {{count}} row',
+    finished_other: 'Finished · {{count}} rows',
+    finishedTitle: 'Piece finished',
+    allRowsDone_one: 'The {{count}} row is done. Tap − if you need to go back.',
+    allRowsDone_other: 'All {{count}} rows done. Tap − if you need to go back.',
+    restartFromRowOne: 'Start again from row 1',
+    restart: 'Start again',
+    restartQuestion: 'Go back to row 1?',
+    backOneRow: 'Back one row',
+    nextRow: 'Row done, next row',
   },
   editSheet: {
     title: {
