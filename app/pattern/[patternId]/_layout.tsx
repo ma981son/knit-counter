@@ -1,6 +1,7 @@
 import { Stack, Tabs, useLocalSearchParams } from 'expo-router';
 import { SymbolView, type SymbolViewProps } from 'expo-symbols';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useClearRestoreParam } from '@/src/hooks/useClearRestoreParam';
 import { selectOpenPattern, useStore } from '@/src/store/store';
@@ -18,6 +19,7 @@ function TabIcon({ name, color }: TabIconProps) {
 export default function PatternLayout() {
   useClearRestoreParam();
   const colors = useTheme();
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{ patternId: string }>();
   const openPattern = useStore((state) => state.openPattern);
   const patternName = useStore((state) => selectOpenPattern(state)?.name);
@@ -41,7 +43,7 @@ export default function PatternLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Counter',
+            title: t('tabs.counter'),
             tabBarIcon: ({ color }) => (
               <TabIcon
                 name={{ android: 'add_circle', ios: 'plus.circle', web: 'add_circle' }}
@@ -53,7 +55,7 @@ export default function PatternLayout() {
         <Tabs.Screen
           name="rows"
           options={{
-            title: 'Rows',
+            title: t('tabs.rows'),
             tabBarIcon: ({ color }) => (
               <TabIcon
                 name={{
@@ -69,7 +71,7 @@ export default function PatternLayout() {
         <Tabs.Screen
           name="code"
           options={{
-            title: 'Code',
+            title: t('tabs.code'),
             tabBarIcon: ({ color }) => (
               <TabIcon
                 name={{

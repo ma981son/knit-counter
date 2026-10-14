@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
+import '@/src/i18n';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { findPattern, useStore } from '@/src/store/store';
