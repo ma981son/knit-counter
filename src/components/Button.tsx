@@ -13,7 +13,7 @@ export function Button({ title, onPress, variant = 'primary', disabled = false }
   const colors = useTheme();
 
   const background =
-    variant === 'primary' ? colors.accent : variant === 'danger' ? colors.danger : 'transparent';
+    variant === 'primary' ? colors.accent : variant === 'danger' ? colors.danger : colors.surface;
   const border =
     variant === 'primary' ? colors.accent : variant === 'danger' ? colors.danger : colors.line;
   const textColor =
