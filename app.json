@@ -4,7 +4,7 @@
     "slug": "knit-counter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/knit-counter-icon.png",
+    "icon": "./assets/images/colored-background.png",
     "scheme": "knitcounter",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -12,8 +12,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#CFE0D0",
-        "foregroundImage": "./assets/images/android-icon-foreground.png"
+        "backgroundColor": "#131816",
+        "foregroundImage": "./assets/images/transparent-light.png",
+        "monochromeImage": "./assets/images/monochrome-dark.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.ma981son.knitcounter"
@@ -21,16 +22,21 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/colored-background.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/transparent-dark.png",
+          "imageWidth": 288,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#eef1ee",
+          "dark": {
+            "image": "./assets/images/transparent-light.png",
+            "backgroundColor": "#131816"
+          }
         }
       ],
       "expo-font"
