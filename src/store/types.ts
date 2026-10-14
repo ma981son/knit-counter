@@ -1,3 +1,5 @@
+import type { PaletteName } from '@/src/theme';
+
 export type Project = {
   id: string;
   name: string;
@@ -19,6 +21,7 @@ export type AppearanceSetting = 'system' | 'light' | 'dark';
 export type Settings = {
   language: LanguageSetting;
   appearance: AppearanceSetting;
+  palette: PaletteName;
   vibration: boolean;
   notification: boolean;
   notificationSound: boolean;
