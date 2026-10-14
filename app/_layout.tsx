@@ -6,14 +6,16 @@ import {
 } from '@expo-google-fonts/figtree';
 import { YoungSerif_400Regular } from '@expo-google-fonts/young-serif';
 import { useFonts } from 'expo-font';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { SymbolView } from 'expo-symbols';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable } from 'react-native';
 
 import { useColorScheme } from '@/src/hooks/useColorScheme';
-import { useLanguageSync } from '@/src/i18n';
+import { useLanguageSync } from '@/src/i18n/useLanguageSync';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { findPattern, useStore } from '@/src/store/store';
@@ -65,6 +67,7 @@ function RootLayoutNav() {
   const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const colors = useTheme();
+  const router = useRouter();
 
   const base = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
   const navigationTheme = {
@@ -90,7 +93,27 @@ function RootLayoutNav() {
           headerTintColor: colors.text,
         }}
       >
-        <Stack.Screen name="index" options={{ title: t('projects.title') }} />
+        <Stack.Screen
+          name="index"
+          options={{
+            title: t('projects.title'),
+            headerRight: () => (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('settings.title')}
+                hitSlop={12}
+                onPress={() => router.push('/settings')}
+              >
+                <SymbolView
+                  name={{ android: 'settings', ios: 'gearshape', web: 'settings' }}
+                  tintColor={colors.text}
+                  size={24}
+                />
+              </Pressable>
+            ),
+          }}
+        />
+        <Stack.Screen name="settings" options={{ title: t('settings.title') }} />
         <Stack.Screen name="project/[projectId]" options={restorableScreen} />
         <Stack.Screen name="pattern/[patternId]" options={restorableScreen} />
       </Stack>

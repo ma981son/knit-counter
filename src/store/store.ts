@@ -6,7 +6,7 @@ import { parsePatternCode } from '../pattern/parse';
 import i18n from '../i18n';
 import { getExample } from '../patterns/examples';
 import * as actions from './actions';
-import type { Pattern, SavedData } from './types';
+import type { Pattern, SavedData, Settings } from './types';
 
 function maxRowFor(code: string): number {
   const { totalRows } = parsePatternCode(code).pattern;
@@ -37,6 +37,7 @@ type Store = SavedData & {
   deletePattern: (patternId: string) => void;
   deleteProject: (projectId: string) => void;
   openPattern: (patternId: string) => void;
+  updateSettings: (changes: Partial<Settings>) => void;
 };
 
 export const useStore = create<Store>()(
@@ -96,6 +97,8 @@ export const useStore = create<Store>()(
       deleteProject: (projectId) => set((state) => actions.deleteProject(state, { projectId })),
 
       openPattern: (patternId) => set({ openPatternId: patternId }),
+
+      updateSettings: (changes) => set((state) => actions.updateSettings(state, changes)),
     }),
     {
       name: 'knit-counter-data',
@@ -104,7 +107,16 @@ export const useStore = create<Store>()(
         version: state.version,
         projects: state.projects,
         openPatternId: state.openPatternId,
+        settings: state.settings,
       }),
+      merge: (persisted, current) => {
+        const saved = persisted as Partial<SavedData> | undefined;
+        return {
+          ...current,
+          ...saved,
+          settings: { ...actions.defaultSettings, ...saved?.settings },
+        };
+      },
       onRehydrateStorage: () => (state) => {
         if (state && state.projects.length === 0) {
           const example = getExample(i18n.resolvedLanguage ?? i18n.language);

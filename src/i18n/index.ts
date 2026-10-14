@@ -1,6 +1,5 @@
-import { getLocales, useLocales } from 'expo-localization';
+import { getLocales } from 'expo-localization';
 import i18n from 'i18next';
-import { useEffect } from 'react';
 import { initReactI18next } from 'react-i18next';
 
 import { de } from './de';
@@ -9,7 +8,7 @@ import { es } from './es';
 
 const SUPPORTED_LANGUAGES = ['en', 'es', 'de'];
 
-function supportedLanguage(code: string | null | undefined) {
+export function supportedLanguage(code: string | null | undefined) {
   return code && SUPPORTED_LANGUAGES.includes(code) ? code : 'en';
 }
 
@@ -19,13 +18,5 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   interpolation: { escapeValue: false },
 });
-
-export function useLanguageSync() {
-  const languageCode = supportedLanguage(useLocales()[0]?.languageCode);
-
-  useEffect(() => {
-    i18n.changeLanguage(languageCode);
-  }, [languageCode]);
-}
 
 export default i18n;

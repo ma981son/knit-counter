@@ -107,6 +107,11 @@ export const es: typeof en = {
     allDone_one: '{{count}} fila terminada',
     allDone_other: 'Terminaste las {{count}} filas',
   },
+  settings: {
+    title: 'Configuración',
+    language: 'Idioma',
+    system: 'Sistema',
+  },
   editSheet: {
     title: {
       project: 'Editar proyecto',

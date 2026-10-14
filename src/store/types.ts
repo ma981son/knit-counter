@@ -12,8 +12,21 @@ export type Pattern = {
   currentRow: number;
 };
 
+export type LanguageSetting = 'system' | 'en' | 'es' | 'de';
+
+export type AppearanceSetting = 'system' | 'light' | 'dark';
+
+export type Settings = {
+  language: LanguageSetting;
+  appearance: AppearanceSetting;
+  vibration: boolean;
+  notification: boolean;
+  keepAwake: boolean;
+};
+
 export type SavedData = {
   version: 1;
   projects: Project[];
   openPatternId: string | null;
+  settings: Settings;
 };

@@ -112,6 +112,11 @@ export const de: typeof en = {
     allDone_one: '{{count}} Reihe geschafft',
     allDone_other: 'Alle {{count}} Reihen geschafft',
   },
+  settings: {
+    title: 'Einstellungen',
+    language: 'Sprache',
+    system: 'System',
+  },
   editSheet: {
     title: {
       project: 'Projekt bearbeiten',

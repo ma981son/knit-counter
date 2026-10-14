@@ -106,6 +106,11 @@ export const en = {
     allDone_one: '{{count}} row done',
     allDone_other: 'All {{count}} rows done',
   },
+  settings: {
+    title: 'Settings',
+    language: 'Language',
+    system: 'System',
+  },
   editSheet: {
     title: {
       project: 'Edit project',

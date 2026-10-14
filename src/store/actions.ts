@@ -1,6 +1,19 @@
-import type { Pattern, Project, SavedData } from './types';
+import type { Pattern, Project, SavedData, Settings } from './types';
 
-export const emptyData: SavedData = { version: 1, projects: [], openPatternId: null };
+export const defaultSettings: Settings = {
+  language: 'system',
+  appearance: 'system',
+  vibration: true,
+  notification: true,
+  keepAwake: true,
+};
+
+export const emptyData: SavedData = {
+  version: 1,
+  projects: [],
+  openPatternId: null,
+  settings: defaultSettings,
+};
 
 export function createId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -116,4 +129,8 @@ export function deletePattern(
 
 export function deleteProject(data: SavedData, args: { projectId: string }): SavedData {
   return { ...data, projects: data.projects.filter((project) => project.id !== args.projectId) };
+}
+
+export function updateSettings(data: SavedData, changes: Partial<Settings>): SavedData {
+  return { ...data, settings: { ...data.settings, ...changes } };
 }
