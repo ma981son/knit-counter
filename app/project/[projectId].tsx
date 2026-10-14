@@ -9,18 +9,21 @@ import { parsePatternCode } from '@/src/pattern/parse';
 import { useStore } from '@/src/store/store';
 import type { Pattern } from '@/src/store/types';
 import { fonts, useTheme } from '@/src/theme';
+import type { TFunction } from 'i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-function progressText(pattern: Pattern): string {
+function progressText(pattern: Pattern, t: TFunction): string {
   const totalRows = parsePatternCode(pattern.code).pattern.totalRows;
-  if (totalRows === 0) return `Row ${pattern.currentRow}`;
-  if (pattern.currentRow > totalRows) return 'Finished';
-  return `Row ${pattern.currentRow} of ${totalRows}`;
+  if (totalRows === 0) return t('project.progressRow', { row: pattern.currentRow });
+  if (pattern.currentRow > totalRows) return t('project.finished');
+  return t('project.progressRowOf', { row: pattern.currentRow, total: totalRows });
 }
 
 export default function ProjectScreen() {
   useClearRestoreParam();
   const colors = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { projectId } = useLocalSearchParams<{ projectId: string }>();
   const project = useStore((state) => state.projects.find((p) => p.id === projectId));
@@ -47,8 +50,8 @@ export default function ProjectScreen() {
         ListHeaderComponent={
           project ? (
             <AddItem
-              label="New pattern"
-              placeholder="Pattern name, e.g. Left sleeve"
+              label={t('project.newPattern')}
+              placeholder={t('project.namePlaceholder')}
               onAdd={(name) => {
                 const id = addPattern(project.id, name);
                 openPattern(id);
@@ -60,14 +63,14 @@ export default function ProjectScreen() {
         renderItem={({ item }) => (
           <ListCard
             title={item.name}
-            subtitle={progressText(item)}
+            subtitle={progressText(item, t)}
             onPress={() => open(item.id)}
             onLongPress={() => setEditing(item)}
           />
         )}
         ListEmptyComponent={
           <Text style={[styles.empty, { color: colors.muted }]}>
-            {project ? 'No patterns yet.' : 'This project no longer exists.'}
+            {project ? t('project.empty') : t('project.missing')}
           </Text>
         }
       />
@@ -75,7 +78,7 @@ export default function ProjectScreen() {
         visible={editing !== null}
         kind="pattern"
         initialName={editing?.name ?? ''}
-        deleteMessage={`This deletes "${editing?.name}" with its code and your row. This can't be undone.`}
+        deleteMessage={t('project.deleteMessage', { name: editing?.name })}
         onRename={(name) => editing && renamePattern(editing.id, name)}
         onDelete={() => editing && deletePattern(editing.id)}
         onClose={() => setEditing(null)}

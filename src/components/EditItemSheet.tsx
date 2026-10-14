@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/src/components/Button';
@@ -6,7 +7,7 @@ import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
   visible: boolean;
-  kind: string;
+  kind: 'project' | 'pattern';
   initialName: string;
   deleteMessage: string;
   onRename: (name: string) => void;
@@ -24,6 +25,7 @@ export function EditItemSheet({
   onClose,
 }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
   const [name, setName] = useState(initialName);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
@@ -40,7 +42,7 @@ export function EditItemSheet({
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
         <Pressable style={[styles.sheet, { backgroundColor: colors.surface }]} onPress={() => {}}>
-          <Text style={[styles.title, { color: colors.text }]}> Edit {kind} </Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t(`editSheet.title.${kind}`)}</Text>
 
           <TextInput
             value={name}
@@ -49,7 +51,7 @@ export function EditItemSheet({
             style={[styles.input, { color: colors.text, borderColor: colors.line }]}
           />
           <Button
-            title="Save name"
+            title={t('editSheet.saveName')}
             disabled={trimmed === '' || trimmed === initialName}
             onPress={() => {
               onRename(trimmed);
@@ -61,10 +63,10 @@ export function EditItemSheet({
 
           {confirmingDelete ? (
             <View style={styles.confirm}>
-              <Text style={[styles.message, { color: colors.text }]}> {deleteMessage} </Text>
+              <Text style={[styles.message, { color: colors.text }]}>{deleteMessage}</Text>
               <View style={styles.row}>
                 <Button
-                  title={`Delete ${kind}`}
+                  title={t(`editSheet.delete.${kind}`)}
                   variant="danger"
                   onPress={() => {
                     onDelete();
@@ -72,7 +74,7 @@ export function EditItemSheet({
                   }}
                 />
                 <Button
-                  title="Keep it"
+                  title={t('editSheet.keep')}
                   variant="secondary"
                   onPress={() => setConfirmingDelete(false)}
                 />
@@ -80,7 +82,7 @@ export function EditItemSheet({
             </View>
           ) : (
             <Button
-              title={`Delete ${kind}…`}
+              title={t(`editSheet.askDelete.${kind}`)}
               variant="secondary"
               onPress={() => setConfirmingDelete(true)}
             />

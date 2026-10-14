@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/src/components/Button';
@@ -12,6 +13,7 @@ type Props = {
 
 export function AddItem({ label, placeholder, onAdd }: Props) {
   const colors = useTheme();
+  const { t } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
   const [name, setName] = useState('');
 
@@ -55,8 +57,8 @@ export function AddItem({ label, placeholder, onAdd }: Props) {
         style={[styles.input, { color: colors.text, borderColor: colors.line }]}
       />
       <View style={styles.buttons}>
-        <Button title="Add" onPress={submit} disabled={name.trim() === ''} />
-        <Button title="Cancel" variant="secondary" onPress={cancel} />
+        <Button title={t('common.add')} onPress={submit} disabled={name.trim() === ''} />
+        <Button title={t('common.cancel')} variant="secondary" onPress={cancel} />
       </View>
     </View>
   );
