@@ -66,6 +66,7 @@ export const es: typeof en = {
     placeholder: '1-6: D1, R1\n7+: Derecho | Revés',
     save: 'Guardar código',
     discard: 'Descartar cambios',
+    saveToCheck: 'Guarda para revisar tus cambios.',
     summaryRows_one: '{{count}} fila',
     summaryRows_other: '{{count}} filas',
     summaryHighlighted_one: '{{count}} destacada',

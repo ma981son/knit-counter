@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/src/components/Button';
 import { CodeCheatSheet } from '@/src/components/CodeCheatSheet';
+import { PatternSummary } from '@/src/components/PatternSummary';
 import { useCurrentPattern } from '@/src/hooks/useCurrentPattern';
 import { useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
@@ -67,6 +68,11 @@ export default function CodeScreen() {
           />
         )}
       </View>
+      {hasChanges ? (
+        <Text style={[styles.message, { color: colors.muted }]}>{t('code.saveToCheck')}</Text>
+      ) : (
+        <PatternSummary parsed={parsed} stitchCounts={stitchCounts} warnings={warnings} />
+      )}
       <CodeCheatSheet />
     </ScrollView>
   );

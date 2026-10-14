@@ -64,6 +64,7 @@ export const en = {
     placeholder: '1-6: K1, P1\n7+: Knit | Purl',
     save: 'Save code',
     discard: 'Discard changes',
+    saveToCheck: 'Save to check your changes.',
     summaryRows_one: '{{count}} row',
     summaryRows_other: '{{count}} rows',
     summaryHighlighted_one: '{{count}} highlighted',

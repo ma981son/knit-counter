@@ -68,6 +68,7 @@ export const de: typeof en = {
     placeholder: '1-6: 1 re, 1 li\n7+: Rechts | Links',
     save: 'Code speichern',
     discard: 'Änderungen verwerfen',
+    saveToCheck: 'Speichere, um deine Änderungen zu prüfen.',
     summaryRows_one: '{{count}} Reihe',
     summaryRows_other: '{{count}} Reihen',
     summaryHighlighted_one: '{{count}} markiert',
