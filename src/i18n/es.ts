@@ -43,7 +43,6 @@ export const es: typeof en = {
     noInstruction: 'No hay instrucciones para esta fila.',
     normalRow: 'Fila normal: {{text}}',
     stitchesLabel: 'PUNTOS',
-    onNeedle: 'en la aguja',
     stitchChange: '{{change}} en esta fila',
     finished_one: 'Terminado · {{count}} fila',
     finished_other: 'Terminado · {{count}} filas',
@@ -87,6 +86,19 @@ export const es: typeof en = {
         stitchChange: 'puntos que se pierden o se ganan en esa fila',
       },
     },
+  },
+  warnings: {
+    skippedLine: 'Se omitió la línea {{line}} porque no empieza con un número de fila: "{{text}}"',
+    invalidRows: 'Línea {{line}}: "{{part}}" no es un número de fila ni un rango.',
+    rowsAfterEnd:
+      'El patrón termina en la fila {{endRow}} (END), así que se ignoran las filas siguientes (hasta la fila {{highestRow}}).',
+    noRows: 'Aún no hay filas. Empieza una línea con un número de fila, como "1-6: Derecho".',
+    gaps_one: 'No hay instrucciones para la fila {{rows}}. Se mostrará vacía.',
+    gaps_other: 'No hay instrucciones para las filas {{rows}}. Se mostrarán vacías.',
+    overlaps_one: 'Dos rangos fijos incluyen la fila {{rows}}. Gana el que empieza después.',
+    overlaps_other: 'Dos rangos fijos incluyen las filas {{rows}}. Gana el que empieza después.',
+    negativeStitches:
+      'El conteo de puntos baja de cero después de la fila {{row}} ({{count}} puntos). Revisa el montaje y los números (-2).',
   },
   editSheet: {
     title: {

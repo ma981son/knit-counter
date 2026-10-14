@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { getRowInfo } from '@/src/pattern/rows';
-import type { ParsedPattern } from '@/src/pattern/types';
+import type { ParsedPattern, PatternWarning } from '@/src/pattern/types';
+import { warningText } from '@/src/pattern/warningText';
 import { fonts, useTheme } from '@/src/theme';
 
 type Props = {
   parsed: ParsedPattern;
   stitchCounts: number[] | null;
-  warnings: string[];
+  warnings: PatternWarning[];
 };
 
 export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
@@ -44,7 +45,7 @@ export function PatternSummary({ parsed, stitchCounts, warnings }: Props) {
 
       {warnings.map((warning, index) => (
         <View key={index} style={[styles.box, { backgroundColor: colors.warnBackground }]}>
-          <Text style={[styles.text, { color: colors.warnText }]}>{warning}</Text>
+          <Text style={[styles.text, { color: colors.warnText }]}>{warningText(warning, t)}</Text>
         </View>
       ))}
     </View>

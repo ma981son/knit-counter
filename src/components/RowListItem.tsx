@@ -31,7 +31,8 @@ export function RowListItem({ info, stitchesBefore, isCurrent, isLast, onLongPre
         ? colors.mark
         : colors.muted;
 
-  const text = info.instructions.map((instruction) => instruction.text).join(' · ');
+  const joined = info.instructions.map((instruction) => instruction.text).join(' · ');
+  const text = joined || (info.isLastRow ? t('counter.lastRow') : '');
 
   return (
     <Pressable

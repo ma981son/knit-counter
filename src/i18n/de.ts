@@ -45,7 +45,6 @@ export const de: typeof en = {
     noInstruction: 'Keine Anweisung für diese Reihe.',
     normalRow: 'Normale Reihe: {{text}}',
     stitchesLabel: 'MASCHEN',
-    onNeedle: 'auf der Nadel',
     stitchChange: '{{change}} in dieser Reihe',
     finished_one: 'Fertig · {{count}} Reihe',
     finished_other: 'Fertig · {{count}} Reihen',
@@ -89,6 +88,22 @@ export const de: typeof en = {
         stitchChange: 'Maschen, die in der Reihe ab- oder zunehmen',
       },
     },
+  },
+  warnings: {
+    skippedLine:
+      'Zeile {{line}} wurde übersprungen, weil sie nicht mit einer Reihennummer beginnt: „{{text}}“',
+    invalidRows: 'Zeile {{line}}: „{{part}}“ ist keine Reihennummer und kein Bereich.',
+    rowsAfterEnd:
+      'Die Anleitung endet in Reihe {{endRow}} (END), spätere Reihen werden ignoriert (bis Reihe {{highestRow}}).',
+    noRows:
+      'Noch keine Reihen gefunden. Beginne eine Zeile mit einer Reihennummer, z. B. „1-6: Rechts“.',
+    gaps_one: 'Keine Anweisung für Reihe {{rows}}. Sie wird leer angezeigt.',
+    gaps_other: 'Keine Anweisung für die Reihen {{rows}}. Sie werden leer angezeigt.',
+    overlaps_one: 'Zwei feste Bereiche enthalten beide Reihe {{rows}}. Der später beginnende gilt.',
+    overlaps_other:
+      'Zwei feste Bereiche enthalten beide die Reihen {{rows}}. Der später beginnende gilt.',
+    negativeStitches:
+      'Nach Reihe {{row}} fällt die Maschenzahl unter null ({{count}} Maschen). Prüfe den Anschlag und die (-2)-Zahlen.',
   },
   editSheet: {
     title: {

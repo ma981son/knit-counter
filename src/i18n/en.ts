@@ -41,7 +41,6 @@ export const en = {
     noInstruction: 'No instruction for this row.',
     normalRow: 'Normal row: {{text}}',
     stitchesLabel: 'STITCHES',
-    onNeedle: 'on your needle',
     stitchChange: '{{change}} this row',
     finished_one: 'Finished · {{count}} row',
     finished_other: 'Finished · {{count}} rows',
@@ -85,6 +84,20 @@ export const en = {
         stitchChange: 'stitches lost or gained on that row',
       },
     },
+  },
+  warnings: {
+    skippedLine:
+      'Line {{line}} was skipped because it doesn\'t start with a row number: "{{text}}"',
+    invalidRows: 'Line {{line}}: "{{part}}" isn\'t a row number or range.',
+    rowsAfterEnd:
+      'The pattern ends at row {{endRow}} (END), so rows after that are ignored (up to row {{highestRow}}).',
+    noRows: 'No rows found yet. Start a line with a row number, like "1-6: Knit".',
+    gaps_one: "No instruction for row {{rows}}. It'll show as empty.",
+    gaps_other: "No instruction for rows {{rows}}. They'll show as empty.",
+    overlaps_one: 'Two fixed ranges both cover row {{rows}}. The one that starts later wins.',
+    overlaps_other: 'Two fixed ranges both cover rows {{rows}}. The one that starts later wins.',
+    negativeStitches:
+      'The stitch count goes below zero after row {{row}} ({{count}} stitches). Check the cast on and the (-2) numbers.',
   },
   editSheet: {
     title: {
