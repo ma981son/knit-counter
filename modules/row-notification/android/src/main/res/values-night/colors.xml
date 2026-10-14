@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="row_notification_line">#2c3531</color>
-  <color name="row_notification_accent">#e475b2</color>
-  <color name="row_notification_on_accent">#21152a</color>
-  <color name="row_notification_mark">#f0a63c</color>
-  <color name="row_notification_end">#7fcfa6</color>
+  <color name="row_notification_line">#3D3238</color>
+  <color name="row_notification_accent">#F29BB0</color>
+  <color name="row_notification_on_accent">#211A1E</color>
+  <color name="row_notification_mark">#F2BE4E</color>
+  <color name="row_notification_end">#4FBFAE</color>
 </resources>
