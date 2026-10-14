@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
+import { useAppearanceSync } from '@/src/hooks/useAppearanceSync';
 import { useColorScheme } from '@/src/hooks/useColorScheme';
 import { useLanguageSync } from '@/src/i18n/useLanguageSync';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
@@ -31,6 +32,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   useLanguageSync();
+  useAppearanceSync();
   useRowNotification();
 
   const [loaded, error] = useFonts({

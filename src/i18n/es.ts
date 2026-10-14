@@ -111,6 +111,9 @@ export const es: typeof en = {
     title: 'Configuración',
     language: 'Idioma',
     system: 'Sistema',
+    appearance: 'Apariencia',
+    light: 'Claro',
+    dark: 'Oscuro',
   },
   editSheet: {
     title: {

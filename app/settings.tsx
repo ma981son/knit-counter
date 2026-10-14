@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { SegmentedControl } from '@/src/components/SegmentedControl';
 import { useStore } from '@/src/store/store';
-import type { LanguageSetting } from '@/src/store/types';
+import type { AppearanceSetting, LanguageSetting } from '@/src/store/types';
 import { fonts, useTheme } from '@/src/theme';
 
 export default function SettingsScreen() {
@@ -19,6 +19,12 @@ export default function SettingsScreen() {
     { value: 'de', label: 'Deutsch' },
   ];
 
+  const appearances: { value: AppearanceSetting; label: string }[] = [
+    { value: 'system', label: t('settings.system') },
+    { value: 'light', label: t('settings.light') },
+    { value: 'dark', label: t('settings.dark') },
+  ];
+
   return (
     <ScrollView
       style={{ backgroundColor: colors.background }}
@@ -30,6 +36,15 @@ export default function SettingsScreen() {
           options={languages}
           value={settings.language}
           onChange={(language) => updateSettings({ language })}
+        />
+      </View>
+
+      <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.line }]}>
+        <Text style={[styles.label, { color: colors.muted }]}>{t('settings.appearance')}</Text>
+        <SegmentedControl
+          options={appearances}
+          value={settings.appearance}
+          onChange={(appearance) => updateSettings({ appearance })}
         />
       </View>
     </ScrollView>

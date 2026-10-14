@@ -116,6 +116,9 @@ export const de: typeof en = {
     title: 'Einstellungen',
     language: 'Sprache',
     system: 'System',
+    appearance: 'Darstellung',
+    light: 'Hell',
+    dark: 'Dunkel',
   },
   editSheet: {
     title: {

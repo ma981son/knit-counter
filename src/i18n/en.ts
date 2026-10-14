@@ -110,6 +110,9 @@ export const en = {
     title: 'Settings',
     language: 'Language',
     system: 'System',
+    appearance: 'Appearance',
+    light: 'Light',
+    dark: 'Dark',
   },
   editSheet: {
     title: {
