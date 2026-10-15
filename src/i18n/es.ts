@@ -127,6 +127,12 @@ export const es: typeof en = {
     sourceCode: 'Código fuente en GitHub',
     dark: 'Oscuro',
     palette: 'Paleta',
+    appIcon: 'Ícono de la app',
+    appIconDialog: {
+      title: '¿Cambiar el ícono de la app?',
+      message: 'knit-counter se cerrará para cambiar el ícono. Vuelve a abrirla desde tu pantalla de inicio.',
+      confirm: 'Cambiar ícono',
+    },
   },
   editSheet: {
     title: {

@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
-import { Linking, ScrollView, StyleSheet, Text } from 'react-native';
+import { useState } from 'react';
+import { Image, Linking, ScrollView, StyleSheet, Text } from 'react-native';
 
+import AppIcon, { type AppIconName } from '@/modules/app-icon/src/AppIconModule';
+import { APP_ICONS, AppIconPicker } from '@/src/components/AppIconPicker';
 import { Button } from '@/src/components/Button';
+import { ConfirmDialog } from '@/src/components/ConfirmDialog';
 import { SegmentedControl } from '@/src/components/SegmentedControl';
 import { SettingSwitch } from '@/src/components/SettingSwitch';
 import { SettingsCard } from '@/src/components/SettingsCard';
@@ -20,6 +24,9 @@ export default function SettingsScreen() {
   const updateSettings = useStore((state) => state.updateSettings);
   const addProject = useStore((state) => state.addProject);
   const addPattern = useStore((state) => state.addPattern);
+  const [currentIcon] = useState(() => AppIcon?.getIcon());
+  const [pendingIcon, setPendingIcon] = useState<AppIconName | null>(null);
+  const pendingIconInfo = APP_ICONS.find((icon) => icon.value === pendingIcon);
 
   const languages: { value: LanguageSetting; label: string }[] = [
     { value: 'system', label: t('settings.system') },
@@ -44,6 +51,16 @@ export default function SettingsScreen() {
     const projectId = addProject(example.projectName);
     addPattern(projectId, example.patternName, example.code);
     router.push({ pathname: '/project/[projectId]', params: { projectId } });
+  }
+
+  function chooseAppIcon(icon: AppIconName) {
+    if (icon !== currentIcon) setPendingIcon(icon);
+  }
+
+  function confirmAppIcon() {
+    if (!pendingIcon) return;
+    setPendingIcon(null);
+    AppIcon?.setIcon(pendingIcon);
   }
 
   function openNotificationSettings() {
@@ -81,6 +98,23 @@ export default function SettingsScreen() {
           onChange={(palette) => updateSettings({ palette })}
         />
       </SettingsCard>
+
+      {currentIcon && (
+        <SettingsCard title={t('settings.appIcon')}>
+          <AppIconPicker value={currentIcon} onChange={chooseAppIcon} />
+        </SettingsCard>
+      )}
+
+      <ConfirmDialog
+        visible={pendingIconInfo !== undefined}
+        title={t('settings.appIconDialog.title')}
+        message={t('settings.appIconDialog.message')}
+        confirmTitle={t('settings.appIconDialog.confirm')}
+        onConfirm={confirmAppIcon}
+        onClose={() => setPendingIcon(null)}
+      >
+        {pendingIconInfo && <Image source={pendingIconInfo.image} style={styles.dialogIcon} />}
+      </ConfirmDialog>
 
       <SettingsCard title={t('settings.counter')}>
         <SettingSwitch
@@ -139,5 +173,10 @@ const styles = StyleSheet.create({
   version: {
     fontFamily: fonts.body,
     fontSize: 16,
+  },
+  dialogIcon: {
+    width: 72,
+    height: 72,
+    borderRadius: 18,
   },
 });

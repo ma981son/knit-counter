@@ -126,6 +126,12 @@ export const en = {
     sourceCode: 'Source code on GitHub',
     dark: 'Dark',
     palette: 'Palette',
+    appIcon: 'App icon',
+    appIconDialog: {
+      title: 'Change app icon?',
+      message: 'knit-counter closes to change the icon. Open it again from your home screen.',
+      confirm: 'Change icon',
+    },
   },
   editSheet: {
     title: {

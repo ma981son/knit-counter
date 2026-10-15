@@ -132,6 +132,12 @@ export const de: typeof en = {
     sourceCode: 'Quellcode auf GitHub',
     dark: 'Dunkel',
     palette: 'Farbpalette',
+    appIcon: 'App-Icon',
+    appIconDialog: {
+      title: 'App-Icon ändern?',
+      message: 'knit-counter schließt sich, um das Icon zu ändern. Öffne die App danach wieder über deinen Startbildschirm.',
+      confirm: 'Icon ändern',
+    },
   },
   editSheet: {
     title: {
