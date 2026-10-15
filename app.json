@@ -49,6 +49,23 @@
       "./plugins/withLocalProperties.js",
       "./plugins/withAppIconAliases.js",
       [
+        "./plugins/withPaletteSplash.js",
+        {
+          "imageWidth": 288,
+          "themes": [
+            {
+              "name": "Jarrito",
+              "image": "./assets/images/jarrito-transparent-light.png",
+              "backgroundColor": "#F4EBDC",
+              "dark": {
+                "image": "./assets/images/jarrito-transparent-dark.png",
+                "backgroundColor": "#1E1813"
+              }
+            }
+          ]
+        }
+      ],
+      [
         "expo-alternate-app-icons",
         [
           {
