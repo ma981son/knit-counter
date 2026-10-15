@@ -46,7 +46,57 @@
           "supportedLocales": ["en", "es", "de"]
         }
       ],
-      "./plugins/withLocalProperties.js"
+      "./plugins/withLocalProperties.js",
+      "./plugins/withAppIconAliases.js",
+      [
+        "./plugins/withPaletteSplash.js",
+        {
+          "imageWidth": 288,
+          "themes": [
+            {
+              "name": "Jarrito",
+              "image": "./assets/images/jarrito-transparent-light.png",
+              "backgroundColor": "#F4EBDC",
+              "dark": {
+                "image": "./assets/images/jarrito-transparent-dark.png",
+                "backgroundColor": "#1E1813"
+              }
+            }
+          ]
+        }
+      ],
+      [
+        "expo-alternate-app-icons",
+        [
+          {
+            "name": "Jarrito",
+            "ios": "./assets/images/jarrito-background-dark.png",
+            "android": {
+              "foregroundImage": "./assets/images/jarrito-transparent-dark.png",
+              "backgroundColor": "#1E1813",
+              "monochromeImage": "./assets/images/monochrome-dark.png"
+            }
+          },
+          {
+            "name": "JarritoLight",
+            "ios": "./assets/images/jarrito-background-light.png",
+            "android": {
+              "foregroundImage": "./assets/images/jarrito-transparent-light.png",
+              "backgroundColor": "#F4EBDC",
+              "monochromeImage": "./assets/images/monochrome-dark.png"
+            }
+          },
+          {
+            "name": "RosaditoLight",
+            "ios": "./assets/images/rosadito-background-light.png",
+            "android": {
+              "foregroundImage": "./assets/images/rosadito-transparent-light.png",
+              "backgroundColor": "#F4EBE6",
+              "monochromeImage": "./assets/images/monochrome-dark.png"
+            }
+          }
+        ]
+      ]
     ],
     "experiments": {
       "typedRoutes": true

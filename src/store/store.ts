@@ -111,10 +111,14 @@ export const useStore = create<Store>()(
       }),
       merge: (persisted, current) => {
         const saved = persisted as Partial<SavedData> | undefined;
+        const knownKeys = Object.keys(actions.defaultSettings);
+        const savedSettings = Object.fromEntries(
+          Object.entries(saved?.settings ?? {}).filter(([key]) => knownKeys.includes(key)),
+        );
         return {
           ...current,
           ...saved,
-          settings: { ...actions.defaultSettings, ...saved?.settings },
+          settings: { ...actions.defaultSettings, ...savedSettings },
         };
       },
       onRehydrateStorage: () => (state) => {

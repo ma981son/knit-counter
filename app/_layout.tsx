@@ -18,6 +18,7 @@ import { useAppearanceSync } from '@/src/hooks/useAppearanceSync';
 import { useColorScheme } from '@/src/hooks/useColorScheme';
 import { useLanguageSync } from '@/src/i18n/useLanguageSync';
 import { useHasHydrated } from '@/src/hooks/useHasHydrated';
+import { useSplashThemeSync } from '@/src/hooks/useSplashThemeSync';
 import { useRowNotification } from '@/src/notifications/useRowNotification';
 import { findPattern, useStore } from '@/src/store/store';
 import { fonts, useTheme } from '@/src/theme';
@@ -33,6 +34,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   useLanguageSync();
   useAppearanceSync();
+  useSplashThemeSync();
   useRowNotification();
 
   const [loaded, error] = useFonts({
