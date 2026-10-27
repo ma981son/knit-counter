@@ -110,4 +110,6 @@ npx expo run:android --variant release
 
 ## License
 
-[MIT](LICENSE) © Maria Fe Sonnenberg
+© 2026 Maria Fe Sonnenberg, under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+You're welcome to use the app, change it and share it, as long as it's not for commercial purposes. Please don't sell it or use it in a paid product.
